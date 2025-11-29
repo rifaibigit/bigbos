@@ -1,0 +1,18 @@
+Options -Multiviews
+
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+
+RewriteRule ^(.*)$ index.php?url=$1 [L]
+
+php_value max_execution_time 1200
+#RLimitMem max
+#php_value memory_limit 128M;
+
+# supress php errors
+php_flag display_startup_errors off
+php_flag display_errors off
+php_flag html_errors off
+php_value docref_root 0
+php_value docref_ext 0

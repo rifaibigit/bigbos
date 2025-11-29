@@ -1,0 +1,6 @@
+{
+    "require": {
+        "phpoffice/phpspreadsheet": "^1.18",
+        "stichoza/google-translate-php": "^4.1"
+    }
+}

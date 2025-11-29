@@ -1,0 +1,25 @@
+<?php
+
+class LoginModel {
+	
+	private $table = 'user';
+	private $db;
+
+	public function __construct()
+	{
+		$this->db = new Database;
+	}
+
+	public function checkLogin($data)
+	{
+		$query = "SELECT * FROM " . $this->table . " WHERE username =:username AND password =:password";
+		$this->db->opendb();
+		$this->db->query($query);
+		$this->db->bind('username', $data['username']);
+		$this->db->bind('password', md5($data['password']));
+		
+		//Flasher::setMessage('Username / Password',$query,'danger');
+		return $this->db->single();
+	}
+
+}

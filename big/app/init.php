@@ -1,0 +1,11 @@
+<?php
+
+require_once 'core/App.php';
+require_once 'core/Controller.php';
+require_once 'core/Database.php';
+require_once 'core/Flasher.php';
+require_once 'config/config.php';
+require_once 'fpdf181/fpdf.php';
+require_once 'library/php-excel-reader/excel_reader2.php';
+require_once 'library/SpreadsheetReader.php';
+require_once 'vendor/autoload.php';

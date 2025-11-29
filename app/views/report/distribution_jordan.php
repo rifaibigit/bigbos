@@ -1,0 +1,357 @@
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Distribution Progress - JORDAN</h1> 
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-sm-12">
+          <?php
+            Flasher::Message();
+          ?>
+        </div>
+      </div>
+      <!-- Default box -->
+
+      <div class="card">
+        <div class="card-body"> 
+            <form action="<?= base_url; ?>/Report/distribution_jordan" method="post">
+                <div class="row">
+                    <div class="col-md-12">
+                      <div class="input-group mb-3">
+
+                        <?php
+
+                        if(isset($data))
+                        {
+                            $region = $data['by_region'];
+                            $area = $data['by_area'];
+                            $island = $data['by_island'];
+                            $month = $data['by_month'];
+                            $year = $data['by_year'];
+
+                        }else
+                        {
+                            $region = "By Region";
+                            $area = "By Area";
+                            $island = "By Island";
+                        }
+
+                        ?>
+
+                          <div>
+                            <select class="mdb-select md-form form-control" title="By Island" name="by_island" id="dt_island" style="margin-left : 10px;width : 125px;" <?php if( $_SESSION['area'] != 'ALL'){echo "disabled"; } ?>>
+                              <option value="">By Island</option>
+                                  <?php $no=1; ?>
+                                  <?php foreach ($data['island'] as $row) :?>
+                                        <option <?php if( $island==$row['island']){echo "selected"; } ?> value="<?= $row['island'];?>"><?= $row['island'];?></option>
+                                  <?php $no++; endforeach; ?>
+                            </select>
+                          </div>
+                          <div style="margin-left : 5px;width : 135px;">
+                            <select class="mdb-select md-form form-control" title="By Region" name="by_region" id="dt_region" style="margin-left : 10px;" <?php if( $_SESSION['area'] != 'ALL'){echo "disabled"; } ?>>
+                              <option value="">By Region</option>
+                                  <?php $no=1; ?>
+                                  <?php foreach ($data['region'] as $row) :?>
+                                        <option <?php if( $region==$row['region']){echo "selected"; } ?> value="<?= $row['region'];?>"><?= $row['region'];?></option>
+                                  <?php $no++; endforeach; ?>
+                            </select>
+                          </div>
+                          <div style="margin-left : 5px;width : 155px;">
+                            <select class="select2-multiple2 md-form form-control" title="By Area" name="by_area[]" id="dt_area" style="margin-left : 10px;width : 155px;" multiple="multiple">
+                                <!-- <option value="">By Area</option> -->
+                                    <?php $no=1; ?>
+                                    <?php foreach ($data['area'] as $row) :?>
+                                            <option <?php if(in_array($row['area'], $area)){echo "selected"; } ?> value="<?= $row['area'];?>"><?= $row['area'];?></option>
+                                    <?php $no++; endforeach; ?>
+                                    <option value="OTHERS">OTHERS</option> 
+                            </select>
+                          </div>
+                          <div style="margin-left : 10px; width:120px;">
+                            <select name="by_month" class="mdb-select md-form form-control" style="margin-left : 10px;">
+                              <option <?php if( $month=='1' or $month=='1' ){echo 'selected'; } ?> value="1">Januari</option>
+                              <option <?php if( $month=='2' or $month=='2' ){echo 'selected'; } ?> value="2">Februari</option>
+                              <option <?php if( $month=='3' or $month=='3' ){echo 'selected'; } ?> value="3">Maret</option>
+                              <option <?php if( $month=='4' or $month=='4' ){echo 'selected'; } ?> value="4">April</option>
+                              <option <?php if( $month=='5' or $month=='5' ){echo 'selected'; } ?> value="5">Mei</option>
+                              <option <?php if( $month=='6' or $month=='6' ){echo 'selected'; } ?> value="6">Juni</option>
+                              <option <?php if( $month=='7' or $month=='7' ){echo 'selected'; } ?> value="7">Juli</option>
+                              <option <?php if( $month=='8' or $month=='8' ){echo 'selected'; } ?> value="8">Agustus</option>
+                              <option <?php if( $month=='9' or $month=='9' ){echo 'selected'; } ?> value="9">September</option>
+                              <option <?php if( $month=='10' or $month=='10'){echo 'selected'; } ?> value="10">Oktober</option>
+                              <option <?php if( $month=='11' or $month=='11'){echo 'selected'; } ?> value="11">Nopember</option>
+                              <option <?php if( $month=='12' or $month=='12'){echo 'selected'; } ?> value="12">Desember</option>
+                            </select>
+                          </div>
+                          <div style="margin-left : 5px; width : 80px;">
+                              <input name="by_year" class="mdb-select md-form form-control" type="number" min="1900" max="2099" step="1" value="<?= $year ;?>" />
+                          </div>
+                          <div style="margin-left : 5px;">
+                            <button class="btn btn-outline-primary" type="submit">Go!</button>
+                            <a class="btn btn-outline-secondary" href="<?= base_url; ?>/Report/distribution_jordan">Reset</a>
+                          </div>
+                          <div style="margin-left : 5px;">
+                            <button class="btn float-right btn btn-outline-success" type="submit" formaction="<?= base_url; ?>/Report/export_distribution_jordan"><i class = "fa fa-download"> Excel</i></button>
+                          </div>
+                          <div style="margin-left : 5px;">
+                            <button class="btn float-right btn btn-outline-success" type="submit" formaction="<?= base_url; ?>/Report/export_distribution_jordan_area"><i class = "fa fa-download"> Area Detail</i></button>
+                          </div>
+                      </div>
+
+                        <!-- <div id="hasil_sale_out"></div> -->
+                      <div class="table-responsive-sm text-small">
+                        <table id="distr" class="table table-bordered table-sm" align="left" style="font-size:85%; border: 1px solid black;table-layout: fixed;">
+                          <thead class="table-warning">
+
+                            <?php
+                                // foreach ($data['sku_count'] as $row) :
+                                //     $count = $row['item_row'];
+                                // endforeach
+                                $count = $data['sku_count']['item_row'];
+                            ?>
+
+                            <tr>
+                              <th rowspan="3" class="text-center" style="width: 5px; vertical-align: middle;">#</th>
+                              <th rowspan="3" class="text-center" style="width: 170px; vertical-align: middle;">TYPE OF OUTLET</th>
+                              <th rowspan="3" class="text-center" style="width: 50px; vertical-align: middle;">Code</th>
+                              <th rowspan="3" class="text-center" style="width: 40px; vertical-align: middle;">RO</th>
+                              <?php foreach ($data['sku_group'] as $row) :?>
+                              <th colspan="<?= $row['count_name']*2;?>" class="text-center"><?= $row['item_group'];?></th>
+                              <?php endforeach ?>
+                              <th colspan="2" rowspan="2" class="text-center" style="vertical-align: middle; background-color: #FF6D6D;">TOTAL</th>
+                            </tr>
+                            <tr style="line-height: 12px; vertical-align: middle;">
+                              <?php foreach ($data['sku_name'] as $row) :?>
+                              <th colspan="2" class="text-center" style="width: 45px;vertical-align: middle;"><?= $row['item_name'];?></th>
+                              <?php endforeach ?>  
+                            </tr>                  
+                            <tr style="line-height: 10px; vertical-align: middle;">
+                              <?php for($i=1;$i<=$count;$i++){
+                                  echo '<th class="text-center" style="width: 30px; vertical-align: middle;white-space: nowrap">DISTR. NO`S</th>';
+                                  echo '<th class="text-center" style="width: 15px; vertical-align: middle;">%</th>';
+                              } 
+                              ?> 
+                              <th class="text-center" style="width: 30px; vertical-align: middle; background-color: #FF6D6D;white-space: nowrap">DISTR. NO`S</th>
+                              <th class="text-center" style="width: 15px; vertical-align: middle; background-color: #FF6D6D;">%</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+
+                          <?php
+
+                            $total_RO = 0;
+                            $x=1;
+                            foreach($data['sku_code'] as $sku):
+                              $total_d[$x] = 0;
+                              $total_p[$x] = 0;
+                              $x++;
+                            endforeach;
+                            
+                            $total_dAll = 0;
+                            $total_pAll = 0;
+
+                          ?>
+
+                          <?php $no=1; ?>
+                          <?php $channel=''; ?>
+
+                              <?php foreach ($data['distr_jordan'] as $row) :?>
+                                <?php
+                                  if ($channel != $row['channel'])
+                                  {
+                                    $channel = $row['channel'];
+                                    echo '<tr style="background-color: rgb(217, 225, 242); font-weight:bold;">';
+                                    echo '<td></td>';
+                                    echo '<td class="text-center">' .$row['channel']. '</td>';
+                                    echo '<td></td>';
+                                    echo '<td></td>';
+                                    $x = 1;
+                                    foreach($data['sku_code'] as $sku):
+                                      echo '<td></td>';
+                                      echo '<td></td>';
+                                      $x++;
+                                    endforeach;
+                                    echo '<td></td>';
+                                    echo '<td></td>';
+                                    echo '</tr>';
+                                  }
+                                ?>
+                                <tr>
+                                    <?php
+                                      $data1 = array(
+                                        'principal' => "JORDAN",
+                                        'outlet_type' => str_replace(" ", "__", $row['outlet_type']),
+                                        'year' => $year,
+                                        'month' => $month,
+                                        'area' => implode(',', str_replace(" ", "__", $area))
+                                      );
+                                    ?> 
+                                    <td class="text-center"><?= $no; ?></td>
+                                    <td><?= $row['desc_type'];?></td>
+                                    <td><?= $row['outlet_type'];?></td>
+                                    <td class="text-right"><b><a href="<?= base_url; ?>/Report/RO_outlet2/<?= implode(",", $data1); ?>" target="_blank"><?= number_format($row['RO'], 0);?></a></b></td>
+                                    <?php $a=1; ?>
+                                    <?php foreach($data['sku_code'] as $sku): ?>
+                                      <td class="text-right"><?= number_format($row['d'.$a], 0);?></td>
+                                      <td class="text-right"><?= number_format($row['%'.$a], 2);?></td>
+                                    <?php $a++; ?>
+                                    <?php endforeach; ?>
+                                    <td class="text-right"><b><a href="<?= base_url; ?>/Report/Distribution_OT2/<?= implode(",", $data1); ?>" target="_blank"><?= number_format($row['dtotal'], 0);?></a></b></td>
+                                    <td class="text-right"><?= number_format($row['%total'], 2);?></td>
+                        
+
+                                  <?php $total_RO += $row['RO']; ?>
+
+                                  <?php $x = 1; ?>
+                                  <?php foreach($data['sku_code'] as $sku): ?>
+                                    <?php $total_d[$x] += $row['d'.$x]; ?>
+                                    <?php 
+                                      if($total_RO==0)
+                                      {
+                                        $total_p[$x] = 0;
+                                      }
+                                      else
+                                      {
+                                        $total_p[$x] = ($total_d[$x]/$total_RO)*100;
+                                      } 
+                                    
+                                    ?>
+                                    <?php $x++; ?>
+                                  <?php endforeach; ?>
+
+                                  <?php $total_dAll += $row['dtotal']; ?>
+
+                                  <?php $no++; endforeach; ?>
+
+                                </tr>
+
+                                <?php 
+                                  if($total_RO==0)
+                                  {
+                                    $total_pAll = 0;
+                                  }
+                                  else
+                                  {
+                                    $total_pAll = ($total_dAll/$total_RO)*100;
+                                  } 
+                                    
+                                ?>
+
+                                <?php
+                                  // $data2 = array(
+                                  //   'principal' => "JORDAN",
+                                  //   'year' => $year,
+                                  //   'area' => implode(',', $area)
+                                  // );
+                                ?>
+
+                                <tr class="table-danger" style="font-weight:bold;">
+                                  <td></td>
+                                  <td class="text-center">TOTAL</td>
+                                  <td></td>
+                                  <td class="text-right"><?= number_format($total_RO, 0);?></td>
+                                  
+                                  <?php $a=1; ?>
+                                  <?php foreach($data['sku_code'] as $sku): ?>
+                                    <td class="text-right"><?= number_format($total_d[$a], 0);?></td>
+                                    <td class="text-right"><?= number_format($total_p[$a], 2);?></td>
+                                  <?php $a++; ?>
+                                  <?php endforeach; ?>
+                                  <td class="text-right"><?= number_format($total_dAll, 0);?></td>
+                                  <td class="text-right"><?= number_format($total_pAll, 2);?></td>
+                                </tr>
+
+                          </tbody>
+                        </table>
+
+                        <style>
+                          .table tr { line-height: 3px; }
+                          .DTFC_LeftBodyLiner { overflow-x: hidden; }
+                          .select2-selection {
+                            height: 40px !important;
+                          }
+                          .select2-selection__arrow {
+                            margin: 5px;
+                          }
+                          .table thead th {
+                            background-color: #ffeeba;
+                          }
+                        </style>
+                        
+                      </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+          Footer
+        </div>
+        <!-- /.card-footer-->
+      </div>
+      <!-- /.card -->
+
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+<script type="text/javascript">
+    $(document).ready(function(){
+      
+        $('#dt_island').change(function(){ 
+            var id=$('#dt_island').val();
+            $.ajax({
+                    url : "<?= base_url; ?>/Report/showRegion_ByIsland",
+                    method : "POST",
+                    data : {id: id},
+                    async : true,
+                    success: function(data){
+                        $('#dt_region').html(data);
+                    }
+                }
+            );
+            return false;
+        });
+
+        $('#dt_island').change(function(){ 
+          var id=$('#dt_island').val();
+            $.ajax({
+                    url : "<?= base_url; ?>/Report/showArea_ByIsland",
+                    method : "POST",
+                    data : {id: id},
+                    async : true,
+                    success: function(data){
+                        $('#dt_area').html(data);
+                    }
+                }
+            );
+            return false;
+        });
+
+        $('#dt_region').change(function(){ 
+          var id=$('#dt_region').val();
+            $.ajax({
+                    url : "<?= base_url; ?>/Report/showArea_ByRegion",
+                    method : "POST",
+                    data : {id: id},
+                    async : true,
+                    success: function(data){
+                        $('#dt_area').html(data);
+                    }
+                }
+            );
+            return false;
+        });
+        
+    });
+</script>
