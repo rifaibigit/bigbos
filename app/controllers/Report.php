@@ -7345,8 +7345,7 @@ class Report extends Controller {
 
 		if (isset($_POST['by_area']))
 		{
-			$area = implode(',', $_POST['by_area']);
-			$area = str_replace(",", "','", $area);;
+			$area = $_POST['by_area'];
 		}
 		else
 		{
@@ -8480,15 +8479,13 @@ class Report extends Controller {
 
 		if (isset($_POST['by_area']))
 		{
-			$area = implode(',', $_POST['by_area']);
-			$area = str_replace(",", "','", $area);;
+			$area = $_POST['by_area'];
 		}
 		else
 		{
 			$area = "";
 		}
 		
-
 		if(isset($_POST['by_sku']))
 		{
 			$sku = $_POST['by_sku'];
@@ -8783,18 +8780,6 @@ class Report extends Controller {
 		$no = 1; // Untuk penomoran tabel, di awal set dengan 1
 		$row = 9;
 
-		$data1 = array(
-			'principal' => $principal,
-			'channel' => $channel,
-			'outlet_type' => $outlet_type,
-			'outlet_code' => $outlet_code,
-			'item_code' => $sku,
-			'area' => $area, 
-			'year' => $year
-			
-		);
-
-		//$data['sellingout_OT'] = $this->model('ReportModel')->getSellingOut_OT3($data1);
 		$data['sellingout_account_performance'] = $this->model('ReportModel')->getSellingOut_Account_performance();
 
 		$group_account = '';
@@ -9164,46 +9149,46 @@ class Report extends Controller {
 			$sheet->setCellValue('H' . $row, $rows['area']);
 			$sheet->setCellValue('I' . $row, $rows['target_jan']);
 			$sheet->setCellValue('J' . $row, $rows['val_jan']);
-			$sheet->setCellValue('K' . $row, persen($row['val_jan'], $row['target_jan']));
+			$sheet->setCellValue('K' . $row, persen($rows['val_jan'], $rows['target_jan']));
 			$sheet->setCellValue('L' . $row, $rows['target_feb']);
 			$sheet->setCellValue('M' . $row, $rows['val_feb']);
-			$sheet->setCellValue('N' . $row, persen($row['val_feb'], $row['target_feb']));
+			$sheet->setCellValue('N' . $row, persen($rows['val_feb'], $rows['target_feb']));
 			$sheet->setCellValue('O' . $row, $rows['target_mar']);
 			$sheet->setCellValue('P' . $row, $rows['val_mar']);
-			$sheet->setCellValue('Q' . $row, persen($row['val_mar'], $row['target_mar']));
+			$sheet->setCellValue('Q' . $row, persen($rows['val_mar'], $rows['target_mar']));
 			$sheet->setCellValue('R' . $row, $rows['target_apr']);
 			$sheet->setCellValue('S' . $row, $rows['val_apr']);
-			$sheet->setCellValue('T' . $row, persen($row['val_apr'], $row['target_apr']));
+			$sheet->setCellValue('T' . $row, persen($rows['val_apr'], $rows['target_apr']));
 			$sheet->setCellValue('U' . $row, $rows['target_mei']);
 			$sheet->setCellValue('V' . $row, $rows['val_mei']);
-			$sheet->setCellValue('W' . $row, persen($row['val_mei'], $row['target_mei']));
+			$sheet->setCellValue('W' . $row, persen($rows['val_mei'], $rows['target_mei']));
 			$sheet->setCellValue('X' . $row, $rows['target_jun']);
 			$sheet->setCellValue('Y' . $row, $rows['val_jun']);
-			$sheet->setCellValue('Z' . $row, persen($row['val_jun'], $row['target_jun']));
+			$sheet->setCellValue('Z' . $row, persen($rows['val_jun'], $rows['target_jun']));
 			$sheet->setCellValue('AA' . $row, $rows['target_jul']);
 			$sheet->setCellValue('AB' . $row, $rows['val_jul']);
-			$sheet->setCellValue('AC' . $row, persen($row['val_jul'], $row['target_jul']));
+			$sheet->setCellValue('AC' . $row, persen($rows['val_jul'], $rows['target_jul']));
 			$sheet->setCellValue('AD' . $row, $rows['target_agu']);
 			$sheet->setCellValue('AE' . $row, $rows['val_agu']);
-			$sheet->setCellValue('AF' . $row, persen($row['val_agu'], $row['target_agu']));
+			$sheet->setCellValue('AF' . $row, persen($rows['val_agu'], $rows['target_agu']));
 			$sheet->setCellValue('AG' . $row, $rows['target_sep']);
 			$sheet->setCellValue('AH' . $row, $rows['val_sep']);
-			$sheet->setCellValue('AI' . $row, persen($row['val_sep'], $row['target_sep']));
+			$sheet->setCellValue('AI' . $row, persen($rows['val_sep'], $rows['target_sep']));
 			$sheet->setCellValue('AJ' . $row, $rows['target_okt']);
 			$sheet->setCellValue('AK' . $row, $rows['val_okt']);
-			$sheet->setCellValue('AL' . $row, persen($row['val_okt'], $row['target_okt']));
+			$sheet->setCellValue('AL' . $row, persen($rows['val_okt'], $rows['target_okt']));
 			$sheet->setCellValue('AM' . $row, $rows['target_nop']);
 			$sheet->setCellValue('AN' . $row, $rows['val_nop']);
-			$sheet->setCellValue('AO' . $row, persen($row['val_nop'], $row['target_nop']));
+			$sheet->setCellValue('AO' . $row, persen($rows['val_nop'], $rows['target_nop']));
 			$sheet->setCellValue('AP' . $row, $rows['target_des']);
 			$sheet->setCellValue('AQ' . $row, $rows['val_des']);
-			$sheet->setCellValue('AR' . $row, persen($row['val_des'], $row['target_des']));
+			$sheet->setCellValue('AR' . $row, persen($rows['val_des'], $rows['target_des']));
 			$sheet->setCellValue('AS' . $row, $rows['target_year_now']);
 			$sheet->setCellValue('AT' . $row, $rows['val_year_now']);
-			$sheet->setCellValue('AU' . $row, persen($row['val_year_now'], $row['target_year_now']));
+			$sheet->setCellValue('AU' . $row, persen($rows['val_year_now'], $rows['target_year_now']));
 			$sheet->setCellValue('AV' . $row, $rows['target_year_old']);
 			$sheet->setCellValue('AW' . $row, $rows['val_year_old']);
-			$sheet->setCellValue('AX' . $row, persen($row['val_year_old'], $row['target_year_old']));
+			$sheet->setCellValue('AX' . $row, persen($rows['val_year_old'], $rows['target_year_old']));
 
 			$group_account = $rows['group_account'];
 			$outlet_count += $rows['outlet_count'];
