@@ -121,7 +121,7 @@
               </tbody>
             </table>
             <div>
-              <input type="text" name="json" id="json" class="form-control" style="font-size:100%;" required>
+              <input type="text" name="json" id="json" class="form-control" style="font-size:100%;" hidden required>
             </div>
             <style>
               .table tr { line-height: 10px; }
