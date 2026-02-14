@@ -4665,6 +4665,122 @@ class ReportModel {
 		return $this->db->resultSet();
 	}
 
+	public function getSellingOut_Account_SKU($data)
+	{
+
+		if (isset($_POST['by_principal']))
+		{
+			$principal = $_POST['by_principal'];
+		}
+		if (isset($_POST['by_channel']))
+		{
+			$channel = $_POST['by_channel'];
+		}
+		if (isset($_POST['by_outlet_type']))
+		{
+			$outlet_type = $_POST['by_outlet_type'];
+		}
+		if (isset($_POST['by_outlet_code']))
+		{
+			$outlet_code = $_POST['by_outlet_code'];
+		}
+
+		if (isset($_POST['by_area']))
+		{
+			$area = $_POST['by_area'];
+			//$area = implode(',', $_POST['by_area']);
+			//$area = str_replace(",", "','", $area);;
+		}
+		elseif ($_SESSION['area'] != 'ALL')
+		{
+			$session_area = str_replace(", ", "','", $_SESSION['area']); 
+			$area = $session_area;
+		}
+		if (isset($_POST['by_year']))
+		{
+			$year = $_POST['by_year'];
+		}else
+		{
+			$year = date('Y');
+		}
+
+		$old_year = $year - 1;
+
+		$str_sql = "SELECT c.group_account, a.cust_code, a.big_code, a.cust_name, a.outlet_type, c.total_outlet as outlet_count, a.area,";
+		
+		foreach($data as $sku):
+			$str_sql = $str_sql . " sum(distinct if(a.item_code = '".$sku['item_code']."', a.qty, 0)) AS qty_".$sku['item_code'].",";
+			$str_sql = $str_sql . " sum(distinct if(a.item_code = '".$sku['item_code']."', a.value_exc, 0)) AS val_".$sku['item_code'].",";
+		endforeach;
+
+		$str_sql = $str_sql . " sum(if(year(a.tanggal) = '".$year."', a.qty, 0)) AS qty_year_now,";
+		$str_sql = $str_sql . " sum(if(year(a.tanggal) = '".$year."', a.value_exc, 0)) AS val_year_now,";
+		$str_sql = $str_sql . " sum(if(year(a.tanggal) = '".$old_year."', a.qty, 0)) AS qty_year_old,";
+		$str_sql = $str_sql . " sum(if(year(a.tanggal) = '".$old_year."', a.value_exc, 0)) AS val_year_old";
+		$str_sql = $str_sql . " FROM " . $this->table_sellingout . " a";
+		$str_sql = $str_sql . " LEFT JOIN channel b on a.outlet_type = b.outlet_type";
+		$str_sql = $str_sql . " LEFT JOIN outlet c on a.cust_code = c.outlet_code";
+		$str_sql = $str_sql . " WHERE year(a.tanggal) in ('$year', '$old_year')";
+		$str_sql = $str_sql . " AND c.group_account is not null";
+
+		if (isset($principal))
+		{
+			if($principal != '')
+			{
+				$str_sql = $str_sql . " AND a.principal = '" . $principal . "'";
+			}
+		}
+		if (isset($channel))
+		{
+			if($channel != '')
+			{
+				$str_sql = $str_sql . " AND b.channel = '" . $channel . "'";
+			}
+		}
+
+		if (isset($outlet_type))
+		{
+			if($outlet_type != '')
+			{
+				$str_sql = $str_sql . " AND b.outlet_type = '" . $outlet_type . "'";
+			}
+		}
+
+		if (isset($outlet_code))
+		{
+			if($outlet_code != '')
+			{
+				$str_sql = $str_sql . " AND a.cust_code = '" . $outlet_code . "'";
+			}
+		}
+
+
+		if (isset($area))
+		{
+			if($area != '' and $area != 'ALL')
+			{
+				$str_sql = $str_sql . " AND a.area in ('" . $area . "')";
+			}
+		}
+
+		if ($_SESSION['area'] != 'ALL')
+			{
+				$session_area = str_replace(",", "','", $_SESSION['area']);
+				$session_area = str_replace(" ", "", $session_area);
+
+				$str_sql = $str_sql . " AND a.area in ('" . $session_area . "')";
+			}
+
+		$str_sql = $str_sql . " GROUP BY c.group_account, a.big_code";
+		$str_sql = $str_sql . " ORDER BY c.group_account, a.big_code";
+
+		// Flasher::setMessage('Berhasil',$str_sql,'success');
+
+		$this->db->opendb();
+		$this->db->query($str_sql);
+		return $this->db->resultSet();
+	}
+
 	public function getSellingOut_Account_performance()
 	{
 
@@ -28193,9 +28309,9 @@ class ReportModel {
 		{
 			$principal = $_POST['by_principal'];
 		}
-		if (isset($data['year']))
+		if (isset($_POST['by_year']))
 		{
-			$year = $data['year'];
+			$year = $_POST['by_year'];
 		}else
 		{
 			$year = date('Y');
@@ -30988,6 +31104,509 @@ class ReportModel {
 		}
 
 		//Flasher::setMessage('Berhasil',$str_sql,'success');
+
+		$this->db->opendb();
+		$this->db->query($str_sql);
+		return $this->db->resultSet();
+	}
+
+	public function getDistr_lord_ALL2($data)
+	{
+		if (isset($_POST['by_region']))
+		{
+			$region = $_POST['by_region'];
+		}
+		if (isset($_POST['by_area']))
+		{
+			$area = implode(',', $_POST['by_area']);
+			$area = str_replace(",", "','", $area);;
+		}
+		elseif ($_SESSION['area'] != 'ALL')
+		{
+			$session_area = str_replace(", ", "','", $_SESSION['area']); 
+			$area = $session_area;
+		}
+		if (isset($_POST['by_island']))
+		{
+			$island = $_POST['by_island'];
+		}
+		if(isset($_POST['by_month']))
+		{
+			$month = $_POST['by_month'];
+		}else
+		{
+			$get['period_si'] = $this->getMonth_SO2($_POST['by_year']);
+			$month = $get['period_si']['to_month'];
+		}
+		if(isset($_POST['by_year']))
+		{
+			$year = $_POST['by_year'];
+		}else
+		{
+			$year = date('Y');
+		}
+
+		$fromdate = '-' .$month. '-1';
+		//$todate = '-' .$month. '-31';
+		
+		$str_sql = " SELECT DISTINCT a.id as id, a.channel as channel, a.desc_type as desc_type, a.outlet_type as outlet_type, sum(b.ro) as RO,";
+
+		if (isset($island) and isset($area) and isset($region) and $island != '' and $area != '' and $region != '')
+		{
+			$a=1;
+			foreach($data['sku_code'] as $sku):
+				$str_sql = $str_sql . " sum(c.d" .$a. ") as d" .$a. ",";
+				$str_sql = $str_sql . " (sum(c.d" .$a. ")/sum(b.ro))*100 as '%".$a."',";
+				$a++;
+			endforeach;
+			$str_sql = $str_sql . " SUM(c.TOTAL) as dtotal, (SUM(c.TOTAL)/SUM(b.ro))*100 as '%total'";
+
+			$str_sql = $str_sql . " FROM channel a";
+
+			$str_sql = $str_sql . " LEFT JOIN (";
+						$str_sql = $str_sql . " select a.id, a.big_code, a.outlet_code, a.outlet_name, a.area, c.outlet_type, a.dist_code, b.distributor, a2.total_outlet as ro";
+						$str_sql = $str_sql . " from outlet a ";
+						$str_sql = $str_sql . " inner join ( ";
+									$str_sql = $str_sql . " select big_code, outlet_code, area, dist_code, max(total_outlet) total_outlet, max(register_date) as register_date";
+									$str_sql = $str_sql . " from outlet";
+									$str_sql = $str_sql . " group by big_code, area";
+									$str_sql = $str_sql . " ) a2 on a.big_code = a2.big_code and a.area = a2.area and a.register_date = a2.register_date";
+						$str_sql = $str_sql . " inner join distributor b on a.dist_code = b.cust_code and a.area = b.area";
+						$str_sql = $str_sql . " inner join channel c on a.outlet_type = c.outlet_type";
+						$str_sql = $str_sql . " inner join area d on a.area = d.area";
+						$str_sql = $str_sql . " where d.island = '" . $island . "' and d.area in ('" . $area . "') and d.region = '" . $region . "'";
+						$str_sql = $str_sql . " and a.register_date <= last_day(concat('" . $year . "', '".$fromdate."'))";
+						$str_sql = $str_sql . " group by a.outlet_type, a.big_code, a.area";
+						$str_sql = $str_sql . " order by a.big_code";
+						$str_sql = $str_sql . " ) b on a.outlet_type = b.outlet_type";
+
+			$str_sql = $str_sql . " LEFT JOIN (";
+						$str_sql = $str_sql . " select x.big_code, x.cust_code, x.cust_name, x.area, x.outlet_type, x.kode_dist, x.nama_dist,";
+						$i = 1;
+						foreach($data['sku_code'] as $sku):
+							$item[$i] = $sku['item_code'];
+							$str_sql = $str_sql . " max(distinct if(x.item_code = '" .$sku['item_code']. "', z.total_outlet, null)) AS d".$i.",";
+							$i++;
+						endforeach;
+						$str_sql = $str_sql . " max(z.total_outlet) as TOTAL";
+						$str_sql = $str_sql . " from selling_out x";
+						$str_sql = $str_sql . " left join area y on x.area = y.area";
+						$str_sql = $str_sql . " inner join outlet z on x.big_code = z.big_code and x.outlet_type = z.outlet_type and x.area = z.area and z.total_outlet >= 1";
+						$str_sql = $str_sql . " where x.principal = 'LORD'";
+						$str_sql = $str_sql . " and y.island = '" . $island . "' and x.area in ('" . $area . "') and y.region = '" . $region . "'";
+						$str_sql = $str_sql . " and x.tanggal between DATE_SUB(concat('" . $year . "', '".$fromdate."'), INTERVAL 11 month) and LAST_DAY(concat('" . $year . "', '".$fromdate."'))";
+						$str_sql = $str_sql . " group by x.outlet_type, x.big_code, x.area";
+						$str_sql = $str_sql . " ) c on a.outlet_type = c.outlet_type AND b.big_code = c.big_code AND b.area = c.area";
+
+			$str_sql = $str_sql . " GROUP BY a.outlet_type";
+			$str_sql = $str_sql . " ORDER BY a.id";
+		}
+		else if (isset($island) and isset($region) and $island != '' and $region != '')
+		{
+			$a=1;
+			foreach($data['sku_code'] as $sku):
+				$str_sql = $str_sql . " sum(c.d" .$a. ") as d" .$a. ",";
+				$str_sql = $str_sql . " (sum(c.d" .$a. ")/sum(b.ro))*100 as '%".$a."',";
+				$a++;
+			endforeach;
+			$str_sql = $str_sql . " SUM(c.TOTAL) as dtotal, (SUM(c.TOTAL)/SUM(b.ro))*100 as '%total'";
+
+			$str_sql = $str_sql . " FROM channel a";
+
+			$str_sql = $str_sql . " LEFT JOIN (";
+						$str_sql = $str_sql . " select a.id, a.big_code, a.outlet_code, a.outlet_name, a.area, c.outlet_type, a.dist_code, b.distributor, a2.total_outlet as ro";
+						$str_sql = $str_sql . " from outlet a ";
+						$str_sql = $str_sql . " inner join ( ";
+									$str_sql = $str_sql . " select big_code, outlet_code, area, dist_code, max(total_outlet) total_outlet, max(register_date) as register_date";
+									$str_sql = $str_sql . " from outlet";
+									$str_sql = $str_sql . " group by big_code, area";
+									$str_sql = $str_sql . " ) a2 on a.big_code = a2.big_code and a.area = a2.area and a.register_date = a2.register_date";
+						$str_sql = $str_sql . " inner join distributor b on a.dist_code = b.cust_code and a.area = b.area";
+						$str_sql = $str_sql . " inner join channel c on a.outlet_type = c.outlet_type";
+						$str_sql = $str_sql . " inner join area d on a.area = d.area";
+						$str_sql = $str_sql . " where d.island = '" . $island . "' and d.region = '" . $region . "'";
+						$str_sql = $str_sql . " and a.register_date <= last_day(concat('" . $year . "', '".$fromdate."'))";
+						$str_sql = $str_sql . " group by a.outlet_type, a.big_code, a.area";
+						$str_sql = $str_sql . " order by a.big_code";
+						$str_sql = $str_sql . " ) b on a.outlet_type = b.outlet_type";
+
+			$str_sql = $str_sql . " LEFT JOIN (";
+						$str_sql = $str_sql . " select x.big_code, x.cust_code, x.cust_name, x.area, x.outlet_type, x.kode_dist, x.nama_dist,";
+						$i = 1;
+						foreach($data['sku_code'] as $sku):
+							$item[$i] = $sku['item_code'];
+							$str_sql = $str_sql . " max(distinct if(x.item_code = '" .$sku['item_code']. "', z.total_outlet, null)) AS d".$i.",";
+							$i++;
+						endforeach;
+						$str_sql = $str_sql . " max(z.total_outlet) as TOTAL";
+						$str_sql = $str_sql . " from selling_out x";
+						$str_sql = $str_sql . " left join area y on x.area = y.area";
+						$str_sql = $str_sql . " inner join outlet z on x.big_code = z.big_code and x.outlet_type = z.outlet_type and x.area = z.area and z.total_outlet >= 1";
+						$str_sql = $str_sql . " where x.principal = 'LORD'";
+						$str_sql = $str_sql . " and y.island = '" . $island . "' and y.region = '" . $region . "'";
+						$str_sql = $str_sql . " and x.tanggal between DATE_SUB(concat('" . $year . "', '".$fromdate."'), INTERVAL 11 month) and LAST_DAY(concat('" . $year . "', '".$fromdate."'))";
+						$str_sql = $str_sql . " group by x.outlet_type, x.big_code, x.area";
+						$str_sql = $str_sql . " ) c on a.outlet_type = c.outlet_type AND b.big_code = c.big_code AND b.area = c.area";
+
+			$str_sql = $str_sql . " GROUP BY a.outlet_type";
+			$str_sql = $str_sql . " ORDER BY a.id";
+		}
+		else if (isset($island) and isset($area) and $island != '' and $area != '')
+		{
+			$a=1;
+			foreach($data['sku_code'] as $sku):
+				$str_sql = $str_sql . " sum(c.d" .$a. ") as d" .$a. ",";
+				$str_sql = $str_sql . " (sum(c.d" .$a. ")/sum(b.ro))*100 as '%".$a."',";
+				$a++;
+			endforeach;
+			$str_sql = $str_sql . " SUM(c.TOTAL) as dtotal, (SUM(c.TOTAL)/SUM(b.ro))*100 as '%total'";
+
+			$str_sql = $str_sql . " FROM channel a";
+
+			$str_sql = $str_sql . " LEFT JOIN (";
+						$str_sql = $str_sql . " select a.id, a.big_code, a.outlet_code, a.outlet_name, a.area, c.outlet_type, a.dist_code, b.distributor, a2.total_outlet as ro";
+						$str_sql = $str_sql . " from outlet a ";
+						$str_sql = $str_sql . " inner join ( ";
+									$str_sql = $str_sql . " select big_code, outlet_code, area, dist_code, max(total_outlet) total_outlet, max(register_date) as register_date";
+									$str_sql = $str_sql . " from outlet";
+									$str_sql = $str_sql . " group by big_code, area";
+									$str_sql = $str_sql . " ) a2 on a.big_code = a2.big_code and a.area = a2.area and a.register_date = a2.register_date";
+						$str_sql = $str_sql . " inner join distributor b on a.dist_code = b.cust_code and a.area = b.area";
+						$str_sql = $str_sql . " inner join channel c on a.outlet_type = c.outlet_type";
+						$str_sql = $str_sql . " inner join area d on a.area = d.area";
+						$str_sql = $str_sql . " where d.island = '" . $island . "' and d.area in ('" . $area . "')";
+						$str_sql = $str_sql . " and a.register_date <= last_day(concat('" . $year . "', '".$fromdate."'))";
+						$str_sql = $str_sql . " group by a.outlet_type, a.big_code, a.area";
+						$str_sql = $str_sql . " order by a.big_code";
+						$str_sql = $str_sql . " ) b on a.outlet_type = b.outlet_type";
+
+			$str_sql = $str_sql . " LEFT JOIN (";
+						$str_sql = $str_sql . " select x.big_code, x.cust_code, x.cust_name, x.area, x.outlet_type, x.kode_dist, x.nama_dist,";
+						$i = 1;
+						foreach($data['sku_code'] as $sku):
+							$item[$i] = $sku['item_code'];
+							$str_sql = $str_sql . " max(distinct if(x.item_code = '" .$sku['item_code']. "', z.total_outlet, null)) AS d".$i.",";
+							$i++;
+						endforeach;
+						$str_sql = $str_sql . " max(z.total_outlet) as TOTAL";
+						$str_sql = $str_sql . " from selling_out x";
+						$str_sql = $str_sql . " left join area y on x.area = y.area";
+						$str_sql = $str_sql . " inner join outlet z on x.big_code = z.big_code and x.outlet_type = z.outlet_type and x.area = z.area and z.total_outlet >= 1";
+						$str_sql = $str_sql . " where x.principal = 'LORD'";
+						$str_sql = $str_sql . " and y.island = '" . $island . "' and x.area in ('" . $area . "')";
+						$str_sql = $str_sql . " and x.tanggal between DATE_SUB(concat('" . $year . "', '".$fromdate."'), INTERVAL 11 month) and LAST_DAY(concat('" . $year . "', '".$fromdate."'))";
+						$str_sql = $str_sql . " group by x.outlet_type, x.big_code, x.area";
+						$str_sql = $str_sql . " ) c on a.outlet_type = c.outlet_type AND b.big_code = c.big_code AND b.area = c.area";
+
+			$str_sql = $str_sql . " GROUP BY a.outlet_type";
+			$str_sql = $str_sql . " ORDER BY a.id";
+		}
+		else if (isset($area) and isset($region) and $area != '' and $region != '')
+		{
+			$a=1;
+			foreach($data['sku_code'] as $sku):
+				$str_sql = $str_sql . " sum(c.d" .$a. ") as d" .$a. ",";
+				$str_sql = $str_sql . " (sum(c.d" .$a. ")/sum(b.ro))*100 as '%".$a."',";
+				$a++;
+			endforeach;
+			$str_sql = $str_sql . " SUM(c.TOTAL) as dtotal, (SUM(c.TOTAL)/SUM(b.ro))*100 as '%total'";
+
+			$str_sql = $str_sql . " FROM channel a";
+
+			$str_sql = $str_sql . " LEFT JOIN (";
+						$str_sql = $str_sql . " select a.id, a.big_code, a.outlet_code, a.outlet_name, a.area, c.outlet_type, a.dist_code, b.distributor, a2.total_outlet as ro";
+						$str_sql = $str_sql . " from outlet a ";
+						$str_sql = $str_sql . " inner join ( ";
+									$str_sql = $str_sql . " select big_code, outlet_code, area, dist_code, max(total_outlet) total_outlet, max(register_date) as register_date";
+									$str_sql = $str_sql . " from outlet";
+									$str_sql = $str_sql . " group by big_code, area";
+									$str_sql = $str_sql . " ) a2 on a.big_code = a2.big_code and a.area = a2.area and a.register_date = a2.register_date";
+						$str_sql = $str_sql . " inner join distributor b on a.dist_code = b.cust_code and a.area = b.area";
+						$str_sql = $str_sql . " inner join channel c on a.outlet_type = c.outlet_type";
+						$str_sql = $str_sql . " inner join area d on a.area = d.area";
+						$str_sql = $str_sql . " where d.area in ('" . $area . "') and d.region = '" . $region . "'";
+						$str_sql = $str_sql . " and a.register_date <= last_day(concat('" . $year . "', '".$fromdate."'))";
+						$str_sql = $str_sql . " group by a.outlet_type, a.big_code, a.area";
+						$str_sql = $str_sql . " order by a.big_code";
+						$str_sql = $str_sql . " ) b on a.outlet_type = b.outlet_type";
+
+			$str_sql = $str_sql . " LEFT JOIN (";
+						$str_sql = $str_sql . " select x.big_code, x.cust_code, x.cust_name, x.area, x.outlet_type, x.kode_dist, x.nama_dist,";
+						$i = 1;
+						foreach($data['sku_code'] as $sku):
+							$item[$i] = $sku['item_code'];
+							$str_sql = $str_sql . " max(distinct if(x.item_code = '" .$sku['item_code']. "', z.total_outlet, null)) AS d".$i.",";
+							$i++;
+						endforeach;
+						$str_sql = $str_sql . " max(z.total_outlet) as TOTAL";
+						$str_sql = $str_sql . " from selling_out x";
+						$str_sql = $str_sql . " left join area y on x.area = y.area";
+						$str_sql = $str_sql . " inner join outlet z on x.big_code = z.big_code and x.outlet_type = z.outlet_type and x.area = z.area and z.total_outlet >= 1";
+						$str_sql = $str_sql . " where x.principal = 'LORD'";
+						$str_sql = $str_sql . " and x.area in ('" . $area . "') and y.region = '" . $region . "'";
+						$str_sql = $str_sql . " and x.tanggal between DATE_SUB(concat('" . $year . "', '".$fromdate."'), INTERVAL 11 month) and LAST_DAY(concat('" . $year . "', '".$fromdate."'))";
+						$str_sql = $str_sql . " group by x.outlet_type, x.big_code, x.area";
+						$str_sql = $str_sql . " ) c on a.outlet_type = c.outlet_type AND b.big_code = c.big_code AND b.area = c.area";
+
+			$str_sql = $str_sql . " GROUP BY a.outlet_type";
+			$str_sql = $str_sql . " ORDER BY a.id";
+		}
+		else if (isset($island) and $island != '')
+		{
+			$a=1;
+			foreach($data['sku_code'] as $sku):
+				$str_sql = $str_sql . " sum(c.d" .$a. ") as d" .$a. ",";
+				$str_sql = $str_sql . " (sum(c.d" .$a. ")/sum(b.ro))*100 as '%".$a."',";
+				$a++;
+			endforeach;
+			$str_sql = $str_sql . " SUM(c.TOTAL) as dtotal, (SUM(c.TOTAL)/SUM(b.ro))*100 as '%total'";
+
+			$str_sql = $str_sql . " FROM channel a";
+
+			$str_sql = $str_sql . " LEFT JOIN (";
+						$str_sql = $str_sql . " select a.id, a.big_code, a.outlet_code, a.outlet_name, a.area, c.outlet_type, a.dist_code, b.distributor, a2.total_outlet as ro";
+						$str_sql = $str_sql . " from outlet a ";
+						$str_sql = $str_sql . " inner join ( ";
+									$str_sql = $str_sql . " select big_code, outlet_code, area, dist_code, max(total_outlet) total_outlet, max(register_date) as register_date";
+									$str_sql = $str_sql . " from outlet";
+									$str_sql = $str_sql . " group by big_code, area";
+									$str_sql = $str_sql . " ) a2 on a.big_code = a2.big_code and a.area = a2.area and a.register_date = a2.register_date";
+						$str_sql = $str_sql . " inner join distributor b on a.dist_code = b.cust_code and a.area = b.area";
+						$str_sql = $str_sql . " inner join channel c on a.outlet_type = c.outlet_type";
+						$str_sql = $str_sql . " inner join area d on a.area = d.area";
+						$str_sql = $str_sql . " where d.island = '" . $island . "'";
+						$str_sql = $str_sql . " and a.register_date <= last_day(concat('" . $year . "', '".$fromdate."'))";
+						$str_sql = $str_sql . " group by a.outlet_type, a.big_code, a.area";
+						$str_sql = $str_sql . " order by a.big_code";
+						$str_sql = $str_sql . " ) b on a.outlet_type = b.outlet_type";
+
+			$str_sql = $str_sql . " LEFT JOIN (";
+						$str_sql = $str_sql . " select x.big_code, x.cust_code, x.cust_name, x.area, x.outlet_type, x.kode_dist, x.nama_dist,";
+						$i = 1;
+						foreach($data['sku_code'] as $sku):
+							$item[$i] = $sku['item_code'];
+							$str_sql = $str_sql . " max(distinct if(x.item_code = '" .$sku['item_code']. "', z.total_outlet, null)) AS d".$i.",";
+							$i++;
+						endforeach;
+						$str_sql = $str_sql . " max(z.total_outlet) as TOTAL";
+						$str_sql = $str_sql . " from selling_out x";
+						$str_sql = $str_sql . " left join area y on x.area = y.area";
+						$str_sql = $str_sql . " inner join outlet z on x.big_code = z.big_code and x.outlet_type = z.outlet_type and x.area = z.area and z.total_outlet >= 1";
+						$str_sql = $str_sql . " where x.principal = 'LORD'";
+						$str_sql = $str_sql . " and y.island = '" . $island . "'";
+						$str_sql = $str_sql . " and x.tanggal between DATE_SUB(concat('" . $year . "', '".$fromdate."'), INTERVAL 11 month) and LAST_DAY(concat('" . $year . "', '".$fromdate."'))";
+						$str_sql = $str_sql . " group by x.outlet_type, x.big_code, x.area";
+						$str_sql = $str_sql . " ) c on a.outlet_type = c.outlet_type AND b.big_code = c.big_code AND b.area = c.area";
+
+			$str_sql = $str_sql . " GROUP BY a.outlet_type";
+			$str_sql = $str_sql . " ORDER BY a.id";
+		}
+		else if (isset($area) and $area != '')
+		{
+			$a=1;
+			foreach($data['sku_code'] as $sku):
+				$str_sql = $str_sql . " sum(c.d" .$a. ") as d" .$a. ",";
+				$str_sql = $str_sql . " (sum(c.d" .$a. ")/sum(b.ro))*100 as '%".$a."',";
+				$a++;
+			endforeach;
+			$str_sql = $str_sql . " SUM(c.TOTAL) as dtotal, (SUM(c.TOTAL)/SUM(b.ro))*100 as '%total'";
+
+			$str_sql = $str_sql . " FROM channel a";
+
+			$str_sql = $str_sql . " LEFT JOIN (";
+						$str_sql = $str_sql . " select a.id, a.big_code, a.outlet_code, a.outlet_name, a.area, c.outlet_type, a.dist_code, b.distributor, a2.total_outlet as ro";
+						$str_sql = $str_sql . " from outlet a ";
+						$str_sql = $str_sql . " inner join ( ";
+									$str_sql = $str_sql . " select big_code, outlet_code, area, dist_code, max(total_outlet) total_outlet, max(register_date) as register_date";
+									$str_sql = $str_sql . " from outlet";
+									$str_sql = $str_sql . " group by big_code, area";
+									$str_sql = $str_sql . " ) a2 on a.big_code = a2.big_code and a.area = a2.area and a.register_date = a2.register_date";
+						$str_sql = $str_sql . " inner join distributor b on a.dist_code = b.cust_code and a.area = b.area";
+						$str_sql = $str_sql . " inner join channel c on a.outlet_type = c.outlet_type";
+						$str_sql = $str_sql . " inner join area d on a.area = d.area";
+						$str_sql = $str_sql . " where d.area in ('" . $area . "')";
+						$str_sql = $str_sql . " and a.register_date <= last_day(concat('" . $year . "', '".$fromdate."'))";
+						$str_sql = $str_sql . " group by a.outlet_type, a.big_code, a.area";
+						$str_sql = $str_sql . " order by a.big_code";
+						$str_sql = $str_sql . " ) b on a.outlet_type = b.outlet_type";
+
+			$str_sql = $str_sql . " LEFT JOIN (";
+						$str_sql = $str_sql . " select x.big_code, x.cust_code, x.cust_name, x.area, x.outlet_type, x.kode_dist, x.nama_dist,";
+						$i = 1;
+						foreach($data['sku_code'] as $sku):
+							$item[$i] = $sku['item_code'];
+							$str_sql = $str_sql . " max(distinct if(x.item_code = '" .$sku['item_code']. "', z.total_outlet, null)) AS d".$i.",";
+							$i++;
+						endforeach;
+						$str_sql = $str_sql . " max(z.total_outlet) as TOTAL";
+						$str_sql = $str_sql . " from selling_out x";
+						$str_sql = $str_sql . " left join area y on x.area = y.area";
+						$str_sql = $str_sql . " inner join outlet z on x.big_code = z.big_code and x.outlet_type = z.outlet_type and x.area = z.area and z.total_outlet >= 1";
+						$str_sql = $str_sql . " where x.principal = 'LORD'";
+						$str_sql = $str_sql . " and x.area in ('" . $area . "')";
+						$str_sql = $str_sql . " and x.tanggal between DATE_SUB(concat('" . $year . "', '".$fromdate."'), INTERVAL 11 month) and LAST_DAY(concat('" . $year . "', '".$fromdate."'))";
+						$str_sql = $str_sql . " group by x.outlet_type, x.big_code, x.area";
+						$str_sql = $str_sql . " ) c on a.outlet_type = c.outlet_type AND b.big_code = c.big_code AND b.area = c.area";
+
+			$str_sql = $str_sql . " GROUP BY a.outlet_type";
+			$str_sql = $str_sql . " ORDER BY a.id";
+		}
+		else if (isset($region) and $region != '')
+		{
+			$a=1;
+			foreach($data['sku_code'] as $sku):
+				$str_sql = $str_sql . " sum(c.d" .$a. ") as d" .$a. ",";
+				$str_sql = $str_sql . " (sum(c.d" .$a. ")/sum(b.ro))*100 as '%".$a."',";
+				$a++;
+			endforeach;
+			$str_sql = $str_sql . " SUM(c.TOTAL) as dtotal, (SUM(c.TOTAL)/SUM(b.ro))*100 as '%total'";
+
+			$str_sql = $str_sql . " FROM channel a";
+
+			$str_sql = $str_sql . " LEFT JOIN (";
+						$str_sql = $str_sql . " select a.id, a.big_code, a.outlet_code, a.outlet_name, a.area, c.outlet_type, a.dist_code, b.distributor, a2.total_outlet as ro";
+						$str_sql = $str_sql . " from outlet a ";
+						$str_sql = $str_sql . " inner join ( ";
+									$str_sql = $str_sql . " select big_code, outlet_code, area, dist_code, max(total_outlet) total_outlet, max(register_date) as register_date";
+									$str_sql = $str_sql . " from outlet";
+									$str_sql = $str_sql . " group by big_code, area";
+									$str_sql = $str_sql . " ) a2 on a.big_code = a2.big_code and a.area = a2.area and a.register_date = a2.register_date";
+						$str_sql = $str_sql . " inner join distributor b on a.dist_code = b.cust_code and a.area = b.area";
+						$str_sql = $str_sql . " inner join channel c on a.outlet_type = c.outlet_type";
+						$str_sql = $str_sql . " inner join area d on a.area = d.area";
+						$str_sql = $str_sql . " where d.region = '" . $region . "'";
+						$str_sql = $str_sql . " and a.register_date <= last_day(concat('" . $year . "', '".$fromdate."'))";
+						$str_sql = $str_sql . " group by a.outlet_type, a.big_code, a.area";
+						$str_sql = $str_sql . " order by a.big_code";
+						$str_sql = $str_sql . " ) b on a.outlet_type = b.outlet_type";
+
+			$str_sql = $str_sql . " LEFT JOIN (";
+						$str_sql = $str_sql . " select x.big_code, x.cust_code, x.cust_name, x.area, x.outlet_type, x.kode_dist, x.nama_dist,";
+						$i = 1;
+						foreach($data['sku_code'] as $sku):
+							$item[$i] = $sku['item_code'];
+							$str_sql = $str_sql . " max(distinct if(x.item_code = '" .$sku['item_code']. "', z.total_outlet, null)) AS d".$i.",";
+							$i++;
+						endforeach;
+						$str_sql = $str_sql . " max(z.total_outlet) as TOTAL";
+						$str_sql = $str_sql . " from selling_out x";
+						$str_sql = $str_sql . " left join area y on x.area = y.area";
+						$str_sql = $str_sql . " inner join outlet z on x.big_code = z.big_code and x.outlet_type = z.outlet_type and x.area = z.area and z.total_outlet >= 1";
+						$str_sql = $str_sql . " where x.principal = 'LORD'";
+						$str_sql = $str_sql . " and y.region = '" . $region . "'";
+						$str_sql = $str_sql . " and x.tanggal between DATE_SUB(concat('" . $year . "', '".$fromdate."'), INTERVAL 11 month) and LAST_DAY(concat('" . $year . "', '".$fromdate."'))";
+						$str_sql = $str_sql . " group by x.outlet_type, x.big_code, x.area";
+						$str_sql = $str_sql . " ) c on a.outlet_type = c.outlet_type AND b.big_code = c.big_code AND b.area = c.area";
+
+			$str_sql = $str_sql . " GROUP BY a.outlet_type";
+			$str_sql = $str_sql . " ORDER BY a.id";
+		}
+		else
+		{
+			if ($_SESSION['area'] != 'ALL')
+			{
+				$session_area = str_replace(",", "','", $_SESSION['area']);
+				$session_area = str_replace(" ", "", $session_area);
+
+				$a=1;
+				foreach($data['sku_code'] as $sku):
+					$str_sql = $str_sql . " sum(c.d" .$a. ") as d" .$a. ",";
+					$str_sql = $str_sql . " (sum(c.d" .$a. ")/sum(b.ro))*100 as '%".$a."',";
+					$a++;
+				endforeach;
+				$str_sql = $str_sql . " SUM(c.TOTAL) as dtotal, (SUM(c.TOTAL)/SUM(b.ro))*100 as '%total'";
+
+				$str_sql = $str_sql . " FROM channel a";
+
+				$str_sql = $str_sql . " LEFT JOIN (";
+							$str_sql = $str_sql . " select a.id, a.big_code, a.outlet_code, a.outlet_name, a.area, c.outlet_type, a.dist_code, b.distributor, a2.total_outlet as ro";
+							$str_sql = $str_sql . " from outlet a ";
+							$str_sql = $str_sql . " inner join ( ";
+										$str_sql = $str_sql . " select big_code, outlet_code, area, dist_code, max(total_outlet) total_outlet, max(register_date) as register_date";
+										$str_sql = $str_sql . " from outlet";
+										$str_sql = $str_sql . " group by big_code, area";
+										$str_sql = $str_sql . " ) a2 on a.big_code = a2.big_code and a.area = a2.area and a.register_date = a2.register_date";
+							$str_sql = $str_sql . " inner join distributor b on a.dist_code = b.cust_code and a.area = b.area";
+							$str_sql = $str_sql . " inner join channel c on a.outlet_type = c.outlet_type";
+							$str_sql = $str_sql . " inner join area d on a.area = d.area";
+							$str_sql = $str_sql . " where d.area in ('" . $session_area . "')";
+							$str_sql = $str_sql . " and a.register_date <= last_day(concat('" . $year . "', '".$fromdate."'))";
+							$str_sql = $str_sql . " group by a.outlet_type, a.big_code, a.area";
+							$str_sql = $str_sql . " order by a.big_code";
+							$str_sql = $str_sql . " ) b on a.outlet_type = b.outlet_type";
+
+				$str_sql = $str_sql . " LEFT JOIN (";
+							$str_sql = $str_sql . " select x.big_code, x.cust_code, x.cust_name, x.area, x.outlet_type, x.kode_dist, x.nama_dist,";
+							$i = 1;
+							foreach($data['sku_code'] as $sku):
+								$item[$i] = $sku['item_code'];
+								$str_sql = $str_sql . " max(distinct if(x.item_code = '" .$sku['item_code']. "', z.total_outlet, null)) AS d".$i.",";
+								$i++;
+							endforeach;
+							$str_sql = $str_sql . " max(z.total_outlet) as TOTAL";
+							$str_sql = $str_sql . " from selling_out x";
+							$str_sql = $str_sql . " left join area y on x.area = y.area";
+							$str_sql = $str_sql . " inner join outlet z on x.big_code = z.big_code and x.outlet_type = z.outlet_type and x.area = z.area and z.total_outlet >= 1";
+							$str_sql = $str_sql . " where x.principal = 'LORD'";
+							$str_sql = $str_sql . " and x.area in ('" . $session_area . "')";
+							$str_sql = $str_sql . " and x.tanggal between DATE_SUB(concat('" . $year . "', '".$fromdate."'), INTERVAL 11 month) and LAST_DAY(concat('" . $year . "', '".$fromdate."'))";
+							$str_sql = $str_sql . " group by x.outlet_type, x.big_code, x.area";
+							$str_sql = $str_sql . " ) c on a.outlet_type = c.outlet_type AND b.big_code = c.big_code AND b.area = c.area";
+
+				$str_sql = $str_sql . " GROUP BY a.outlet_type";
+				$str_sql = $str_sql . " ORDER BY a.id";
+			}
+			else
+			{
+				$a=1;
+				foreach($data['sku_code'] as $sku):
+					$str_sql = $str_sql . " sum(c.d" .$a. ") as d" .$a. ",";
+					$str_sql = $str_sql . " (sum(c.d" .$a. ")/sum(b.ro))*100 as '%".$a."',";
+					$a++;
+				endforeach;
+				$str_sql = $str_sql . " SUM(c.TOTAL) as dtotal, (SUM(c.TOTAL)/SUM(b.ro))*100 as '%total'";
+
+				$str_sql = $str_sql . " FROM channel a";
+
+				$str_sql = $str_sql . " LEFT JOIN (";
+							$str_sql = $str_sql . " select a.id, a.big_code, a.outlet_code, a.outlet_name, a.area, c.outlet_type, a.dist_code, b.distributor, a2.total_outlet as ro";
+							$str_sql = $str_sql . " from outlet a ";
+							$str_sql = $str_sql . " inner join ( ";
+										$str_sql = $str_sql . " select big_code, outlet_code, area, dist_code, max(total_outlet) total_outlet, max(register_date) as register_date";
+										$str_sql = $str_sql . " from outlet";
+										$str_sql = $str_sql . " group by big_code, area";
+										$str_sql = $str_sql . " ) a2 on a.big_code = a2.big_code and a.area = a2.area and a.register_date = a2.register_date";
+							$str_sql = $str_sql . " inner join distributor b on a.dist_code = b.cust_code and a.area = b.area";
+							$str_sql = $str_sql . " inner join channel c on a.outlet_type = c.outlet_type";
+							$str_sql = $str_sql . " inner join area d on a.area = d.area";
+							$str_sql = $str_sql . " where a.register_date <= last_day(concat('" . $year . "', '".$fromdate."'))";
+							$str_sql = $str_sql . " group by a.outlet_type, a.big_code, a.area";
+							$str_sql = $str_sql . " order by a.big_code";
+							$str_sql = $str_sql . " ) b on a.outlet_type = b.outlet_type";
+
+				$str_sql = $str_sql . " LEFT JOIN (";
+							$str_sql = $str_sql . " select x.big_code, x.cust_code, x.cust_name, x.area, x.outlet_type, x.kode_dist, x.nama_dist,";
+							$i = 1;
+							foreach($data['sku_code'] as $sku):
+								$item[$i] = $sku['item_code'];
+								$str_sql = $str_sql . " max(distinct if(x.item_code = '" .$sku['item_code']. "', z.total_outlet, null)) AS d".$i.",";
+								$i++;
+							endforeach;
+							$str_sql = $str_sql . " max(z.total_outlet) as TOTAL";
+							$str_sql = $str_sql . " from selling_out x";
+							$str_sql = $str_sql . " left join area y on x.area = y.area";
+							$str_sql = $str_sql . " inner join outlet z on x.big_code = z.big_code and x.outlet_type = z.outlet_type and x.area = z.area and z.total_outlet >= 1";
+							$str_sql = $str_sql . " where x.principal = 'LORD'";
+							$str_sql = $str_sql . " and x.tanggal between DATE_SUB(concat('" . $year . "', '".$fromdate."'), INTERVAL 11 month) and LAST_DAY(concat('" . $year . "', '".$fromdate."'))";
+							$str_sql = $str_sql . " group by x.outlet_type, x.big_code, x.area";
+							$str_sql = $str_sql . " ) c on a.outlet_type = c.outlet_type AND b.big_code = c.big_code AND b.area = c.area";
+
+				$str_sql = $str_sql . " GROUP BY a.outlet_type";
+				$str_sql = $str_sql . " ORDER BY a.id";
+			}
+		}
+
+		// Flasher::setMessage('Berhasil',$str_sql,'success');
 
 		$this->db->opendb();
 		$this->db->query($str_sql);
@@ -41442,20 +42061,25 @@ class ReportModel {
 		{
 			$island = $_POST['by_island'];
 		}
+		
 		if(isset($_POST['by_month1']))
 		{
 			$month1 = $_POST['by_month1'];
 		}else
 		{
-			$month1 = date('m');
+			$get['period_so'] = $this->getMonth_SO();
+			$month1 = $get['period_so']['to_month'];
 		}
+
 		if(isset($_POST['by_month2']))
 		{
 			$month2 = $_POST['by_month2'];
 		}else
 		{
-			$month2 = date('m');
+			$get['period_so'] = $this->getMonth_SO();
+			$month2 = $get['period_so']['to_month'];
 		}
+
 		if(isset($_POST['by_year']))
 		{
 			$year = $_POST['by_year'];

@@ -120,6 +120,27 @@ class SkuModel {
 		return $this->db->resultSet();
 	}
 
+	public function getItemNameSKU2()
+	{
+		if(isset($_POST['by_principal']))
+		{
+			$principal = $_POST['by_principal'];
+		}else
+		{
+			$principal = "JORDAN";
+		}
+
+		$this->db->opendb();
+		$str_sql = "SELECT a.item_name";
+		$str_sql = $str_sql . " FROM sku a";
+		$str_sql = $str_sql . " LEFT JOIN sku_group b on a.item_group = b.item_group";
+		$str_sql = $str_sql . " WHERE a.principal = '".$principal."'";
+		$str_sql = $str_sql . " ORDER BY b.group_id, a.id";
+
+		$this->db->query($str_sql);
+		return $this->db->resultSet();
+	}
+
 	public function getItemCodeSKU()
 	{
 		if(isset($_POST['by_principal']))
@@ -135,6 +156,21 @@ class SkuModel {
 		$str_sql = $str_sql . " FROM sku a";
 		$str_sql = $str_sql . " LEFT JOIN sku_group b on a.item_group = b.item_group";
 		$str_sql = $str_sql . " WHERE a.principal = '".$principal."'";
+		$str_sql = $str_sql . " ORDER BY b.group_id, a.id";
+
+		// Flasher::setMessage('Berhasil',$str_sql,'success');
+
+		$this->db->query($str_sql);
+		return $this->db->resultSet();
+	}
+
+	public function getItemCodeSKU_ALL()
+	{
+
+		$this->db->opendb();
+		$str_sql = "SELECT DISTINCT a.item_code, a.item_name";
+		$str_sql = $str_sql . " FROM sku a";
+		$str_sql = $str_sql . " LEFT JOIN sku_group b on a.item_group = b.item_group";
 		$str_sql = $str_sql . " ORDER BY b.group_id, a.id";
 
 		// Flasher::setMessage('Berhasil',$str_sql,'success');
@@ -209,8 +245,45 @@ class SkuModel {
 		return $this->db->resultSet();
 	}
 
+	public function getGroupSKU3()
+	{
+		if(isset($_POST['by_principal']))
+		{
+			$principal = $_POST['by_principal'];
+		}else
+		{
+			$principal = "JORDAN";
+		}
+
+		$this->db->opendb();
+		$str_sql = "SELECT a.item_group, count(distinct a.item_name) as count_name";
+		$str_sql = $str_sql . " FROM sku a";
+		$str_sql = $str_sql . " LEFT JOIN sku_group b on a.item_group = b.item_group";
+		$str_sql = $str_sql . " WHERE a.principal = '".$principal."'";
+		$str_sql = $str_sql . " GROUP BY a.item_group";
+		$str_sql = $str_sql . " ORDER BY b.group_id, a.id";
+
+		$this->db->query($str_sql);
+		return $this->db->resultSet();
+	}
+
 	public function getCountSKU($principal)
 	{
+		$this->db->opendb();
+		$this->db->query("SELECT count(item_name) as item_row FROM " . $this->table . " where principal = '".$principal."' ORDER BY id");
+		return $this->db->resultSet();
+	}
+
+	public function getCountSKU2()
+	{
+		if(isset($_POST['by_principal']))
+		{
+			$principal = $_POST['by_principal'];
+		}else
+		{
+			$principal = "JORDAN";
+		}
+
 		$this->db->opendb();
 		$this->db->query("SELECT count(item_name) as item_row FROM " . $this->table . " where principal = '".$principal."' ORDER BY id");
 		return $this->db->resultSet();

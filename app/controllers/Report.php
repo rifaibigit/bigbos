@@ -1758,6 +1758,91 @@ class Report extends Controller {
 		$this->view('templates/footer');
 	}
 
+	public function Sellingout_Account_SKU()
+	{
+		$data['title'] = 'Report Selling Out - Group Account';
+
+		$this->template('header', $data);
+		$this->template('sidebar', $data);
+
+		$data['principal'] = $this->model('ReportModel')->getPrincipalOut();
+		$data['channel'] = $this->model('ReportModel')->getChannel();
+		$data['outlet_type'] = $this->model('ReportModel')->getOutletType();
+		$data['outlet'] = $this->model('ReportModel')->getOutletSO();
+		$data['item_name'] = $this->model('ReportModel')->getItemNameOut();
+		$data['area'] = $this->model('ReportModel')->getAreaOut();
+		$data['sku_code'] = $this->model('SkuModel')->getItemCodeSKU();
+		$data['sellingout_Account'] = $this->model('ReportModel')->getSellingOut_Account_SKU($data['sku_code']);
+
+		$data['sku_name'] = $this->model('SkuModel')->getItemNameSKU2();
+		$data['sku_group'] = $this->model('SkuModel')->getGroupSKU3();
+		$data['sku_count'] = $this->model('SkuModel')->getCountSKU2();
+
+		if(isset($_POST['by_principal']))
+		{
+			$data['by_principal'] = $_POST['by_principal'];
+		}else
+		{
+			$data['by_principal'] = "";
+		}
+
+		if(isset($_POST['by_channel']))
+		{
+			$data['by_channel'] = $_POST['by_channel'];
+		}else
+		{
+			$data['by_channel'] = "";
+		}
+
+		if(isset($_POST['by_outlet_type']))
+		{
+			$data['by_outlet_type'] = $_POST['by_outlet_type'];
+		}else
+		{
+			$data['by_outlet_type'] = "";
+		}
+
+		if(isset($_POST['by_outlet_code']))
+		{
+			$data['by_outlet_code'] = $_POST['by_outlet_code'];
+		}else
+		{
+			$data['by_outlet_code'] = "";
+		}
+
+		// if(isset($_POST['by_sku']))
+		// {
+		// 	$data['by_sku'] = $_POST['by_sku'];
+		// }else
+		// {
+		// 	$data['by_sku'] = "";
+		// }
+
+		if(isset($_POST['by_area']))
+		{
+			$data['by_area'] = $_POST['by_area'];
+		}
+		elseif ($_SESSION['area'] != 'ALL')
+		{
+			$data['by_area'] = explode(', ', $_SESSION['area']);
+		}
+		else
+		{
+			$data['by_area'] = "";
+		}
+
+		if(isset($_POST['by_year']))
+		{
+			$data['by_year'] = $_POST['by_year'];
+		}else
+		{
+			$data['by_year'] = date('Y');
+		}
+
+		$this->view('report/sellingout_Account_sku', $data);
+		$this->view('templates/footer');
+	}
+
 	public function Sellingout_AccountShow()
 	{
 		$data['data'] = $this->model('ReportModel')->getSellingOut_Account();
@@ -3669,7 +3754,7 @@ class Report extends Controller {
         $data['island'] = $this->model('ReportModel')->getIslandOut();
 		$data['sku_code'] = $this->model('SkuModel')->getItemCodeSKULord();
 
-		$data['distr_lord'] = $this->model('ReportModel')->getDistr_lord_ALL($data);
+		$data['distr_lord'] = $this->model('ReportModel')->getDistr_lord_ALL2($data);
 
 		$data['sku_name'] = $this->model('SkuModel')->getItemNameSKULord();
 		$data['sku_group'] = $this->model('SkuModel')->getGroupSKULord();
@@ -3791,7 +3876,8 @@ class Report extends Controller {
 			$data['by_year'] = $_POST['by_year'];
 		}else
 		{
-			$data['by_year'] = date('Y');
+			$get['period_si'] = $this->model('ReportModel')->getMonth_SO();
+			$data['by_year'] = $get['period_si']['year'];
 		}
 
 		$this->view('report/distribution_jordan', $data);
@@ -4529,21 +4615,21 @@ class Report extends Controller {
 
 		$data['title'] = 'Contribution - JORDAN';
 
-		if(isset($_POST['by_month1']))
-		{
-			$data['by_month1'] = $_POST['by_month1'];
-		}else
-		{
-			$data['by_month1'] = date('m');
-		}
+		// if(isset($_POST['by_month1']))
+		// {
+		// 	$data['by_month1'] = $_POST['by_month1'];
+		// }else
+		// {
+		// 	$data['by_month1'] = date('m');
+		// }
 
-		if(isset($_POST['by_month2']))
-		{
-			$data['by_month2'] = $_POST['by_month2'];
-		}else
-		{
-			$data['by_month2'] = date('m');
-		}
+		// if(isset($_POST['by_month2']))
+		// {
+		// 	$data['by_month2'] = $_POST['by_month2'];
+		// }else
+		// {
+		// 	$data['by_month2'] = date('m');
+		// }
 
 		$dateObj1   = DateTime::createFromFormat('!m', $data['by_month1']);
 		$dateObj2   = DateTime::createFromFormat('!m', $data['by_month2']);
@@ -4555,9 +4641,9 @@ class Report extends Controller {
 		$this->template('header', $data);
 		$this->template('sidebar', $data);
 
-        $data['area'] = $this->model('ReportModel')->getAreaOut();
-		$data['region'] = $this->model('ReportModel')->getRegionOut();
-        $data['island'] = $this->model('ReportModel')->getIslandOut();
+        // $data['area'] = $this->model('ReportModel')->getAreaOut();
+		// $data['region'] = $this->model('ReportModel')->getRegionOut();
+        // $data['island'] = $this->model('ReportModel')->getIslandOut();
 		$data['sku_code'] = $this->model('SkuModel')->getItemCodeSKUJordan();
 
 		$data['cont_jordan'] = $this->model('ReportModel')->getCont_jordan_ALL($data);
