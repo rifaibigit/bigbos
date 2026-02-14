@@ -37969,7 +37969,7 @@ class Report extends Controller {
 		);
 
 		//$data['distr_lord'] = $this->model('ReportModel')->getDistr_jordan_ALL($data);
-		$data['distr_lord'] = $this->model('ReportModel')->getDistr_lord_ALL($data);
+		$data['distr_lord'] = $this->model('ReportModel')->getDistr_lord_ALL2($data);
 
 		$data_col = 1;
 		$data_row = 10;
