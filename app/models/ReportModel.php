@@ -28853,7 +28853,7 @@ class ReportModel {
 			$str_sql = $str_sql . " and principal = '" . $principal . "'";	
 		}
 
-		$str_sql = $str_sql . " group by kode_dist, nama_dist, area";
+		$str_sql = $str_sql . " group by kode_dist, area";
 		$str_sql = $str_sql . " order by kode_dist, nama_dist, area) c on a.cust_code = c.kode_dist and a.area = c.area";
 
 		if($area != 'ALL')

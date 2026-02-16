@@ -634,8 +634,6 @@
                                         
                                     </tbody>
                                 </table>
-
-                                <!-- <?php// echo json_encode($dist_val); ?>  -->
                                 
                                 <div id="chart" style="width: 100%;height: 100%; margin-top: 50px;">
                                     <a style="float:right; margin-right: 30px;" class="btn btn-outline-info" href="#top"><i class="fas fa-table"> Table</i></a>
