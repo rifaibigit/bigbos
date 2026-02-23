@@ -101,6 +101,9 @@
                           <div style="margin-left : 5px;">
                             <button class="btn float-right btn btn-outline-success" type="submit" formaction="<?= base_url; ?>/Report/export_distribution_lord"><i class = "fa fa-download"> Excel</i></button>
                           </div>
+                          <div style="margin-left : 5px;">
+                            <button class="btn float-right btn btn-outline-success" type="submit" formaction="<?= base_url; ?>/Report/export_distribution_lord_area"><i class = "fa fa-download"> Area Detail</i></button>
+                          </div>
                         </div>
 
                         <!-- <div id="hasil_sale_out"></div> -->
