@@ -47,7 +47,7 @@
             </div>
             <div class="form-group">
               <label >Cust Code</label>
-              <input type="text" class="form-control" name="cust_code" value="<?= $data['outlet']['outlet_code']; ?>" readonly>
+              <input type="text" class="form-control" name="cust_code" value="<?= $data['outlet']['outlet_code']; ?>">
             </div>
             <div class="form-group">
               <label >Cust Name</label>
