@@ -202,12 +202,6 @@
                                 <?php $no=1; ?>
                                 <?php $channel=''; ?>
 
-                                <!-- <?php// echo '<pre>'; print_r($data['so_contr']); echo '</pre>';?> -->
-
-                                <?php
-                                  
-                                ?>
-
                                 <!-- Online -->
                                 <!-- <?php foreach ($data['so_contr'] as $row) :?>
 

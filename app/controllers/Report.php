@@ -4618,21 +4618,21 @@ class Report extends Controller {
 
 		$data['title'] = 'Contribution - JORDAN';
 
-		// if(isset($_POST['by_month1']))
-		// {
-		// 	$data['by_month1'] = $_POST['by_month1'];
-		// }else
-		// {
-		// 	$data['by_month1'] = date('m');
-		// }
+		if(isset($_POST['by_month1']))
+		{
+			$data['by_month1'] = $_POST['by_month1'];
+		}else
+		{
+			$data['by_month1'] = date('m');
+		}
 
-		// if(isset($_POST['by_month2']))
-		// {
-		// 	$data['by_month2'] = $_POST['by_month2'];
-		// }else
-		// {
-		// 	$data['by_month2'] = date('m');
-		// }
+		if(isset($_POST['by_month2']))
+		{
+			$data['by_month2'] = $_POST['by_month2'];
+		}else
+		{
+			$data['by_month2'] = date('m');
+		}
 
 		$dateObj1   = DateTime::createFromFormat('!m', $data['by_month1']);
 		$dateObj2   = DateTime::createFromFormat('!m', $data['by_month2']);
