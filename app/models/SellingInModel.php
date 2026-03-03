@@ -59,6 +59,55 @@ class SellingInModel {
 		return $this->db->resultSet();
 	}
 
+	public function getSellingin_ALL()
+	{
+		if(isset($_POST['by_month']))
+		{
+			$month = $_POST['by_month'];
+		}else
+		{
+			$month = date('m');
+		}
+
+		if(isset($_POST['by_year']))
+		{
+			$year = $_POST['by_year'];
+		}else
+		{
+			$year = date('Y');
+		}
+
+		$query = "SELECT a.id, a.tanggal, a.invoice, a.principal, a.cust_code, a.cust_name, a.item_code, a.item_name,";
+		$query = $query . " a.qty, a.sale_price, a.total_diskon, a.value_exc, a.value_inc, a.create_by, a.create_date";
+		$query = $query . " FROM selling_in a";
+		$query = $query . " left join distributor b on a.cust_code = b.cust_code";
+
+		if($month == 'all' or $month == 'All')
+		{
+			$query = $query . " where year(a.tanggal) = '" . $year . "'";
+		}
+		else
+		{
+			$query = $query . " where year(a.tanggal) = '" . $year . "' and month(a.tanggal) = '" . (int)$month . "'";
+		}
+
+		if ($_SESSION['area'] != 'ALL')
+		{
+			$session_area = str_replace(",", "','", $_SESSION['area']);
+			$session_area = str_replace(" ", "", $session_area);
+
+			$query = $query . " and b.area in ('" . $session_area . "')";
+		}
+
+		$query = $query . " ORDER BY a.ID ASC";
+
+		//Flasher::setMessage('Berhasil',$query,'success');
+
+		$this->db->opendb();
+		$this->db->query($query);
+		return $this->db->resultSet();
+	}
+
 	public function getSellinginById($id)
 	{
 		$this->db->opendb();

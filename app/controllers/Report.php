@@ -42,7 +42,7 @@ class Report extends Controller {
 		}
 		
 
-		$data['sellingin'] = $this->model('SellingInModel')->getAllSellingin();
+		$data['sellingin'] = $this->model('SellingInModel')->getSellingin_ALL();
 		
 		$this->template('header', $data);
 		$this->template('sidebar', $data);
