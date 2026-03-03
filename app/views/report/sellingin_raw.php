@@ -57,7 +57,7 @@
                 <div class="row">
                   <div class="input-group mb-3">
                     <div style="margin-left : 10px; width : 110px;">
-                      <select name="by_month" class="mdb-select xs-form form-control">
+                      <select name="by_month" id="dt_month" class="mdb-select xs-form form-control">
                         <option <?php if( $month=='all' or $month=='All' ){echo 'selected'; } ?> value="all">All</option>
                         <option <?php if( $month=='1' or $month=='1' ){echo 'selected'; } ?> value="1">Januari</option>
                         <option <?php if( $month=='2' or $month=='2' ){echo 'selected'; } ?> value="2">Februari</option>
@@ -74,7 +74,7 @@
                       </select>
                     </div>
                     <div style="margin-left : 5px; width : 80px;">
-                        <input name="by_year" class="mdb-select md-form form-control" type="number" min="1900" max="2099" step="1" value="<?= $year ;?>" />
+                        <input name="by_year" id="dt_year" class="mdb-select md-form form-control" type="number" min="1900" max="2099" step="1" value="<?= $year ;?>" />
                     </div>
                     <div style="margin-left : 5px;">
                         <button class="btn btn-outline-primary" type="submit">Go!</button>
@@ -87,8 +87,9 @@
           </div>
 
           <div class="table-responsive-sm text-small">
-            <table id="selling-in" class="table table-bordered nowrap" style="font-size:80%; border: 1px solid black; width: 100%;">
-              <thead>
+            <table id="si_raw" class="table table-bordered nowrap" style="font-size:80%; border: 1px solid black; width: 100%;">
+
+              <tfoot>
                   <tr>
                       <th class="text-center" style="vertical-align: middle;">#</th>
                       <th class="text-center" style="vertical-align: middle;">Tanggal</th>
@@ -100,33 +101,13 @@
                       <th class="text-center" style="vertical-align: middle;">Item Name</th>
                       <th class="text-center" style="vertical-align: middle;">Qty</th>
                       <th class="text-center" style="vertical-align: middle;">Sale Price</th>
+                      <th class="text-center" style="vertical-align: middle;">Total Discount</th>
                       <th class="text-center" style="vertical-align: middle;">Value Exc</th>
                       <th class="text-center" style="vertical-align: middle;">Value Inc</th>
                       <th class="text-center" style="vertical-align: middle;">Create By</th>
                       <th class="text-center" style="vertical-align: middle;">Create Date</th>
                   </tr>
-              </thead>
-              <tbody>
-                  <?php $no=1; ?>
-                  <?php foreach ($data['sellingin'] as $row) :?>
-                  <tr>
-                      <td class="text-center"><?= $no; ?></td>
-                      <td><?= $row['tanggal'];?></td>
-                      <td><?= $row['invoice'];?></td>
-                      <td><?= $row['principal'];?></td>
-                      <td><?= $row['cust_code'];?></td>
-                      <td><?= $row['cust_name'];?></td>
-                      <td><?= $row['item_code'];?></td>
-                      <td><?= $row['item_name'];?></td>
-                      <td class="text-right"><?= number_format($row['qty'], 0);?></td>
-                      <td class="text-right"><?= number_format($row['sale_price'], 2);?></td>
-                      <td class="text-right"><?= number_format($row['value_exc'], 2);?></td>
-                      <td class="text-right"><?= number_format($row['value_inc'], 2);?></td>
-                      <td><?= $row['create_by'];?></td>
-                      <td><?= $row['create_date'];?></td>
-                  </tr>
-                  <?php $no++; endforeach; ?>
-              </tbody>
+              </tfoot>
             </table>
             <style>
               .table tr { line-height: 10px; }
@@ -146,4 +127,83 @@
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
+
+  <script>
+    $(document).ready(function(){
+
+      var month = document.getElementById("dt_month").value;
+      var year = document.getElementById("dt_year").value;
+
+      $('#si_raw tfoot th').each(function () {
+          var title = $(this).text();
+          $(this).html('<input type="text" class="text-center" placeholder="'+title+'" style="width: 100%" />');
+      });
+
+      tb_so_raw = $('#si_raw').DataTable({
+        "retrieve": true,
+        "language": { 
+          "loadingRecords": "<img src='<?= base_url; ?>/dist/img/BIG Rotate.gif' style='width:50px;'/>Loading ..."
+        },
+        "ajax": {
+            'type': 'POST',
+            'url': '<?= base_url; ?>/Report/sellingin_RAW_show',
+            'data': {'by_month': month, 'by_year': year},
+          },
+        "fnCreatedRow": function (row, data, index) {
+          $('td', row).eq(0).html(index + 1);
+        },
+        "columns": [
+              { "title": "#", "data": "id", "sClass": "text-center"},
+              { "title": "Tanggal", "data": "tanggal", "sClass": "text-center"},
+              { "title": "Invoice", "data": "invoice", "sClass": "text-center"},
+              { "title": "Principal", "data": "principal", "sClass": "text-center"},
+              { "title": "Cust Code", "data": "cust_code", "sClass": "text-center"},
+              { "title": "Cust Name", "data": "cust_name", "sClass": "text-center"},
+              { "title": "Item Code", "data": "item_code", "sClass": "text-center"},
+              { "title": "SKU", "data": "item_name", "sClass": "text-center"},
+              { "title": "Qty", "data": "qty", "sClass": "text-right"},
+              { "title": "Sale Price", "data": "sale_price", "sClass": "text-right"},
+              { "title": "Total Discount", "data": "total_diskon", "sClass": "text-right"},
+              { "title": "Value Exc", "data": "value_exc", "sClass": "text-right"},
+              { "title": "Value Inc", "data": "value_inc", "sClass": "text-right"},
+              { "title": "Create By", "data": "create_by", "sClass": "text-center"},
+              { "title": "Create Date", "data": "create_date", "sClass": "text-center"},
+              
+        ],
+        "scrollY": 450,
+        "scrollX": true,
+        "autoWidth": false,
+        "responsive": true,
+        "pageResize": true,
+        "paging": true,
+        "info": true,
+        "paging":   true,
+        "lengthMenu": [200, 300, 400, 500],
+        "pageLength": 200,
+        // "fixedColumns":   {
+        //     "leftColumns": 2
+        // },
+        "dom": 'Bfrtip',
+        "buttons": [
+              'pageLength',
+              { extend: 'excel', text: '<i class = "fa fa-download"> Excel</i>' },
+        ],
+        initComplete: function () {
+          // Apply the search
+          this.api()
+              .columns()
+              .every(function () {
+                  var that = this;
+
+                  $('input', this.footer()).on('keyup change clear', function () {
+                      if (that.search() !== this.value) {
+                          that.search(this.value).draw();
+                      }
+                  });
+              });
+        },
+      });
+
+    });
+  </script>
 

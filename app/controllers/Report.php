@@ -42,12 +42,20 @@ class Report extends Controller {
 		}
 		
 
-		$data['sellingin'] = $this->model('SellingInModel')->getSellingin_ALL();
+		// $data['sellingin'] = $this->model('SellingInModel')->getSellingin_ALL();
 		
 		$this->template('header', $data);
 		$this->template('sidebar', $data);
 		$this->view('report/sellingin_raw', $data);
 		$this->view('templates/footer');
+	}
+
+	public function sellingin_RAW_show()
+	{	
+		$data['data'] = $this->model('SellingInModel')->getSellingin_ALL();
+
+		$json = json_encode($data);
+		echo $json;
 	}
 
 	public function sellingout_RAW()
