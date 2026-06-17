@@ -482,7 +482,7 @@ class SellingOutModel {
 
 				if(!$outlet or $outlet['outlet_code'] !== $row['cust_code'])
 				{
-					$error = "KODE OUTLET : '".var_dump($outlet)."' dan AREA : '".$row['area']."' di baris : '".$baris."' tidak ditemukan di Master Data Outlet";
+					$error = "KODE OUTLET : '".$outlet['outlet_code']."' dan AREA : '".$row['area']."' di baris : '".$baris."' tidak ditemukan di Master Data Outlet";
 					throw new Exception($error);
 
 					goto rollback;

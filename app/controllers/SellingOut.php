@@ -42,7 +42,7 @@ class SellingOut extends Controller {
 	}
 	public function show()
 	{
-		//$data['data'] = $this->model('SellingOutModel')->getAllSellingout();
+		$data['data'] = $this->model('SellingOutModel')->getAllSellingout();
 
 		$json = json_encode($data);
 
@@ -608,7 +608,7 @@ class SellingOut extends Controller {
 		}
 		else
 		{
-			unlink($target);
+			// unlink($target);
 
             Flasher::setMessage('Gagal','diupload','danger');
             header('location: '. base_url . '/SellingOut');

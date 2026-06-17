@@ -129,9 +129,9 @@
                             <thead class="table-warning">
 
                               <?php
-                                  foreach ($data['sku_count'] as $row) :
-                                      $count = $row['item_row'];
-                                  endforeach
+                                  // foreach ($data['sku_count'] as $row) :
+                                      $count = $data['sku_count']['item_row'];
+                                  // endforeach
                               ?>
 
                               <tr>

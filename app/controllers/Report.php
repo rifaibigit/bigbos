@@ -3384,9 +3384,28 @@ class Report extends Controller {
 		$this->template('header', $data);
 		$this->template('sidebar', $data);
 
+		$get['period_si'] = $this->model('ReportModel')->getMonth_SO2($_POST['by_year']);
+		$max_month = $get['period_si']['to_month'];
+		$so_year = $get['period_si']['year'];
+		$input_month2 = $_POST['by_month2'];
+
 		$data['principal'] = $this->model('ReportModel')->getPrincipalOut();
 		$data['area'] = $this->model('ReportModel')->getAreaOut();
-		$data['so_growth_channel'] = $this->model('ReportModel')->getSellingOut_Growth_Channel2();
+
+		if ($input_month2 > $max_month) {
+			Flasher::setMessage(
+				'Peringatan',
+				'Data Selling Out hanya tersedia sampai bulan ' . date('F', mktime(0, 0, 0, $max_month, 1)) . ' - ' . $so_year,
+				'warning'
+			);
+
+			// header('Location: ' . base_url . '/Report/sellingout_growth_channel');
+			// exit;
+		}
+		else{
+			$data['so_growth_channel'] = $this->model('ReportModel')->getSellingOut_Growth_Channel2();
+		}
+		
 
 		if(isset($_POST['by_principal']))
 		{
@@ -3408,6 +3427,23 @@ class Report extends Controller {
 		else
 		{
 			$data['by_area'] = "";
+		}
+
+		if(isset($_POST['by_month1']))
+		{
+			$data['by_month1'] = $_POST['by_month1'];
+		}else
+		{
+			$data['by_month1'] = 1;
+		}
+
+		if(isset($_POST['by_month2']))
+		{
+			$data['by_month2'] = $_POST['by_month2'];
+		}else
+		{
+			$get['period_si'] = $this->model('ReportModel')->getMonth_SO();
+			$data['by_month2'] = $get['period_si']['to_month'];
 		}
 
 		if(isset($_POST['by_year']))
@@ -18135,6 +18171,23 @@ class Report extends Controller {
 			$area = "";
 		}
 
+		if(isset($_POST['by_month1']))
+		{
+			$data['by_month1'] = $_POST['by_month1'];
+		}else
+		{
+			$data['by_month1'] = 1;
+		}
+
+		if(isset($_POST['by_month2']))
+		{
+			$data['by_month2'] = $_POST['by_month2'];
+		}else
+		{
+			$get['period_si'] = $this->model('ReportModel')->getMonth_SO();
+			$data['by_month2'] = $get['period_si']['to_month'];
+		}
+
 		if (isset($_POST['by_year']))
 		{
 			$year = $_POST['by_year'];
@@ -18144,56 +18197,65 @@ class Report extends Controller {
 			$year = "";
 		}
 
+		$get['period_si'] = $this->model('ReportModel')->getMonth_SO2($_POST['by_year']);
+		$max_month = $get['period_si']['to_month'];
+		$so_year = $get['period_si']['year'];
+		$input_month2 = $_POST['by_month2'];
+
 		$year_to = $year;
 		$year_from = $year_to - 1;
 
+		$bulan = [
+			1 => 'Januari',
+			2 => 'Februari',
+			3 => 'Maret',
+			4 => 'April',
+			5 => 'Mei',
+			6 => 'Juni',
+			7 => 'Juli',
+			8 => 'Agustus',
+			9 => 'September',
+			10 => 'Oktober',
+			11 => 'November',
+			12 => 'Desember'
+		];
+
 		$sheet->setCellValue('A1', "Report Selling Out - Growth By Channel (" . $year . ")"); // Set kolom A1 dengan tulisan 
-		$sheet->setCellValue('A2', "Area : " . $area); 
+		$sheet->setCellValue('A2', "Month : " . $bulan[$data['by_month1']] . ' - ' . $bulan[$data['by_month2']]); 
+		$sheet->setCellValue('A3', "Area : " . $area); 
 		//$sheet->mergeCells('A1:F1'); // Set Merge Cell pada kolom A1 sampai F1
 		$sheet->getStyle('A1')->getFont()->setBold(true); // Set bold kolom A1
 		$sheet->getStyle('A2')->getFont()->setBold(true);
+		$sheet->getStyle('A3')->getFont()->setBold(true);
 		$sheet->getStyle('A1')->getFont()->setSize(20); // Set font size 20 untuk kolom A1
 		// Buat header tabel nya pada baris ke 4
-		$sheet->setCellValue('A4', "#"); // Set kolom A4 dengan tulisan "#"
-		$sheet->mergeCells('A4:A5');
-		$sheet->setCellValue('B4', "Outlet Type");
-		$sheet->mergeCells('B4:B5');
-		$sheet->setCellValue('C4', "Full Year"); 
-		$sheet->mergeCells('C4:E4');
-		$sheet->setCellValue('F4', "SKU Existing"); 
-		$sheet->mergeCells('F4:H4');
-		$sheet->setCellValue('I4', "Add SKU"); 
-		$sheet->mergeCells('I4:J4');
-		$sheet->setCellValue('K4', "NOO"); 
-		$sheet->mergeCells('K4:L4');
+		$sheet->setCellValue('A5', "#"); // Set kolom A4 dengan tulisan "#"
+		$sheet->mergeCells('A5:A6');
+		$sheet->setCellValue('B5', "Outlet Type");
+		$sheet->mergeCells('B5:B6');
+		$sheet->setCellValue('C5', "Full Year"); 
+		$sheet->mergeCells('C5:E5');
+		$sheet->setCellValue('F5', "SKU Existing"); 
+		$sheet->mergeCells('F5:H5');
+		$sheet->setCellValue('I5', "Add SKU"); 
+		$sheet->mergeCells('I5:J5');
+		$sheet->setCellValue('K5', "NOO"); 
+		$sheet->mergeCells('K5:L5');
 
-		$sheet->setCellValue('C5', $year_from);
-		$sheet->setCellValue('D5', $year_to);
-		$sheet->setCellValue('E5', "Growth %");
-		$sheet->setCellValue('F5', $year_from);
-		$sheet->setCellValue('G5', $year_to);
-		$sheet->setCellValue('H5', "Growth %");
-		$sheet->setCellValue('I5', "Value");
-		$sheet->setCellValue('J5', "Contr %");
-		$sheet->setCellValue('K5', "Value");
-		$sheet->setCellValue('L5', "Contr %");
+		$sheet->setCellValue('C6', $year_from);
+		$sheet->setCellValue('D6', $year_to);
+		$sheet->setCellValue('E6', "Growth %");
+		$sheet->setCellValue('F6', $year_from);
+		$sheet->setCellValue('G6', $year_to);
+		$sheet->setCellValue('H6', "Growth %");
+		$sheet->setCellValue('I6', "Value");
+		$sheet->setCellValue('J6', "Contr %");
+		$sheet->setCellValue('K6', "Value");
+		$sheet->setCellValue('L6', "Contr %");
 		
 		
 
 		// Apply style header yang telah kita buat tadi ke masing-masing kolom header
-		$sheet->getStyle('A4')->applyFromArray($style_col);
-		$sheet->getStyle('B4')->applyFromArray($style_col);
-		$sheet->getStyle('C4')->applyFromArray($style_col);
-		$sheet->getStyle('D4')->applyFromArray($style_col);
-		$sheet->getStyle('E4')->applyFromArray($style_col);
-		$sheet->getStyle('F4')->applyFromArray($style_col);
-		$sheet->getStyle('G4')->applyFromArray($style_col);
-		$sheet->getStyle('H4')->applyFromArray($style_col);
-		$sheet->getStyle('I4')->applyFromArray($style_col);
-		$sheet->getStyle('J4')->applyFromArray($style_col);
-		$sheet->getStyle('K4')->applyFromArray($style_col);
-		$sheet->getStyle('L4')->applyFromArray($style_col);
-
 		$sheet->getStyle('A5')->applyFromArray($style_col);
 		$sheet->getStyle('B5')->applyFromArray($style_col);
 		$sheet->getStyle('C5')->applyFromArray($style_col);
@@ -18207,7 +18269,20 @@ class Report extends Controller {
 		$sheet->getStyle('K5')->applyFromArray($style_col);
 		$sheet->getStyle('L5')->applyFromArray($style_col);
 
-		$sheet->getStyle('A4:L5')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFE4B5');
+		$sheet->getStyle('A6')->applyFromArray($style_col);
+		$sheet->getStyle('B6')->applyFromArray($style_col);
+		$sheet->getStyle('C6')->applyFromArray($style_col);
+		$sheet->getStyle('D6')->applyFromArray($style_col);
+		$sheet->getStyle('E6')->applyFromArray($style_col);
+		$sheet->getStyle('F6')->applyFromArray($style_col);
+		$sheet->getStyle('G6')->applyFromArray($style_col);
+		$sheet->getStyle('H6')->applyFromArray($style_col);
+		$sheet->getStyle('I6')->applyFromArray($style_col);
+		$sheet->getStyle('J6')->applyFromArray($style_col);
+		$sheet->getStyle('K6')->applyFromArray($style_col);
+		$sheet->getStyle('L6')->applyFromArray($style_col);
+
+		$sheet->getStyle('A5:L6')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFE4B5');
 		// $sheet->getStyle('S6')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');
 
 		// Set height baris ke 1 dan 2
@@ -18238,7 +18313,7 @@ class Report extends Controller {
 
 
 		$no = 1; // Untuk penomoran tabel, di awal set dengan 1
-		$row = 6;
+		$row = 7;
 
 		// $data1 = array(
 		// 	'island' => $island,
@@ -18247,7 +18322,18 @@ class Report extends Controller {
 		// 	'year' => $year
 		// );
 
-		$data['so_growth_channel'] = $this->model('ReportModel')->getSellingOut_Growth_Channel2();
+		if ($input_month2 > $max_month) {
+			Flasher::setMessage(
+				'Peringatan',
+				'Data Selling Out hanya tersedia sampai bulan ' . date('F', mktime(0, 0, 0, $max_month, 1)) . ' - ' . $so_year,
+				'warning'
+			);
+
+		}else{
+			$data['so_growth_channel'] = $this->model('ReportModel')->getSellingOut_Growth_Channel2();
+		}
+
+		
 
 		foreach ($data['so_growth_channel'] as $row2):
 

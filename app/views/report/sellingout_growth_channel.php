@@ -36,6 +36,8 @@
                                         $principal = $data['by_principal'];
                                         $area = $data['by_area'];
                                         $year = $data['by_year'];
+                                        $month1 = $data['by_month1'];
+                                        $month2 = $data['by_month2'];
                                         $year_to = $year;
 		                                $year_from = $year_to - 1;
                                     }
@@ -66,6 +68,42 @@
                                                 <?php foreach ($data['area'] as $row) :?>
                                                         <option <?php if(in_array($row['area'], $area)){echo "selected"; } ?> value="<?= $row['area'];?>"><b><?= $row['area'];?></b></option>
                                                 <?php $no++; endforeach; ?>
+                                        </select>
+                                    </div>
+                                    <div class="row" style="margin-left : 10px; width:110px;">
+                                        <div></div>
+                                        <select name="by_month1" title="MONTH" class="mdb-select md-form form-control" style="margin-left : 10px;  width:110px;">
+                                        <option <?php if( $month1=='1' or $month1=='1' ){echo 'selected'; } ?> value="1">Januari</option>
+                                        <option <?php if( $month1=='2' or $month1=='2' ){echo 'selected'; } ?> value="2">Februari</option>
+                                        <option <?php if( $month1=='3' or $month1=='3' ){echo 'selected'; } ?> value="3">Maret</option>
+                                        <option <?php if( $month1=='4' or $month1=='4' ){echo 'selected'; } ?> value="4">April</option>
+                                        <option <?php if( $month1=='5' or $month1=='5' ){echo 'selected'; } ?> value="5">Mei</option>
+                                        <option <?php if( $month1=='6' or $month1=='6' ){echo 'selected'; } ?> value="6">Juni</option>
+                                        <option <?php if( $month1=='7' or $month1=='7' ){echo 'selected'; } ?> value="7">Juli</option>
+                                        <option <?php if( $month1=='8' or $month1=='8' ){echo 'selected'; } ?> value="8">Agustus</option>
+                                        <option <?php if( $month1=='9' or $month1=='9' ){echo 'selected'; } ?> value="9">September</option>
+                                        <option <?php if( $month1=='10' or $month1=='10'){echo 'selected'; } ?> value="10">Oktober</option>
+                                        <option <?php if( $month1=='11' or $month1=='11'){echo 'selected'; } ?> value="11">Nopember</option>
+                                        <option <?php if( $month1=='12' or $month1=='12'){echo 'selected'; } ?> value="12">Desember</option>
+                                        </select>
+                                    </div>
+                                    <div class="row" style="margin-left : 5px;">
+                                        <div style="margin-left : 8px;margin-right : 10px; margin-top: 5px;">
+                                        <label>To</label>
+                                        </div>
+                                        <select name="by_month2" title="MONTH" class="mdb-select md-form form-control" style="margin-left : 10px;  width:110px;">
+                                        <option <?php if( $month2=='1' or $month2=='1' ){echo 'selected'; } ?> value="1">Januari</option>
+                                        <option <?php if( $month2=='2' or $month2=='2' ){echo 'selected'; } ?> value="2">Februari</option>
+                                        <option <?php if( $month2=='3' or $month2=='3' ){echo 'selected'; } ?> value="3">Maret</option>
+                                        <option <?php if( $month2=='4' or $month2=='4' ){echo 'selected'; } ?> value="4">April</option>
+                                        <option <?php if( $month2=='5' or $month2=='5' ){echo 'selected'; } ?> value="5">Mei</option>
+                                        <option <?php if( $month2=='6' or $month2=='6' ){echo 'selected'; } ?> value="6">Juni</option>
+                                        <option <?php if( $month2=='7' or $month2=='7' ){echo 'selected'; } ?> value="7">Juli</option>
+                                        <option <?php if( $month2=='8' or $month2=='8' ){echo 'selected'; } ?> value="8">Agustus</option>
+                                        <option <?php if( $month2=='9' or $month2=='9' ){echo 'selected'; } ?> value="9">September</option>
+                                        <option <?php if( $month2=='10' or $month2=='10'){echo 'selected'; } ?> value="10">Oktober</option>
+                                        <option <?php if( $month2=='11' or $month2=='11'){echo 'selected'; } ?> value="11">Nopember</option>
+                                        <option <?php if( $month2=='12' or $month2=='12'){echo 'selected'; } ?> value="12">Desember</option>
                                         </select>
                                     </div>
                                     <div style="margin-left : 10px; width : 80px;">
@@ -455,6 +493,18 @@
                 "leftColumns": 2
             },
         });
+
+        // document.querySelector('form').addEventListener('submit', function(e){
+
+        //     const month2 = parseInt(document.querySelector('[name="by_month2"]').value);
+        //     const year = parseInt(document.querySelector('[name="by_year"]').value);
+        //     const maxMonth = <?= $this->model('ReportModel')->getMonth_SO()['to_month']; ?>;
+
+        //     if(month2 > maxMonth){
+        //         e.preventDefault();
+        //         alert('Data Selling Out hanya tersedia sampai bulan ' + maxMonth + ' - ' + year);
+        //     }
+        // });
 
     })
 
