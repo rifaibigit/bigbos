@@ -31,6 +31,12 @@
 
                                 <?php
 
+                                    $total_from = 0;
+                                    $total_to = 0;
+                                    $total_exist = 0;
+                                    $total_add_sku = 0;
+                                    $total_noo = 0;
+
                                     if(isset($data))
                                     {
                                         $principal = $data['by_principal'];
@@ -163,7 +169,9 @@
                                             $total_value_add_sku = 0;
                                             $total_value_noo = 0;
 
-                                            
+                                            if (!is_array($area)) {
+                                                $area = empty($area) ? [] : [$area];
+                                            }
 
                                         ?>
 

@@ -29080,7 +29080,7 @@ class ReportModel {
 		$year_to = $year;
 		$year_from = $year_to - 1;
 
-		$str_sql = "SELECT c.id, c.channel, c.outlet_category,";
+		$str_sql = "SELECT c.id, c.channel, c.outlet_category, c.outlet_type,";
 		$str_sql = $str_sql . " SUM(a.value_from) AS value_from, SUM(a.value_to) AS value_to,";
 		$str_sql = $str_sql . " SUM(IF(ISNULL(d.value_to), 0, d.value_to)) AS value_exist,";
 		$str_sql = $str_sql . " SUM(a.value_to) - SUM(d.value_to) - SUM(IF(ISNULL(e.value_noo), 0, e.value_noo)) AS value_add_sku,";
@@ -29190,6 +29190,23 @@ class ReportModel {
 			$area = $session_area;
 		}
 
+		if(isset($_POST['by_month1']))
+		{
+			$month1 = $_POST['by_month1'];
+		}else
+		{
+			$month1 = 1;
+		}
+
+		if(isset($_POST['by_month2']))
+		{
+			$month2 = $_POST['by_month2'];
+		}else
+		{
+			$get['period_si'] = $this->getMonth_SO();
+			$month2 = $get['period_si']['to_month'];
+		}
+
 		if (isset($_POST['by_year']))
 		{
 			$year = $_POST['by_year'];
@@ -29218,7 +29235,7 @@ class ReportModel {
 				{
 					$str_sql = $str_sql . " and so.area in ('".$area."')";
 				}
-				$str_sql = $str_sql . " and year(so.tanggal) in ('".$year_from."', '".$year_to."') and month(so.tanggal) in (select distinct month(tanggal) as bulan from selling_out where year(tanggal) = '".$year_to."') and so.value_exc <> 0";
+				$str_sql = $str_sql . " and year(so.tanggal) in ('".$year_from."', '".$year_to."') and (month(so.tanggal) between '".$month1."' and '".$month2."') and so.value_exc <> 0";
 				$str_sql = $str_sql . " group by so.outlet_type, so.big_code, so.item_code";
 		$str_sql = $str_sql . " ) a";
 		$str_sql = $str_sql . " INNER JOIN sku b on a.item_code = b.item_code";
@@ -29236,6 +29253,7 @@ class ReportModel {
 							$str_sql = $str_sql . " and so.area in ('".$area."')";
 						}
 						$str_sql = $str_sql . " and year(so.tanggal) in ('".$year_to."')";
+						$str_sql = $str_sql . " and (month(so.tanggal) between '".$month1."' and '".$month2."')";
 						$str_sql = $str_sql . " and so.value_exc <> 0";
 						$str_sql = $str_sql . " group by so.outlet_type, so.big_code, so.item_code ";
 						$str_sql = $str_sql . " ) so_to";
@@ -29251,7 +29269,6 @@ class ReportModel {
 							$str_sql = $str_sql . " and so.area in ('".$area."')";
 						}
 						$str_sql = $str_sql . " and year(so.tanggal) <= '".$year_from."'";
-						// $str_sql = $str_sql . " and month(so.tanggal) in (select distinct month(tanggal) as bulan from selling_out where year(tanggal) = '".$year_to."') and not isnull(so.big_code)";
 						$str_sql = $str_sql . " and so.value_exc <> 0";
 						$str_sql = $str_sql . " group by so.outlet_type, so.big_code, so.item_code ";
 						$str_sql = $str_sql . " ) so_from on so_to.outlet_type = so_from.outlet_type and so_to.big_code = so_from.big_code and so_to.item_code = so_from.item_code";
@@ -29266,6 +29283,7 @@ class ReportModel {
 						$str_sql = $str_sql . " and so.area in ('".$area."')";
 					}
 					$str_sql = $str_sql . " and year(so.tanggal) in ('".$year_to."')";
+					$str_sql = $str_sql . " and (month(so.tanggal) between '".$month1."' and '".$month2."')";
 					$str_sql = $str_sql . " and so.big_code not in (";
 											$str_sql = $str_sql . " select distinct big_code";
 											$str_sql = $str_sql . " from selling_out";
@@ -29275,7 +29293,6 @@ class ReportModel {
 												$str_sql = $str_sql . " and area in ('".$area."')";
 											}
 											$str_sql = $str_sql . " and year(tanggal) <= '".$year_from."'";
-											// $str_sql = $str_sql . " and month(tanggal) in (select distinct month(tanggal) as bulan from selling_out where year(tanggal) = '".$year_to."') and not isnull(big_code)";
 											$str_sql = $str_sql . " )";
 					$str_sql = $str_sql . " group by so.outlet_type, so.big_code, so.item_code";
 					$str_sql = $str_sql . " ) e ON a.outlet_type = e.outlet_type AND a.big_code = e.big_code AND a.item_code = e.item_code";
@@ -29301,6 +29318,23 @@ class ReportModel {
 		{
 			$session_area = str_replace(", ", "','", $_SESSION['area']); 
 			$area = $session_area;
+		}
+
+		if(isset($_POST['by_month1']))
+		{
+			$month1 = $_POST['by_month1'];
+		}else
+		{
+			$month1 = 1;
+		}
+
+		if(isset($_POST['by_month2']))
+		{
+			$month2 = $_POST['by_month2'];
+		}else
+		{
+			$get['period_si'] = $this->getMonth_SO();
+			$month2 = $get['period_si']['to_month'];
 		}
 
 		if (isset($_POST['by_year']))
@@ -29331,7 +29365,7 @@ class ReportModel {
 				{
 					$str_sql = $str_sql . " and so.area in ('".$area."')";
 				}
-				$str_sql = $str_sql . " and year(so.tanggal) in ('".$year_from."', '".$year_to."') and month(so.tanggal) in (select distinct month(tanggal) as bulan from selling_out where year(tanggal) = '".$year_to."') and so.value_exc <> 0";
+				$str_sql = $str_sql . " and year(so.tanggal) in ('".$year_from."', '".$year_to."') and (month(so.tanggal) between '".$month1."' and '".$month2."') and so.value_exc <> 0";
 				$str_sql = $str_sql . " group by so.outlet_type, so.big_code, so.item_code";
 		$str_sql = $str_sql . " ) a";
 		$str_sql = $str_sql . " INNER JOIN sku b on a.item_code = b.item_code";
@@ -29346,6 +29380,7 @@ class ReportModel {
 						$str_sql = $str_sql . " and so.area in ('".$area."')";
 					}
 					$str_sql = $str_sql . " and year(so.tanggal) in ('".$year_to."')";
+					$str_sql = $str_sql . " and (month(so.tanggal) between '".$month1."' and '".$month2."')";
 					$str_sql = $str_sql . " and so.big_code not in (";
 											$str_sql = $str_sql . " select distinct big_code";
 											$str_sql = $str_sql . " from selling_out";
@@ -29394,6 +29429,23 @@ class ReportModel {
 			$area = $session_area;
 		}
 
+		if(isset($_POST['by_month1']))
+		{
+			$month1 = $_POST['by_month1'];
+		}else
+		{
+			$month1 = 1;
+		}
+
+		if(isset($_POST['by_month2']))
+		{
+			$month2 = $_POST['by_month2'];
+		}else
+		{
+			$get['period_si'] = $this->getMonth_SO();
+			$month2 = $get['period_si']['to_month'];
+		}
+
 		if (isset($_POST['by_year']))
 		{
 			$year = $_POST['by_year'];
@@ -29422,7 +29474,7 @@ class ReportModel {
 				{
 					$str_sql = $str_sql . " and so.area in ('".$area."')";
 				}
-				$str_sql = $str_sql . " and year(so.tanggal) in ('".$year_from."', '".$year_to."') and month(so.tanggal) in (select distinct month(tanggal) as bulan from selling_out where year(tanggal) = '".$year_to."') and so.value_exc <> 0";
+				$str_sql = $str_sql . " and year(so.tanggal) in ('".$year_from."', '".$year_to."') and (month(so.tanggal) between '".$month1."' and '".$month2."') and so.value_exc <> 0";
 				$str_sql = $str_sql . " group by so.outlet_type, so.big_code, so.item_code";
 		$str_sql = $str_sql . " ) a";
 		$str_sql = $str_sql . " INNER JOIN sku b on a.item_code = b.item_code";
@@ -29440,6 +29492,7 @@ class ReportModel {
 							$str_sql = $str_sql . " and so.area in ('".$area."')";
 						}
 						$str_sql = $str_sql . " and year(so.tanggal) in ('".$year_to."')";
+						$str_sql = $str_sql . " and (month(so.tanggal) between '".$month1."' and '".$month2."')";
 						$str_sql = $str_sql . " and so.value_exc <> 0";
 						$str_sql = $str_sql . " group by so.outlet_type, so.big_code, so.item_code ";
 						$str_sql = $str_sql . " ) so_to";
@@ -29471,6 +29524,7 @@ class ReportModel {
 						$str_sql = $str_sql . " and so.area in ('".$area."')";
 					}
 					$str_sql = $str_sql . " and year(so.tanggal) in ('".$year_to."')";
+					$str_sql = $str_sql . " and (month(so.tanggal) between '".$month1."' and '".$month2."')";
 					$str_sql = $str_sql . " and so.big_code not in (";
 											$str_sql = $str_sql . " select distinct big_code";
 											$str_sql = $str_sql . " from selling_out";
