@@ -35,6 +35,8 @@
 
                         <?php
 
+                        extract($data);
+
                         if(isset($data))
                         {
                             $region = $data['by_region'];

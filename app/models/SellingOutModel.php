@@ -478,6 +478,16 @@ class SellingOutModel {
 					goto rollback;
 				}
 
+				$outlet_type = $this->getOutletType($row['outlet_type']);
+				if(!$outlet_type)
+				{
+					$error = "OUTLET TYPE : '".$outlet_type['outlet_type']."' di baris : '".$baris."' tidak ditemukan di Master Data Channel";
+					throw new Exception($error);
+
+					goto rollback;
+				}
+
+
 				$outlet = $this->getOutletByCode($row['cust_code'], $row['area'], $row['kode_dist']);
 
 				if(!$outlet or $outlet['outlet_code'] !== $row['cust_code'])

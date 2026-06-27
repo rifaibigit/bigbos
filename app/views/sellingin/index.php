@@ -49,6 +49,8 @@
             <div class="col-sm-6" style="display: flex; justify-content: flex-end">
               <form action="<?= base_url; ?>/SellingIn" enctype="multipart/form-data" method="POST" role="form">
                 <?php
+                    extract($data);
+
                     if(isset($data))
                     {
                         $month = $data['by_month'];

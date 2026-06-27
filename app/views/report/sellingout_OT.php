@@ -32,6 +32,8 @@
 
                                 <?php
 
+                                    extract($data);
+
                                     if(isset($data))
                                     {
                                         $principal = $data['by_principal'];
@@ -183,48 +185,7 @@
                                             <th class="text-center" style="width: 70px; background-color: #7BFF6D">Value</th>
                                         </tr>
                                     </thead>
-                                    <!-- <tbody>
-                                        <?php// $no=1; ?>
-                                        <?php //foreach ($data['sellingout_OT'] as $row) :?>
-                                        <tr>
-                                            <td class="text-center"><?= $no; ?></td>
-                                            <td><?= $row['cust_code'];?></td>
-                                            <td><?= $row['cust_name'];?></td>
-                                            <td class="text-center"><?= $row['outlet_count'];?></td>
-                                            <td class="text-center"><?= $row['area'];?></td>
-                                            <td class="text-right"><?= number_format($row['qty_jan'], 0);?></td>
-                                            <td class="text-right"><?= number_format($row['val_jan'], 2);?></td>
-                                            <td class="text-right"><?= number_format($row['qty_feb'], 0);?></td>
-                                            <td class="text-right"><?= number_format($row['val_feb'], 2);?></td>
-                                            <td class="text-right"><?= number_format($row['qty_mar'], 0);?></td>
-                                            <td class="text-right"><?= number_format($row['val_mar'], 2);?></td>
-                                            <td class="text-right"><?= number_format($row['qty_apr'], 0);?></td>
-                                            <td class="text-right"><?= number_format($row['val_apr'], 2);?></td>
-                                            <td class="text-right"><?= number_format($row['qty_mei'], 0);?></td>
-                                            <td class="text-right"><?= number_format($row['val_mei'], 2);?></td>
-                                            <td class="text-right"><?= number_format($row['qty_jun'], 0);?></td>
-                                            <td class="text-right"><?= number_format($row['val_jun'], 2);?></td>
-                                            <td class="text-right"><?= number_format($row['qty_jul'], 0);?></td>
-                                            <td class="text-right"><?= number_format($row['val_jul'], 2);?></td>
-                                            <td class="text-right"><?= number_format($row['qty_agu'], 0);?></td>
-                                            <td class="text-right"><?= number_format($row['val_agu'], 2);?></td>
-                                            <td class="text-right"><?= number_format($row['qty_sep'], 0);?></td>
-                                            <td class="text-right"><?= number_format($row['val_sep'], 2);?></td>
-                                            <td class="text-right"><?= number_format($row['qty_okt'], 0);?></td>
-                                            <td class="text-right"><?= number_format($row['val_okt'], 2);?></td>
-                                            <td class="text-right"><?= number_format($row['qty_nop'], 0);?></td>
-                                            <td class="text-right"><?= number_format($row['val_nop'], 2);?></td>
-                                            <td class="text-right"><?= number_format($row['qty_des'], 0);?></td>
-                                            <td class="text-right"><?= number_format($row['val_des'], 2);?></td>
-                                            <td class="text-right"><?= number_format($row['qty_year'], 0);?></td>
-                                            <td class="text-right"><?= number_format($row['val_year'], 2);?></td>
-                                            <td class="text-right"><?= number_format($row['qty_year']/12, 0);?></td>
-                                            <td class="text-right"><?= number_format($row['val_year']/12, 2);?></td>
-                                        </tr>
-
-                                        <?php //$no++; //endforeach; ?>
-                                        
-                                    </tbody> -->
+                                    
                                 </table>
                                 
                                 <div>
@@ -280,6 +241,10 @@
         // Swal.fire('Error', area,'error');
 
         tb_sale_out_ot = $('#sale_out_ot2').DataTable({
+            "retrieve": true,
+            "language": { 
+                "loadingRecords": "<img src='<?= base_url; ?>/dist/img/BIG Rotate.gif' style='width:50px;'/>Loading ..."
+            },
             "ajax": {
             'type': 'POST',
             'url': '<?= base_url; ?>/Report/Sellingout_OTshow',

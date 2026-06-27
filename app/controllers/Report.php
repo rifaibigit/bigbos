@@ -402,10 +402,6 @@ class Report extends Controller {
 		$this->template('header', $data);
 		$this->template('sidebar', $data);
 
-		// $data['by_year'] = $ot['2'];
-		// $data['by_year'] = $data['by_year'] . $ot['3'];
-		// $data['by_year'] = $data['by_year'] . $ot['4'];
-		// $data['by_year'] = $data['by_year'] . $ot['5'];
 		$data1 = explode(",", $ot);
 		$data['by_year'] = $data1[1];
 
@@ -1304,6 +1300,10 @@ class Report extends Controller {
 		$data['val_channel'] = $this->model('ReportModel')->getvalOut_Channel();
 		$data['sellingout'] = $this->model('ReportModel')->getSellingOut();
 
+		$get['period_so'] = $this->model('ReportModel')->getMonth_SO();
+		$month_so = $get['period_so']['to_month'];
+		$year_so = $get['period_so']['year'];
+
 		if(isset($_POST['by_principal']))
 		{
 			$data['by_principal'] = $_POST['by_principal'];
@@ -1365,7 +1365,7 @@ class Report extends Controller {
 			$data['by_month2'] = $_POST['by_month2'];
 		}else
 		{
-			$data['by_month2'] = date('m');
+			$data['by_month2'] = $month_so;
 		}
 
 		if(isset($_POST['by_year']))
@@ -1373,7 +1373,7 @@ class Report extends Controller {
 			$data['by_year'] = $_POST['by_year'];
 		}else
 		{
-			$data['by_year'] = date('Y');
+			$data['by_year'] = $year_so;
 		}
 
 
@@ -3266,6 +3266,10 @@ class Report extends Controller {
 
 		$data['sellingout'] = $this->model('ReportModel')->getSellingOut_Month();
 
+		$get['period_so'] = $this->model('ReportModel')->getMonth_SO();
+		$month_so = $get['period_so']['to_month'];
+		$year_so = $get['period_so']['year'];
+
 		if(isset($_POST['by_dist']))
 		{
 			$data['by_dist'] = $_POST['by_dist'];
@@ -3279,7 +3283,7 @@ class Report extends Controller {
 			$data['by_year'] = $_POST['by_year'];
 		}else
 		{
-			$data['by_year'] = date('Y');
+			$data['by_year'] = $year_so;
 		}
 
 		if(isset($_POST['by_month']))
@@ -3287,7 +3291,7 @@ class Report extends Controller {
 			$data['by_month'] = $_POST['by_month'];
 		}else
 		{
-			$data['by_month'] = date('m');
+			$data['by_month'] = $month_so;
 		}
 
 		$this->view('report/sellingout_performance_weekly', $data);
@@ -3316,6 +3320,10 @@ class Report extends Controller {
 
 		$data['cmo'] = $this->model('ReportModel')->getSellingOut_CMO();
 
+		$get['period_so'] = $this->model('ReportModel')->getMonth_SO();
+		$month_so = $get['period_so']['to_month'];
+		$year_so = $get['period_so']['year'];
+
 		if(isset($_POST['by_dist']))
 		{
 			$data['by_dist'] = $_POST['by_dist'];
@@ -3329,7 +3337,7 @@ class Report extends Controller {
 			$data['by_year'] = $_POST['by_year'];
 		}else
 		{
-			$data['by_year'] = date('Y');
+			$data['by_year'] = $year_so;
 		}
 
 		if(isset($_POST['by_month']))
@@ -3337,7 +3345,7 @@ class Report extends Controller {
 			$data['by_month'] = $_POST['by_month'];
 		}else
 		{
-			$data['by_month'] = date('m');
+			$data['by_month'] = $month_so;
 		}
 
 		$this->view('report/sellingout_CMO', $data);
@@ -3637,13 +3645,6 @@ class Report extends Controller {
         $data['island'] = $this->model('ReportModel')->getIslandOut();
 		$data['sku_code'] = $this->model('SkuModel')->getItemCodeSKULord();
 
-		$data['distr_lord'] = $this->model('ReportModel')->getAO_lord_ALL($data);
-
-		$data['sku_name'] = $this->model('SkuModel')->getItemNameSKULord();
-		$data['sku_group'] = $this->model('SkuModel')->getGroupSKULord();
-		$data['sku_count'] = $this->model('SkuModel')->getCountSKULord();
-
-
 		if(isset($_POST['by_region']))
 		{
 			$data['by_region'] = $_POST['by_region'];
@@ -3678,7 +3679,8 @@ class Report extends Controller {
 			$data['by_month1'] = $_POST['by_month1'];
 		}else
 		{
-			$data['by_month1'] = date('m');
+			$get['period_si'] = $this->model('ReportModel')->getMonth_SO();
+			$data['by_month1'] = $get['period_si']['to_month'];
 		}
 
 		if(isset($_POST['by_month2']))
@@ -3686,7 +3688,8 @@ class Report extends Controller {
 			$data['by_month2'] = $_POST['by_month2'];
 		}else
 		{
-			$data['by_month2'] = date('m');
+			$get['period_si'] = $this->model('ReportModel')->getMonth_SO();
+			$data['by_month2'] = $get['period_si']['to_month'];
 		}
 
 		if(isset($_POST['by_year']))
@@ -3694,8 +3697,15 @@ class Report extends Controller {
 			$data['by_year'] = $_POST['by_year'];
 		}else
 		{
-			$data['by_year'] = date('Y');
+			$get['period_si'] = $this->model('ReportModel')->getMonth_SO();
+			$data['by_year'] = $get['period_si']['year'];
 		}
+
+		$data['distr_lord'] = $this->model('ReportModel')->getAO_lord_ALL($data);
+
+		$data['sku_name'] = $this->model('SkuModel')->getItemNameSKULord();
+		$data['sku_group'] = $this->model('SkuModel')->getGroupSKULord();
+		$data['sku_count'] = $this->model('SkuModel')->getCountSKULord();
 
 		$this->view('report/activeoutlet_lord', $data);
 		$this->view('templates/footer');
@@ -3872,13 +3882,6 @@ class Report extends Controller {
         $data['island'] = $this->model('ReportModel')->getIslandOut();
 		$data['sku_code'] = $this->model('SkuModel')->getItemCodeSKULord();
 
-		$data['distr_lord'] = $this->model('ReportModel')->getDistr_lord_ALL2($data);
-
-		$data['sku_name'] = $this->model('SkuModel')->getItemNameSKULord();
-		$data['sku_group'] = $this->model('SkuModel')->getGroupSKULord();
-		$data['sku_count'] = $this->model('SkuModel')->getCountSKULord();
-
-
 		if(isset($_POST['by_region']))
 		{
 			$data['by_region'] = $_POST['by_region'];
@@ -3925,6 +3928,12 @@ class Report extends Controller {
 			$get['period_si'] = $this->model('ReportModel')->getMonth_SO();
 			$data['by_year'] = $get['period_si']['year'];
 		}
+
+		$data['distr_lord'] = $this->model('ReportModel')->getDistr_lord_ALL2($data);
+
+		$data['sku_name'] = $this->model('SkuModel')->getItemNameSKULord();
+		$data['sku_group'] = $this->model('SkuModel')->getGroupSKULord();
+		$data['sku_count'] = $this->model('SkuModel')->getCountSKULord();
 
 		$this->view('report/distribution_lord', $data);
 		$this->view('templates/footer');
@@ -3941,18 +3950,6 @@ class Report extends Controller {
 		//$data['username'] = $_SESSION['username'];
 		//$data['user_area'] = $this->model('UserModel')->getUserArea($data['username']);
 
-        $data['area'] = $this->model('ReportModel')->getAreaOut();
-		$data['region'] = $this->model('ReportModel')->getRegionOut();
-        $data['island'] = $this->model('ReportModel')->getIslandOut();
-		$data['sku_code'] = $this->model('SkuModel')->getItemCodeSKUJordan();
-
-		$data['distr_jordan'] = $this->model('ReportModel')->getDistr_jordan_ALL($data);
-
-		$data['sku_name'] = $this->model('SkuModel')->getItemNameSKUJordan();
-		$data['sku_group'] = $this->model('SkuModel')->getGroupSKUJordan();
-		$data['sku_count'] = $this->model('SkuModel')->getCountSKUJordan();
-
-
 		if(isset($_POST['by_region']))
 		{
 			$data['by_region'] = $_POST['by_region'];
@@ -3999,6 +3996,20 @@ class Report extends Controller {
 			$get['period_si'] = $this->model('ReportModel')->getMonth_SO();
 			$data['by_year'] = $get['period_si']['year'];
 		}
+
+        $data['area'] = $this->model('ReportModel')->getAreaOut();
+		$data['region'] = $this->model('ReportModel')->getRegionOut();
+        $data['island'] = $this->model('ReportModel')->getIslandOut();
+		$data['sku_code'] = $this->model('SkuModel')->getItemCodeSKUJordan();
+		
+
+		$data['distr_jordan'] = $this->model('ReportModel')->getDistr_jordan_ALL($data);
+
+		$data['sku_name'] = $this->model('SkuModel')->getItemNameSKUJordan();
+		$data['sku_group'] = $this->model('SkuModel')->getGroupSKUJordan();
+		$data['sku_count'] = $this->model('SkuModel')->getCountSKUJordan();
+
+		
 
 		$this->view('report/distribution_jordan', $data);
 		$this->view('templates/footer');
@@ -4020,13 +4031,6 @@ class Report extends Controller {
         $data['island'] = $this->model('ReportModel')->getIslandOut();
 		$data['sku_code'] = $this->model('SkuModel')->getItemCodeSKURiemann();
 
-		$data['distr_riemann'] = $this->model('ReportModel')->getDistr_riemann_ALL($data);
-
-		$data['sku_name'] = $this->model('SkuModel')->getItemNameSKURiemann();
-		$data['sku_group'] = $this->model('SkuModel')->getGroupSKURiemann();
-		$data['sku_count'] = $this->model('SkuModel')->getCountSKURiemann();
-
-
 		if(isset($_POST['by_region']))
 		{
 			$data['by_region'] = $_POST['by_region'];
@@ -4073,6 +4077,12 @@ class Report extends Controller {
 			$get['period_si'] = $this->model('ReportModel')->getMonth_SO();
 			$data['by_year'] = $get['period_si']['year'];
 		}
+
+		$data['distr_riemann'] = $this->model('ReportModel')->getDistr_riemann_ALL($data);
+
+		$data['sku_name'] = $this->model('SkuModel')->getItemNameSKURiemann();
+		$data['sku_group'] = $this->model('SkuModel')->getGroupSKURiemann();
+		$data['sku_count'] = $this->model('SkuModel')->getCountSKURiemann();
 
 		$this->view('report/distribution_riemann', $data);
 		$this->view('templates/footer');
@@ -4145,13 +4155,6 @@ class Report extends Controller {
         $data['island'] = $this->model('ReportModel')->getIslandOut();
 		$data['sku_code'] = $this->model('SkuModel')->getItemCodeSKULord();
 
-		$data['distr_lord'] = $this->model('ReportModel')->getDistr_lord_new_OT($data);
-
-		$data['sku_name'] = $this->model('SkuModel')->getItemNameSKULord();
-		$data['sku_group'] = $this->model('SkuModel')->getGroupSKULord();
-		$data['sku_count'] = $this->model('SkuModel')->getCountSKULord();
-
-
 		if(isset($_POST['by_region']))
 		{
 			$data['by_region'] = $_POST['by_region'];
@@ -4181,7 +4184,8 @@ class Report extends Controller {
 			$data['by_month'] = $_POST['by_month'];
 		}else
 		{
-			$data['by_month'] = date('m');
+			$get['period_si'] = $this->model('ReportModel')->getMonth_SO();
+			$data['by_month'] =$get['period_si']['to_month'];
 		}
 
 		if(isset($_POST['by_year']))
@@ -4189,8 +4193,15 @@ class Report extends Controller {
 			$data['by_year'] = $_POST['by_year'];
 		}else
 		{
-			$data['by_year'] = date('Y');
+			$get['period_si'] = $this->model('ReportModel')->getMonth_SO();
+			$data['by_year'] = $get['period_si']['year'];
 		}
+
+		$data['distr_lord'] = $this->model('ReportModel')->getDistr_lord_new_OT($data);
+
+		$data['sku_name'] = $this->model('SkuModel')->getItemNameSKULord();
+		$data['sku_group'] = $this->model('SkuModel')->getGroupSKULord();
+		$data['sku_count'] = $this->model('SkuModel')->getCountSKULord();
 
 		$this->view('report/distribution_lord_newOT', $data);
 		$this->view('templates/footer');
@@ -4707,7 +4718,8 @@ class Report extends Controller {
 			$data['by_month1'] = $_POST['by_month1'];
 		}else
 		{
-			$data['by_month1'] = date('m');
+			$get['period_so'] = $this->model('ReportModel')->getMonth_SO();
+			$data['by_month1'] = $get['period_so']['to_month'];
 		}
 
 		if(isset($_POST['by_month2']))
@@ -4715,7 +4727,8 @@ class Report extends Controller {
 			$data['by_month2'] = $_POST['by_month2'];
 		}else
 		{
-			$data['by_month2'] = date('m');
+			$get['period_so'] = $this->model('ReportModel')->getMonth_SO();
+			$data['by_month2'] = $get['period_so']['to_month'];
 		}
 
 		if(isset($_POST['by_year']))
@@ -4762,9 +4775,9 @@ class Report extends Controller {
 		$this->template('header', $data);
 		$this->template('sidebar', $data);
 
-        // $data['area'] = $this->model('ReportModel')->getAreaOut();
-		// $data['region'] = $this->model('ReportModel')->getRegionOut();
-        // $data['island'] = $this->model('ReportModel')->getIslandOut();
+        $data['area'] = $this->model('ReportModel')->getAreaOut();
+		$data['region'] = $this->model('ReportModel')->getRegionOut();
+        $data['island'] = $this->model('ReportModel')->getIslandOut();
 		$data['sku_code'] = $this->model('SkuModel')->getItemCodeSKUJordan();
 
 		$data['cont_jordan'] = $this->model('ReportModel')->getCont_jordan_ALL($data);
@@ -6601,34 +6614,34 @@ class Report extends Controller {
 			$sheet->setCellValue('C' . $row, $rows['outlet_name']);
 			$sheet->setCellValue('D' . $row, $rows['outlet_type']);
 			$sheet->setCellValue('E' . $row, $rows['area']);
-			$sheet->setCellValue('F' . $row, number_format($rows['qty_jan'], 0));
-			$sheet->setCellValue('G' . $row, number_format($rows['val_jan'], 2));
-			$sheet->setCellValue('H' . $row, number_format($rows['qty_feb'], 0));
-			$sheet->setCellValue('I' . $row, number_format($rows['val_feb'], 2));
-			$sheet->setCellValue('J' . $row, number_format($rows['qty_mar'], 0));
-			$sheet->setCellValue('K' . $row, number_format($rows['val_mar'], 2));
-			$sheet->setCellValue('L' . $row, number_format($rows['qty_apr'], 0));
-			$sheet->setCellValue('M' . $row, number_format($rows['val_apr'], 2));
-			$sheet->setCellValue('N' . $row, number_format($rows['qty_mei'], 0));
-			$sheet->setCellValue('O' . $row, number_format($rows['val_mei'], 2));
-			$sheet->setCellValue('P' . $row, number_format($rows['qty_jun'], 0));
-			$sheet->setCellValue('Q' . $row, number_format($rows['val_jun'], 2));
-			$sheet->setCellValue('R' . $row, number_format($rows['qty_jul'], 0));
-			$sheet->setCellValue('S' . $row, number_format($rows['val_jul'], 2));
-			$sheet->setCellValue('T' . $row, number_format($rows['qty_agu'], 0));
-			$sheet->setCellValue('U' . $row, number_format($rows['val_agu'], 2));
-			$sheet->setCellValue('V' . $row, number_format($rows['qty_sep'], 0));
-			$sheet->setCellValue('W' . $row, number_format($rows['val_sep'], 2));
-			$sheet->setCellValue('X' . $row, number_format($rows['qty_okt'], 0));
-			$sheet->setCellValue('Y' . $row, number_format($rows['val_okt'], 2));
-			$sheet->setCellValue('Z' . $row, number_format($rows['qty_nop'], 0));
-			$sheet->setCellValue('AA' . $row, number_format($rows['val_nop'], 2));
-			$sheet->setCellValue('AB' . $row, number_format($rows['qty_des'], 0));
-			$sheet->setCellValue('AC' . $row, number_format($rows['val_des'], 2));
-			$sheet->setCellValue('AD' . $row, number_format($rows['qty_year'], 0));
-			$sheet->setCellValue('AE' . $row, number_format($rows['val_year'], 2));
-			$sheet->setCellValue('AF' . $row, number_format($rows['qty_year']/12, 0));
-			$sheet->setCellValue('AG' . $row, number_format($rows['val_year']/12, 2));
+			$sheet->setCellValue('F' . $row, $rows['qty_jan']);
+			$sheet->setCellValue('G' . $row, $rows['val_jan']);
+			$sheet->setCellValue('H' . $row, $rows['qty_feb']);
+			$sheet->setCellValue('I' . $row, $rows['val_feb']);
+			$sheet->setCellValue('J' . $row, $rows['qty_mar']);
+			$sheet->setCellValue('K' . $row, $rows['val_mar']);
+			$sheet->setCellValue('L' . $row, $rows['qty_apr']);
+			$sheet->setCellValue('M' . $row, $rows['val_apr']);
+			$sheet->setCellValue('N' . $row, $rows['qty_mei']);
+			$sheet->setCellValue('O' . $row, $rows['val_mei']);
+			$sheet->setCellValue('P' . $row, $rows['qty_jun']);
+			$sheet->setCellValue('Q' . $row, $rows['val_jun']);
+			$sheet->setCellValue('R' . $row, $rows['qty_jul']);
+			$sheet->setCellValue('S' . $row, $rows['val_jul']);
+			$sheet->setCellValue('T' . $row, $rows['qty_agu']);
+			$sheet->setCellValue('U' . $row, $rows['val_agu']);
+			$sheet->setCellValue('V' . $row, $rows['qty_sep']);
+			$sheet->setCellValue('W' . $row, $rows['val_sep']);
+			$sheet->setCellValue('X' . $row, $rows['qty_okt']);
+			$sheet->setCellValue('Y' . $row, $rows['val_okt']);
+			$sheet->setCellValue('Z' . $row, $rows['qty_nop']);
+			$sheet->setCellValue('AA' . $row, $rows['val_nop']);
+			$sheet->setCellValue('AB' . $row, $rows['qty_des']);
+			$sheet->setCellValue('AC' . $row, $rows['val_des']);
+			$sheet->setCellValue('AD' . $row, $rows['qty_year']);
+			$sheet->setCellValue('AE' . $row, $rows['val_year']);
+			$sheet->setCellValue('AF' . $row, $rows['qty_year']/12);
+			$sheet->setCellValue('AG' . $row, $rows['val_year']/12);
 
 			// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 			$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -6698,6 +6711,35 @@ class Report extends Controller {
 			$sheet->getStyle('AE' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 			$sheet->getStyle('AF' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 			$sheet->getStyle('AG' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+			$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('T' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('U' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('V' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('W' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('X' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('Y' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('Z' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AA' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('AB' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AC' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('AD' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AE' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('AF' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AG' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 
 			$no++; // Tambah 1 setiap kali looping
     		$row++; // Tambah 1 setiap kali looping
@@ -7083,34 +7125,34 @@ class Report extends Controller {
 			$sheet->setCellValue('E' . $row, $rows['outlet_type']);
 			$sheet->setCellValue('F' . $row, $rows['outlet_count']);
 			$sheet->setCellValue('G' . $row, $rows['area']);
-			$sheet->setCellValue('H' . $row, number_format($rows['qty_jan'], 0));
-			$sheet->setCellValue('I' . $row, number_format($rows['val_jan'], 2));
-			$sheet->setCellValue('J' . $row, number_format($rows['qty_feb'], 0));
-			$sheet->setCellValue('K' . $row, number_format($rows['val_feb'], 2));
-			$sheet->setCellValue('L' . $row, number_format($rows['qty_mar'], 0));
-			$sheet->setCellValue('M' . $row, number_format($rows['val_mar'], 2));
-			$sheet->setCellValue('N' . $row, number_format($rows['qty_apr'], 0));
-			$sheet->setCellValue('O' . $row, number_format($rows['val_apr'], 2));
-			$sheet->setCellValue('P' . $row, number_format($rows['qty_mei'], 0));
-			$sheet->setCellValue('Q' . $row, number_format($rows['val_mei'], 2));
-			$sheet->setCellValue('R' . $row, number_format($rows['qty_jun'], 0));
-			$sheet->setCellValue('S' . $row, number_format($rows['val_jun'], 2));
-			$sheet->setCellValue('T' . $row, number_format($rows['qty_jul'], 0));
-			$sheet->setCellValue('U' . $row, number_format($rows['val_jul'], 2));
-			$sheet->setCellValue('V' . $row, number_format($rows['qty_agu'], 0));
-			$sheet->setCellValue('W' . $row, number_format($rows['val_agu'], 2));
-			$sheet->setCellValue('X' . $row, number_format($rows['qty_sep'], 0));
-			$sheet->setCellValue('Y' . $row, number_format($rows['val_sep'], 2));
-			$sheet->setCellValue('Z' . $row, number_format($rows['qty_okt'], 0));
-			$sheet->setCellValue('AA' . $row, number_format($rows['val_okt'], 2));
-			$sheet->setCellValue('AB' . $row, number_format($rows['qty_nop'], 0));
-			$sheet->setCellValue('AC' . $row, number_format($rows['val_nop'], 2));
-			$sheet->setCellValue('AD' . $row, number_format($rows['qty_des'], 0));
-			$sheet->setCellValue('AE' . $row, number_format($rows['val_des'], 2));
-			$sheet->setCellValue('AF' . $row, number_format($rows['qty_year'], 0));
-			$sheet->setCellValue('AG' . $row, number_format($rows['val_year'], 2));
-			$sheet->setCellValue('AH' . $row, number_format($rows['qty_year']/12, 0));
-			$sheet->setCellValue('AI' . $row, number_format($rows['val_year']/12, 2));
+			$sheet->setCellValue('H' . $row, $rows['qty_jan']);
+			$sheet->setCellValue('I' . $row, $rows['val_jan']);
+			$sheet->setCellValue('J' . $row, $rows['qty_feb']);
+			$sheet->setCellValue('K' . $row, $rows['val_feb']);
+			$sheet->setCellValue('L' . $row, $rows['qty_mar']);
+			$sheet->setCellValue('M' . $row, $rows['val_mar']);
+			$sheet->setCellValue('N' . $row, $rows['qty_apr']);
+			$sheet->setCellValue('O' . $row, $rows['val_apr']);
+			$sheet->setCellValue('P' . $row, $rows['qty_mei']);
+			$sheet->setCellValue('Q' . $row, $rows['val_mei']);
+			$sheet->setCellValue('R' . $row, $rows['qty_jun']);
+			$sheet->setCellValue('S' . $row, $rows['val_jun']);
+			$sheet->setCellValue('T' . $row, $rows['qty_jul']);
+			$sheet->setCellValue('U' . $row, $rows['val_jul']);
+			$sheet->setCellValue('V' . $row, $rows['qty_agu']);
+			$sheet->setCellValue('W' . $row, $rows['val_agu']);
+			$sheet->setCellValue('X' . $row, $rows['qty_sep']);
+			$sheet->setCellValue('Y' . $row, $rows['val_sep']);
+			$sheet->setCellValue('Z' . $row, $rows['qty_okt']);
+			$sheet->setCellValue('AA' . $row, $rows['val_okt']);
+			$sheet->setCellValue('AB' . $row, $rows['qty_nop']);
+			$sheet->setCellValue('AC' . $row, $rows['val_nop']);
+			$sheet->setCellValue('AD' . $row, $rows['qty_des']);
+			$sheet->setCellValue('AE' . $row, $rows['val_des']);
+			$sheet->setCellValue('AF' . $row, $rows['qty_year']);
+			$sheet->setCellValue('AG' . $row, $rows['val_year']);
+			$sheet->setCellValue('AH' . $row, $rows['qty_year']/12);
+			$sheet->setCellValue('AI' . $row, $rows['val_year']/12);
 
 			// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 			$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -7185,6 +7227,35 @@ class Report extends Controller {
 			$sheet->getStyle('AH' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 			$sheet->getStyle('AI' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
+			$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('T' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('U' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('V' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('W' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('X' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('Y' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('Z' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AA' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('AB' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AC' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('AD' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AE' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('AF' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AG' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('AH' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AI' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+
 			$no++; // Tambah 1 setiap kali looping
     		$row++; // Tambah 1 setiap kali looping
 		endforeach;
@@ -7236,7 +7307,6 @@ class Report extends Controller {
 
 		$writer = new Xlsx($spreadsheet);
 		$writer->save('php://output');
-
 
 	}
 
@@ -11603,32 +11673,32 @@ class Report extends Controller {
 				$sheet->setCellValue('B' . $row, '');
 				$sheet->setCellValue('C' . $row, '');
 				$sheet->setCellValue('D' . $row, $region);
-				$sheet->setCellValue('E' . $row, number_format($sub_val_jan, 2));
-				$sheet->setCellValue('F' . $row, number_format($sub_cont_jan, 2));
-				$sheet->setCellValue('G' . $row, number_format($sub_val_feb, 2));
-				$sheet->setCellValue('H' . $row, number_format($sub_cont_feb, 2));
-				$sheet->setCellValue('I' . $row, number_format($sub_val_mar, 2));
-				$sheet->setCellValue('J' . $row, number_format($sub_cont_mar, 2));
-				$sheet->setCellValue('K' . $row, number_format($sub_val_apr, 2));
-				$sheet->setCellValue('L' . $row, number_format($sub_cont_apr, 2));
-				$sheet->setCellValue('M' . $row, number_format($sub_val_mei, 2));
-				$sheet->setCellValue('N' . $row, number_format($sub_cont_mei, 2));
-				$sheet->setCellValue('O' . $row, number_format($sub_val_jun, 2));
-				$sheet->setCellValue('P' . $row, number_format($sub_cont_jun, 2));
-				$sheet->setCellValue('Q' . $row, number_format($sub_val_jul, 2));
-				$sheet->setCellValue('R' . $row, number_format($sub_cont_jul, 2));
-				$sheet->setCellValue('S' . $row, number_format($sub_val_agu, 2));
-				$sheet->setCellValue('T' . $row, number_format($sub_cont_agu, 2));
-				$sheet->setCellValue('U' . $row, number_format($sub_val_sep, 2));
-				$sheet->setCellValue('V' . $row, number_format($sub_cont_sep, 2));
-				$sheet->setCellValue('W' . $row, number_format($sub_val_okt, 2));
-				$sheet->setCellValue('X' . $row, number_format($sub_cont_okt, 2));
-				$sheet->setCellValue('Y' . $row, number_format($sub_val_nop, 2));
-				$sheet->setCellValue('Z' . $row, number_format($sub_cont_nop, 2));
-				$sheet->setCellValue('AA' . $row, number_format($sub_val_des, 2));
-				$sheet->setCellValue('AB' . $row, number_format($sub_cont_des, 2));
-				$sheet->setCellValue('AC' . $row, number_format($sub_val_year, 2));
-				$sheet->setCellValue('AD' . $row, number_format($sub_cont_year, 2));
+				$sheet->setCellValue('E' . $row, $sub_val_jan);
+				$sheet->setCellValue('F' . $row, $sub_cont_jan);
+				$sheet->setCellValue('G' . $row, $sub_val_feb);
+				$sheet->setCellValue('H' . $row, $sub_cont_feb);
+				$sheet->setCellValue('I' . $row, $sub_val_mar);
+				$sheet->setCellValue('J' . $row, $sub_cont_mar);
+				$sheet->setCellValue('K' . $row, $sub_val_apr);
+				$sheet->setCellValue('L' . $row, $sub_cont_apr);
+				$sheet->setCellValue('M' . $row, $sub_val_mei);
+				$sheet->setCellValue('N' . $row, $sub_cont_mei);
+				$sheet->setCellValue('O' . $row, $sub_val_jun);
+				$sheet->setCellValue('P' . $row, $sub_cont_jun);
+				$sheet->setCellValue('Q' . $row, $sub_val_jul);
+				$sheet->setCellValue('R' . $row, $sub_cont_jul);
+				$sheet->setCellValue('S' . $row, $sub_val_agu);
+				$sheet->setCellValue('T' . $row, $sub_cont_agu);
+				$sheet->setCellValue('U' . $row, $sub_val_sep);
+				$sheet->setCellValue('V' . $row, $sub_cont_sep);
+				$sheet->setCellValue('W' . $row, $sub_val_okt);
+				$sheet->setCellValue('X' . $row, $sub_cont_okt);
+				$sheet->setCellValue('Y' . $row, $sub_val_nop);
+				$sheet->setCellValue('Z' . $row, $sub_cont_nop);
+				$sheet->setCellValue('AA' . $row, $sub_val_des);
+				$sheet->setCellValue('AB' . $row, $sub_cont_des);
+				$sheet->setCellValue('AC' . $row, $sub_val_year);
+				$sheet->setCellValue('AD' . $row, $sub_cont_year);
 			
 
 				// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
@@ -11693,6 +11763,33 @@ class Report extends Controller {
 				$sheet->getStyle('AB' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 				$sheet->getStyle('AC' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 				$sheet->getStyle('AD' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+				$sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('T' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('U' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('V' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('W' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('X' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('Y' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('Z' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('AA' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('AB' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('AC' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('AD' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 				
 				$sheet->getStyle('A' . $row . ':AD' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFE4B5');
 				$sheet->getStyle('A' . $row . ':AD' . $row)->getFont()->setBold(true);
@@ -11737,32 +11834,32 @@ class Report extends Controller {
 				$sheet->setCellValue('B' . $row, '');
 				$sheet->setCellValue('C' . $row, '');
 				$sheet->setCellValue('D' . $row, $island);
-				$sheet->setCellValue('E' . $row, number_format($total_val_jan, 2));
-				$sheet->setCellValue('F' . $row, number_format($total_cont_jan, 2));
-				$sheet->setCellValue('G' . $row, number_format($total_val_feb, 2));
-				$sheet->setCellValue('H' . $row, number_format($total_cont_feb, 2));
-				$sheet->setCellValue('I' . $row, number_format($total_val_mar, 2));
-				$sheet->setCellValue('J' . $row, number_format($total_cont_mar, 2));
-				$sheet->setCellValue('K' . $row, number_format($total_val_apr, 2));
-				$sheet->setCellValue('L' . $row, number_format($total_cont_apr, 2));
-				$sheet->setCellValue('M' . $row, number_format($total_val_mei, 2));
-				$sheet->setCellValue('N' . $row, number_format($total_cont_mei, 2));
-				$sheet->setCellValue('O' . $row, number_format($total_val_jun, 2));
-				$sheet->setCellValue('P' . $row, number_format($total_cont_jun, 2));
-				$sheet->setCellValue('Q' . $row, number_format($total_val_jul, 2));
-				$sheet->setCellValue('R' . $row, number_format($total_cont_jul, 2));
-				$sheet->setCellValue('S' . $row, number_format($total_val_agu, 2));
-				$sheet->setCellValue('T' . $row, number_format($total_cont_agu, 2));
-				$sheet->setCellValue('U' . $row, number_format($total_val_sep, 2));
-				$sheet->setCellValue('V' . $row, number_format($total_cont_sep, 2));
-				$sheet->setCellValue('W' . $row, number_format($total_val_okt, 2));
-				$sheet->setCellValue('X' . $row, number_format($total_cont_okt, 2));
-				$sheet->setCellValue('Y' . $row, number_format($total_val_nop, 2));
-				$sheet->setCellValue('Z' . $row, number_format($total_cont_nop, 2));
-				$sheet->setCellValue('AA' . $row, number_format($total_val_des, 2));
-				$sheet->setCellValue('AB' . $row, number_format($total_cont_des, 2));
-				$sheet->setCellValue('AC' . $row, number_format($total_val_year, 2));
-				$sheet->setCellValue('AD' . $row, number_format($total_cont_year, 2));
+				$sheet->setCellValue('E' . $row, $total_val_jan);
+				$sheet->setCellValue('F' . $row, $total_cont_jan);
+				$sheet->setCellValue('G' . $row, $total_val_feb);
+				$sheet->setCellValue('H' . $row, $total_cont_feb);
+				$sheet->setCellValue('I' . $row, $total_val_mar);
+				$sheet->setCellValue('J' . $row, $total_cont_mar);
+				$sheet->setCellValue('K' . $row, $total_val_apr);
+				$sheet->setCellValue('L' . $row, $total_cont_apr);
+				$sheet->setCellValue('M' . $row, $total_val_mei);
+				$sheet->setCellValue('N' . $row, $total_cont_mei);
+				$sheet->setCellValue('O' . $row, $total_val_jun);
+				$sheet->setCellValue('P' . $row, $total_cont_jun);
+				$sheet->setCellValue('Q' . $row, $total_val_jul);
+				$sheet->setCellValue('R' . $row, $total_cont_jul);
+				$sheet->setCellValue('S' . $row, $total_val_agu);
+				$sheet->setCellValue('T' . $row, $total_cont_agu);
+				$sheet->setCellValue('U' . $row, $total_val_sep);
+				$sheet->setCellValue('V' . $row, $total_cont_sep);
+				$sheet->setCellValue('W' . $row, $total_val_okt);
+				$sheet->setCellValue('X' . $row, $total_cont_okt);
+				$sheet->setCellValue('Y' . $row, $total_val_nop);
+				$sheet->setCellValue('Z' . $row, $total_cont_nop);
+				$sheet->setCellValue('AA' . $row, $total_val_des);
+				$sheet->setCellValue('AB' . $row, $total_cont_des);
+				$sheet->setCellValue('AC' . $row, $total_val_year);
+				$sheet->setCellValue('AD' . $row, $total_cont_year);
 
 				// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 				$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -11827,6 +11924,33 @@ class Report extends Controller {
 				$sheet->getStyle('AC' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 				$sheet->getStyle('AD' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
+				$sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('T' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('U' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('V' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('W' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('X' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('Y' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('Z' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('AA' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('AB' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('AC' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('AD' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+
 				$sheet->getStyle('A' . $row . ':AD' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');
 				$sheet->getStyle('A' . $row . ':AD' . $row)->getFont()->setBold(true);
 
@@ -11881,32 +12005,32 @@ class Report extends Controller {
     		$sheet->setCellValue('B' . $row, $rows['cust_code']);
 			$sheet->setCellValue('C' . $row, $rows['distributor']);
 			$sheet->setCellValue('D' . $row, $rows['area']);
-			$sheet->setCellValue('E' . $row, number_format($rows['val_jan'], 2));
-			$sheet->setCellValue('F' . $row, number_format($cont_jan, 2));
-			$sheet->setCellValue('G' . $row, number_format($rows['val_feb'], 2));
-			$sheet->setCellValue('H' . $row, number_format($cont_feb, 2));
-			$sheet->setCellValue('I' . $row, number_format($rows['val_mar'], 2));
-			$sheet->setCellValue('J' . $row, number_format($cont_mar, 2));
-			$sheet->setCellValue('K' . $row, number_format($rows['val_apr'], 2));
-			$sheet->setCellValue('L' . $row, number_format($cont_apr, 2));
-			$sheet->setCellValue('M' . $row, number_format($rows['val_mei'], 2));
-			$sheet->setCellValue('N' . $row, number_format($cont_mei, 2));
-			$sheet->setCellValue('O' . $row, number_format($rows['val_jun'], 2));
-			$sheet->setCellValue('P' . $row, number_format($cont_jun, 2));
-			$sheet->setCellValue('Q' . $row, number_format($rows['val_jul'], 2));
-			$sheet->setCellValue('R' . $row, number_format($cont_jul, 2));
-			$sheet->setCellValue('S' . $row, number_format($rows['val_agu'], 2));
-			$sheet->setCellValue('T' . $row, number_format($cont_agu, 2));
-			$sheet->setCellValue('U' . $row, number_format($rows['val_sep'], 2));
-			$sheet->setCellValue('V' . $row, number_format($cont_sep, 2));
-			$sheet->setCellValue('W' . $row, number_format($rows['val_okt'], 2));
-			$sheet->setCellValue('X' . $row, number_format($cont_okt, 2));
-			$sheet->setCellValue('Y' . $row, number_format($rows['val_nop'], 2));
-			$sheet->setCellValue('Z' . $row, number_format($cont_nop, 2));
-			$sheet->setCellValue('AA' . $row, number_format($rows['val_des'], 2));
-			$sheet->setCellValue('AB' . $row, number_format($cont_des, 2));
-			$sheet->setCellValue('AC' . $row, number_format($rows['val_year'], 2));
-			$sheet->setCellValue('AD' . $row, number_format($cont_year, 2));
+			$sheet->setCellValue('E' . $row, $rows['val_jan']);
+			$sheet->setCellValue('F' . $row, $cont_jan);
+			$sheet->setCellValue('G' . $row, $rows['val_feb']);
+			$sheet->setCellValue('H' . $row, $cont_feb);
+			$sheet->setCellValue('I' . $row, $rows['val_mar']);
+			$sheet->setCellValue('J' . $row, $cont_mar);
+			$sheet->setCellValue('K' . $row, $rows['val_apr']);
+			$sheet->setCellValue('L' . $row, $cont_apr);
+			$sheet->setCellValue('M' . $row, $rows['val_mei']);
+			$sheet->setCellValue('N' . $row, $cont_mei);
+			$sheet->setCellValue('O' . $row, $rows['val_jun']);
+			$sheet->setCellValue('P' . $row, $cont_jun);
+			$sheet->setCellValue('Q' . $row, $rows['val_jul']);
+			$sheet->setCellValue('R' . $row, $cont_jul);
+			$sheet->setCellValue('S' . $row, $rows['val_agu']);
+			$sheet->setCellValue('T' . $row, $cont_agu);
+			$sheet->setCellValue('U' . $row, $rows['val_sep']);
+			$sheet->setCellValue('V' . $row, $cont_sep);
+			$sheet->setCellValue('W' . $row, $rows['val_okt']);
+			$sheet->setCellValue('X' . $row, $cont_okt);
+			$sheet->setCellValue('Y' . $row, $rows['val_nop']);
+			$sheet->setCellValue('Z' . $row, $cont_nop);
+			$sheet->setCellValue('AA' . $row, $rows['val_des']);
+			$sheet->setCellValue('AB' . $row, $cont_des);
+			$sheet->setCellValue('AC' . $row, $rows['val_year']);
+			$sheet->setCellValue('AD' . $row, $cont_year);
 
 			// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 			$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -11970,6 +12094,33 @@ class Report extends Controller {
 			$sheet->getStyle('AB' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 			$sheet->getStyle('AC' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 			$sheet->getStyle('AD' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+			$sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('T' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('U' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('V' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('W' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('X' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('Y' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('Z' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('AA' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('AB' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('AC' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('AD' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 
 			$region = $rows['region'];
 			$island = $rows['island'];
@@ -12068,32 +12219,32 @@ class Report extends Controller {
 		$sheet->setCellValue('B' . $row, '');
 		$sheet->setCellValue('C' . $row, '');
 		$sheet->setCellValue('D' . $row, $region);
-		$sheet->setCellValue('E' . $row, number_format($sub_val_jan, 0));
-		$sheet->setCellValue('F' . $row, number_format($sub_cont_jan, 2));
-		$sheet->setCellValue('G' . $row, number_format($sub_val_feb, 0));
-		$sheet->setCellValue('H' . $row, number_format($sub_cont_feb, 2));
-		$sheet->setCellValue('I' . $row, number_format($sub_val_mar, 0));
-		$sheet->setCellValue('J' . $row, number_format($sub_cont_mar, 2));
-		$sheet->setCellValue('K' . $row, number_format($sub_val_apr, 0));
-		$sheet->setCellValue('L' . $row, number_format($sub_cont_apr, 2));
-		$sheet->setCellValue('M' . $row, number_format($sub_val_mei, 0));
-		$sheet->setCellValue('N' . $row, number_format($sub_cont_mei, 2));
-		$sheet->setCellValue('O' . $row, number_format($sub_val_jun, 0));
-		$sheet->setCellValue('P' . $row, number_format($sub_cont_jun, 2));
-		$sheet->setCellValue('Q' . $row, number_format($sub_val_jul, 0));
-		$sheet->setCellValue('R' . $row, number_format($sub_cont_jul, 2));
-		$sheet->setCellValue('S' . $row, number_format($sub_val_agu, 0));
-		$sheet->setCellValue('T' . $row, number_format($sub_cont_agu, 2));
-		$sheet->setCellValue('U' . $row, number_format($sub_val_sep, 0));
-		$sheet->setCellValue('V' . $row, number_format($sub_cont_sep, 2));
-		$sheet->setCellValue('W' . $row, number_format($sub_val_okt, 0));
-		$sheet->setCellValue('X' . $row, number_format($sub_cont_okt, 2));
-		$sheet->setCellValue('Y' . $row, number_format($sub_val_nop, 0));
-		$sheet->setCellValue('Z' . $row, number_format($sub_cont_nop, 2));
-		$sheet->setCellValue('AA' . $row, number_format($sub_val_des, 0));
-		$sheet->setCellValue('AB' . $row, number_format($sub_cont_des, 2));
-		$sheet->setCellValue('AC' . $row, number_format($sub_val_year, 0));
-		$sheet->setCellValue('AD' . $row, number_format($sub_cont_year, 2));
+		$sheet->setCellValue('E' . $row, $sub_val_jan);
+		$sheet->setCellValue('F' . $row, $sub_cont_jan);
+		$sheet->setCellValue('G' . $row, $sub_val_feb);
+		$sheet->setCellValue('H' . $row, $sub_cont_feb);
+		$sheet->setCellValue('I' . $row, $sub_val_mar);
+		$sheet->setCellValue('J' . $row, $sub_cont_mar);
+		$sheet->setCellValue('K' . $row, $sub_val_apr);
+		$sheet->setCellValue('L' . $row, $sub_cont_apr);
+		$sheet->setCellValue('M' . $row, $sub_val_mei);
+		$sheet->setCellValue('N' . $row, $sub_cont_mei);
+		$sheet->setCellValue('O' . $row, $sub_val_jun);
+		$sheet->setCellValue('P' . $row, $sub_cont_jun);
+		$sheet->setCellValue('Q' . $row, $sub_val_jul);
+		$sheet->setCellValue('R' . $row, $sub_cont_jul);
+		$sheet->setCellValue('S' . $row, $sub_val_agu);
+		$sheet->setCellValue('T' . $row, $sub_cont_agu);
+		$sheet->setCellValue('U' . $row, $sub_val_sep);
+		$sheet->setCellValue('V' . $row, $sub_cont_sep);
+		$sheet->setCellValue('W' . $row, $sub_val_okt);
+		$sheet->setCellValue('X' . $row, $sub_cont_okt);
+		$sheet->setCellValue('Y' . $row, $sub_val_nop);
+		$sheet->setCellValue('Z' . $row, $sub_cont_nop);
+		$sheet->setCellValue('AA' . $row, $sub_val_des);
+		$sheet->setCellValue('AB' . $row, $sub_cont_des);
+		$sheet->setCellValue('AC' . $row, $sub_val_year);
+		$sheet->setCellValue('AD' . $row, $sub_cont_year);
 
 		// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 		$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -12157,6 +12308,33 @@ class Report extends Controller {
 		$sheet->getStyle('AB' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('AC' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('AD' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+		$sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('T' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('U' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('V' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('W' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('X' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('Y' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('Z' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AA' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AB' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AC' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AD' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 		
 		$sheet->getStyle('A' . $row . ':AD' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFE4B5');
 		$sheet->getStyle('A' . $row . ':AD' . $row)->getFont()->setBold(true);
@@ -12167,32 +12345,32 @@ class Report extends Controller {
 		$sheet->setCellValue('B' . $row, '');
 		$sheet->setCellValue('C' . $row, '');
 		$sheet->setCellValue('D' . $row, $island);
-		$sheet->setCellValue('E' . $row, number_format($total_val_jan, 2));
-		$sheet->setCellValue('F' . $row, number_format($total_cont_jan, 2));
-		$sheet->setCellValue('G' . $row, number_format($total_val_feb, 2));
-		$sheet->setCellValue('H' . $row, number_format($total_cont_feb, 2));
-		$sheet->setCellValue('I' . $row, number_format($total_val_mar, 2));
-		$sheet->setCellValue('J' . $row, number_format($total_cont_mar, 2));
-		$sheet->setCellValue('K' . $row, number_format($total_val_apr, 2));
-		$sheet->setCellValue('L' . $row, number_format($total_cont_apr, 2));
-		$sheet->setCellValue('M' . $row, number_format($total_val_mei, 2));
-		$sheet->setCellValue('N' . $row, number_format($total_cont_mei, 2));
-		$sheet->setCellValue('O' . $row, number_format($total_val_jun, 2));
-		$sheet->setCellValue('P' . $row, number_format($total_cont_jun, 2));
-		$sheet->setCellValue('Q' . $row, number_format($total_val_jul, 2));
-		$sheet->setCellValue('R' . $row, number_format($total_cont_jul, 2));
-		$sheet->setCellValue('S' . $row, number_format($total_val_agu, 2));
-		$sheet->setCellValue('T' . $row, number_format($total_cont_agu, 2));
-		$sheet->setCellValue('U' . $row, number_format($total_val_sep, 2));
-		$sheet->setCellValue('V' . $row, number_format($total_cont_sep, 2));
-		$sheet->setCellValue('W' . $row, number_format($total_val_okt, 2));
-		$sheet->setCellValue('X' . $row, number_format($total_cont_okt, 2));
-		$sheet->setCellValue('Y' . $row, number_format($total_val_nop, 2));
-		$sheet->setCellValue('Z' . $row, number_format($total_cont_nop, 2));
-		$sheet->setCellValue('AA' . $row, number_format($total_val_des, 2));
-		$sheet->setCellValue('AB' . $row, number_format($total_cont_des, 2));
-		$sheet->setCellValue('AC' . $row, number_format($total_val_year, 2));
-		$sheet->setCellValue('AD' . $row, number_format($total_cont_year, 2));
+		$sheet->setCellValue('E' . $row, $total_val_jan);
+		$sheet->setCellValue('F' . $row, $total_cont_jan);
+		$sheet->setCellValue('G' . $row, $total_val_feb);
+		$sheet->setCellValue('H' . $row, $total_cont_feb);
+		$sheet->setCellValue('I' . $row, $total_val_mar);
+		$sheet->setCellValue('J' . $row, $total_cont_mar);
+		$sheet->setCellValue('K' . $row, $total_val_apr);
+		$sheet->setCellValue('L' . $row, $total_cont_apr);
+		$sheet->setCellValue('M' . $row, $total_val_mei);
+		$sheet->setCellValue('N' . $row, $total_cont_mei);
+		$sheet->setCellValue('O' . $row, $total_val_jun);
+		$sheet->setCellValue('P' . $row, $total_cont_jun);
+		$sheet->setCellValue('Q' . $row, $total_val_jul);
+		$sheet->setCellValue('R' . $row, $total_cont_jul);
+		$sheet->setCellValue('S' . $row, $total_val_agu);
+		$sheet->setCellValue('T' . $row, $total_cont_agu);
+		$sheet->setCellValue('U' . $row, $total_val_sep);
+		$sheet->setCellValue('V' . $row, $total_cont_sep);
+		$sheet->setCellValue('W' . $row, $total_val_okt);
+		$sheet->setCellValue('X' . $row, $total_cont_okt);
+		$sheet->setCellValue('Y' . $row, $total_val_nop);
+		$sheet->setCellValue('Z' . $row, $total_cont_nop);
+		$sheet->setCellValue('AA' . $row, $total_val_des);
+		$sheet->setCellValue('AB' . $row, $total_cont_des);
+		$sheet->setCellValue('AC' . $row, $total_val_year);
+		$sheet->setCellValue('AD' . $row, $total_cont_year);
 
 		// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 		$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -12256,6 +12434,33 @@ class Report extends Controller {
 		$sheet->getStyle('AB' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('AC' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('AD' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+		$sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('T' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('U' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('V' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('W' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('X' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('Y' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('Z' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AA' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AB' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AC' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AD' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 
 		$sheet->getStyle('A' . $row . ':AD' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');
 		$sheet->getStyle('A' . $row . ':AD' . $row)->getFont()->setBold(true);
@@ -12266,32 +12471,32 @@ class Report extends Controller {
 		$sheet->setCellValue('B' . $row, '');
 		$sheet->setCellValue('C' . $row, '');
 		$sheet->setCellValue('D' . $row, 'NATIONAL');
-		$sheet->setCellValue('E' . $row, number_format($grandtotal_val_jan, 2));
-		$sheet->setCellValue('F' . $row, number_format($grandtotal_cont_jan, 2));
-		$sheet->setCellValue('G' . $row, number_format($grandtotal_val_feb, 2));
-		$sheet->setCellValue('H' . $row, number_format($grandtotal_cont_feb, 2));
-		$sheet->setCellValue('I' . $row, number_format($grandtotal_val_mar, 2));
-		$sheet->setCellValue('J' . $row, number_format($grandtotal_cont_mar, 2));
-		$sheet->setCellValue('K' . $row, number_format($grandtotal_val_apr, 2));
-		$sheet->setCellValue('L' . $row, number_format($grandtotal_cont_apr, 2));
-		$sheet->setCellValue('M' . $row, number_format($grandtotal_val_mei, 2));
-		$sheet->setCellValue('N' . $row, number_format($grandtotal_cont_mei, 2));
-		$sheet->setCellValue('O' . $row, number_format($grandtotal_val_jun, 2));
-		$sheet->setCellValue('P' . $row, number_format($grandtotal_cont_jun, 2));
-		$sheet->setCellValue('Q' . $row, number_format($grandtotal_val_jul, 2));
-		$sheet->setCellValue('R' . $row, number_format($grandtotal_cont_jul, 2));
-		$sheet->setCellValue('S' . $row, number_format($grandtotal_val_agu, 2));
-		$sheet->setCellValue('T' . $row, number_format($grandtotal_cont_agu, 2));
-		$sheet->setCellValue('U' . $row, number_format($grandtotal_val_sep, 2));
-		$sheet->setCellValue('V' . $row, number_format($grandtotal_cont_sep, 2));
-		$sheet->setCellValue('W' . $row, number_format($grandtotal_val_okt, 2));
-		$sheet->setCellValue('X' . $row, number_format($grandtotal_cont_okt, 2));
-		$sheet->setCellValue('Y' . $row, number_format($grandtotal_val_nop, 2));
-		$sheet->setCellValue('Z' . $row, number_format($grandtotal_cont_nop, 2));
-		$sheet->setCellValue('AA' . $row, number_format($grandtotal_val_des, 2));
-		$sheet->setCellValue('AB' . $row, number_format($grandtotal_cont_des, 2));
-		$sheet->setCellValue('AC' . $row, number_format($grandtotal_val_year, 2));
-		$sheet->setCellValue('AD' . $row, number_format($grandtotal_cont_year, 2));
+		$sheet->setCellValue('E' . $row, $grandtotal_val_jan);
+		$sheet->setCellValue('F' . $row, $grandtotal_cont_jan);
+		$sheet->setCellValue('G' . $row, $grandtotal_val_feb);
+		$sheet->setCellValue('H' . $row, $grandtotal_cont_feb);
+		$sheet->setCellValue('I' . $row, $grandtotal_val_mar);
+		$sheet->setCellValue('J' . $row, $grandtotal_cont_mar);
+		$sheet->setCellValue('K' . $row, $grandtotal_val_apr);
+		$sheet->setCellValue('L' . $row, $grandtotal_cont_apr);
+		$sheet->setCellValue('M' . $row, $grandtotal_val_mei);
+		$sheet->setCellValue('N' . $row, $grandtotal_cont_mei);
+		$sheet->setCellValue('O' . $row, $grandtotal_val_jun);
+		$sheet->setCellValue('P' . $row, $grandtotal_cont_jun);
+		$sheet->setCellValue('Q' . $row, $grandtotal_val_jul);
+		$sheet->setCellValue('R' . $row, $grandtotal_cont_jul);
+		$sheet->setCellValue('S' . $row, $grandtotal_val_agu);
+		$sheet->setCellValue('T' . $row, $grandtotal_cont_agu);
+		$sheet->setCellValue('U' . $row, $grandtotal_val_sep);
+		$sheet->setCellValue('V' . $row, $grandtotal_cont_sep);
+		$sheet->setCellValue('W' . $row, $grandtotal_val_okt);
+		$sheet->setCellValue('X' . $row, $grandtotal_cont_okt);
+		$sheet->setCellValue('Y' . $row, $grandtotal_val_nop);
+		$sheet->setCellValue('Z' . $row, $grandtotal_cont_nop);
+		$sheet->setCellValue('AA' . $row, $grandtotal_val_des);
+		$sheet->setCellValue('AB' . $row, $grandtotal_cont_des);
+		$sheet->setCellValue('AC' . $row, $grandtotal_val_year);
+		$sheet->setCellValue('AD' . $row, $grandtotal_cont_year);
 
 		// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 		$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -12355,6 +12560,33 @@ class Report extends Controller {
 		$sheet->getStyle('AB' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('AC' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('AD' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+		$sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('T' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('U' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('V' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('W' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('X' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('Y' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('Z' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AA' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AB' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AC' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AD' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 
 		$sheet->getStyle('A' . $row . ':AD' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');
 		$sheet->getStyle('A' . $row . ':AD' . $row)->getFont()->setBold(true);
@@ -12549,9 +12781,9 @@ class Report extends Controller {
 				$sheet->setCellValue('B' . $row, $asm);
 				$sheet->setCellValue('C' . $row, '');
 				$sheet->setCellValue('D' . $row, '');
-				$sheet->setCellValue('E' . $row, number_format($sub_actual, 2));
-				$sheet->setCellValue('F' . $row, number_format($sub_target, 2));
-				$sheet->setCellValue('G' . $row, number_format($sub_p, 2) . '%');
+				$sheet->setCellValue('E' . $row, $sub_actual);
+				$sheet->setCellValue('F' . $row, $sub_target);
+				$sheet->setCellValue('G' . $row, $sub_p);
 
 				// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 				$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -12570,6 +12802,10 @@ class Report extends Controller {
 				$sheet->getStyle('F' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 				$sheet->getStyle('G' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
+				$sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+
 				$sheet->getStyle('A' . $row . ':G' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFE4B5');
 				$sheet->getStyle('A' . $row . ':G' . $row)->getFont()->setBold(true);
 
@@ -12584,9 +12820,9 @@ class Report extends Controller {
     		$sheet->setCellValue('B' . $row, $rows['asm']);
 			$sheet->setCellValue('C' . $row, $rows['distributor']);
 			$sheet->setCellValue('D' . $row, $rows['area']);
-			$sheet->setCellValue('E' . $row, number_format($rows['value'], 2));
-			$sheet->setCellValue('F' . $row, number_format($rows['value_target'], 2));
-			$sheet->setCellValue('G' . $row, number_format($rows['p'], 2) . '%');
+			$sheet->setCellValue('E' . $row, $rows['value']);
+			$sheet->setCellValue('F' . $row, $rows['value_target']);
+			$sheet->setCellValue('G' . $row, $rows['p']);
 
 			// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 			$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -12604,6 +12840,10 @@ class Report extends Controller {
 			$sheet->getStyle('E' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 			$sheet->getStyle('F' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 			$sheet->getStyle('G' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+			$sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 
 			$asm = $rows['asm'];
 
@@ -12631,9 +12871,9 @@ class Report extends Controller {
 		$sheet->setCellValue('B' . $row, $asm);
 		$sheet->setCellValue('C' . $row, '');
 		$sheet->setCellValue('D' . $row, '');
-		$sheet->setCellValue('E' . $row, number_format($sub_actual, 2));
-		$sheet->setCellValue('F' . $row, number_format($sub_target, 2));
-		$sheet->setCellValue('G' . $row, number_format($sub_p, 2) . '%');
+		$sheet->setCellValue('E' . $row, $sub_actual);
+		$sheet->setCellValue('F' . $row, $sub_target);
+		$sheet->setCellValue('G' . $row, $sub_p);
 
 		// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 		$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -12652,6 +12892,10 @@ class Report extends Controller {
 		$sheet->getStyle('F' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('G' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
+		$sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+
 		$sheet->getStyle('A' . $row . ':G' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFE4B5');
 		$sheet->getStyle('A' . $row . ':G' . $row)->getFont()->setBold(true);
 
@@ -12661,9 +12905,9 @@ class Report extends Controller {
 		$sheet->setCellValue('B' . $row, '');
 		$sheet->setCellValue('C' . $row, 'GRAND TOTAL');
 		$sheet->setCellValue('D' . $row, '');
-		$sheet->setCellValue('E' . $row, number_format($total_actual, 2));
-		$sheet->setCellValue('F' . $row, number_format($total_target, 2));
-		$sheet->setCellValue('G' . $row, number_format($total_p, 2) . '%');
+		$sheet->setCellValue('E' . $row, $total_actual);
+		$sheet->setCellValue('F' . $row, $total_target);
+		$sheet->setCellValue('G' . $row, $total_p);
 
 		// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 		$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -12681,6 +12925,10 @@ class Report extends Controller {
 		$sheet->getStyle('E' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('F' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('G' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+		$sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 
 		$sheet->getStyle('A' . $row . ':G' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');
 		$sheet->getStyle('A' . $row . ':G' . $row)->getFont()->setBold(true);
@@ -12852,9 +13100,9 @@ class Report extends Controller {
 				$sheet->setCellValue('B' . $row, $asm);
 				$sheet->setCellValue('C' . $row, '');
 				$sheet->setCellValue('D' . $row, '');
-				$sheet->setCellValue('E' . $row, number_format($sub_actual, 2));
-				$sheet->setCellValue('F' . $row, number_format($sub_target, 2));
-				$sheet->setCellValue('G' . $row, number_format($sub_p, 2) . '%');
+				$sheet->setCellValue('E' . $row, $sub_actual);
+				$sheet->setCellValue('F' . $row, $sub_target);
+				$sheet->setCellValue('G' . $row, $sub_p);
 
 				// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 				$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -12873,6 +13121,10 @@ class Report extends Controller {
 				$sheet->getStyle('F' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 				$sheet->getStyle('G' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
+				$sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+
 				$sheet->getStyle('A' . $row . ':G' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFE4B5');
 				$sheet->getStyle('A' . $row . ':G' . $row)->getFont()->setBold(true);
 
@@ -12887,9 +13139,9 @@ class Report extends Controller {
     		$sheet->setCellValue('B' . $row, $rows['asm']);
 			$sheet->setCellValue('C' . $row, $rows['distributor']);
 			$sheet->setCellValue('D' . $row, $rows['area']);
-			$sheet->setCellValue('E' . $row, number_format($rows['value'], 2));
-			$sheet->setCellValue('F' . $row, number_format($rows['value_target'], 2));
-			$sheet->setCellValue('G' . $row, number_format($rows['p'], 2) . '%');
+			$sheet->setCellValue('E' . $row, $rows['value']);
+			$sheet->setCellValue('F' . $row, $rows['value_target']);
+			$sheet->setCellValue('G' . $row, $rows['p']);
 
 			// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 			$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -12907,6 +13159,10 @@ class Report extends Controller {
 			$sheet->getStyle('E' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 			$sheet->getStyle('F' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 			$sheet->getStyle('G' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+			$sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 
 			$asm = $rows['asm'];
 
@@ -12934,9 +13190,9 @@ class Report extends Controller {
 		$sheet->setCellValue('B' . $row, $asm);
 		$sheet->setCellValue('C' . $row, '');
 		$sheet->setCellValue('D' . $row, '');
-		$sheet->setCellValue('E' . $row, number_format($sub_actual, 2));
-		$sheet->setCellValue('F' . $row, number_format($sub_target, 2));
-		$sheet->setCellValue('G' . $row, number_format($sub_p, 2) . '%');
+		$sheet->setCellValue('E' . $row, $sub_actual);
+		$sheet->setCellValue('F' . $row, $sub_target);
+		$sheet->setCellValue('G' . $row, $sub_p);
 
 		// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 		$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -12955,6 +13211,10 @@ class Report extends Controller {
 		$sheet->getStyle('F' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('G' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
+		$sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+
 		$sheet->getStyle('A' . $row . ':G' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFE4B5');
 		$sheet->getStyle('A' . $row . ':G' . $row)->getFont()->setBold(true);
 
@@ -12964,9 +13224,9 @@ class Report extends Controller {
 		$sheet->setCellValue('B' . $row, '');
 		$sheet->setCellValue('C' . $row, 'GRAND TOTAL');
 		$sheet->setCellValue('D' . $row, '');
-		$sheet->setCellValue('E' . $row, number_format($total_actual, 2));
-		$sheet->setCellValue('F' . $row, number_format($total_target, 2));
-		$sheet->setCellValue('G' . $row, number_format($total_p, 2) . '%');
+		$sheet->setCellValue('E' . $row, $total_actual);
+		$sheet->setCellValue('F' . $row, $total_target);
+		$sheet->setCellValue('G' . $row, $total_p);
 
 		// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 		$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -12984,6 +13244,10 @@ class Report extends Controller {
 		$sheet->getStyle('E' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('F' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('G' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+		$sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 
 		$sheet->getStyle('A' . $row . ':G' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');
 		$sheet->getStyle('A' . $row . ':G' . $row)->getFont()->setBold(true);
@@ -13357,34 +13621,34 @@ class Report extends Controller {
 				$sheet->setCellValue('B' . $row, '');
 				$sheet->setCellValue('C' . $row, '');
 				$sheet->setCellValue('D' . $row, $region);
-				$sheet->setCellValue('E' . $row, number_format($qty_jan, 0));
-				$sheet->setCellValue('F' . $row, number_format($val_jan, 2));
-				$sheet->setCellValue('G' . $row, number_format($qty_feb, 0));
-				$sheet->setCellValue('H' . $row, number_format($val_feb, 2));
-				$sheet->setCellValue('I' . $row, number_format($qty_mar, 0));
-				$sheet->setCellValue('J' . $row, number_format($val_mar, 2));
-				$sheet->setCellValue('K' . $row, number_format($qty_apr, 0));
-				$sheet->setCellValue('L' . $row, number_format($val_apr, 2));
-				$sheet->setCellValue('M' . $row, number_format($qty_mei, 0));
-				$sheet->setCellValue('N' . $row, number_format($val_mei, 2));
-				$sheet->setCellValue('O' . $row, number_format($qty_jun, 0));
-				$sheet->setCellValue('P' . $row, number_format($val_jun, 2));
-				$sheet->setCellValue('Q' . $row, number_format($qty_jul, 0));
-				$sheet->setCellValue('R' . $row, number_format($val_jul, 2));
-				$sheet->setCellValue('S' . $row, number_format($qty_agu, 0));
-				$sheet->setCellValue('T' . $row, number_format($val_agu, 2));
-				$sheet->setCellValue('U' . $row, number_format($qty_sep, 0));
-				$sheet->setCellValue('V' . $row, number_format($val_sep, 2));
-				$sheet->setCellValue('W' . $row, number_format($qty_okt, 0));
-				$sheet->setCellValue('X' . $row, number_format($val_okt, 2));
-				$sheet->setCellValue('Y' . $row, number_format($qty_nop, 0));
-				$sheet->setCellValue('Z' . $row, number_format($val_nop, 2));
-				$sheet->setCellValue('AA' . $row, number_format($qty_des, 0));
-				$sheet->setCellValue('AB' . $row, number_format($val_des, 2));
-				$sheet->setCellValue('AC' . $row, number_format($qty_year, 0));
-				$sheet->setCellValue('AD' . $row, number_format($val_year, 2));
-				$sheet->setCellValue('AE' . $row, number_format($qty_year/12, 0));
-				$sheet->setCellValue('AF' . $row, number_format($val_year/12, 2));
+				$sheet->setCellValue('E' . $row, $qty_jan);
+				$sheet->setCellValue('F' . $row, $val_jan);
+				$sheet->setCellValue('G' . $row, $qty_feb);
+				$sheet->setCellValue('H' . $row, $val_feb);
+				$sheet->setCellValue('I' . $row, $qty_mar);
+				$sheet->setCellValue('J' . $row, $val_mar);
+				$sheet->setCellValue('K' . $row, $qty_apr);
+				$sheet->setCellValue('L' . $row, $val_apr);
+				$sheet->setCellValue('M' . $row, $qty_mei);
+				$sheet->setCellValue('N' . $row, $val_mei);
+				$sheet->setCellValue('O' . $row, $qty_jun);
+				$sheet->setCellValue('P' . $row, $val_jun);
+				$sheet->setCellValue('Q' . $row, $qty_jul);
+				$sheet->setCellValue('R' . $row, $val_jul);
+				$sheet->setCellValue('S' . $row, $qty_agu);
+				$sheet->setCellValue('T' . $row, $val_agu);
+				$sheet->setCellValue('U' . $row, $qty_sep);
+				$sheet->setCellValue('V' . $row, $val_sep);
+				$sheet->setCellValue('W' . $row, $qty_okt);
+				$sheet->setCellValue('X' . $row, $val_okt);
+				$sheet->setCellValue('Y' . $row, $qty_nop);
+				$sheet->setCellValue('Z' . $row, $val_nop);
+				$sheet->setCellValue('AA' . $row, $qty_des);
+				$sheet->setCellValue('AB' . $row, $val_des);
+				$sheet->setCellValue('AC' . $row, $qty_year);
+				$sheet->setCellValue('AD' . $row, $val_year);
+				$sheet->setCellValue('AE' . $row, $qty_year/12);
+				$sheet->setCellValue('AF' . $row, $val_year/12);
 
 				// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 				$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -13452,6 +13716,35 @@ class Report extends Controller {
 				$sheet->getStyle('AD' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 				$sheet->getStyle('AE' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 				$sheet->getStyle('AF' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+				$sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('T' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('U' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('V' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('W' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('X' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('Y' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('Z' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('AA' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('AB' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('AC' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('AD' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('AE' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('AF' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 
 				$sheet->getStyle('A' . $row . ':AF' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFE4B5');
 				$sheet->getStyle('A' . $row . ':AF' . $row)->getFont()->setBold(true);
@@ -13496,34 +13789,34 @@ class Report extends Controller {
 				$sheet->setCellValue('B' . $row, '');
 				$sheet->setCellValue('C' . $row, '');
 				$sheet->setCellValue('D' . $row, $island);
-				$sheet->setCellValue('E' . $row, number_format($sub_qty_jan, 0));
-				$sheet->setCellValue('F' . $row, number_format($sub_val_jan, 2));
-				$sheet->setCellValue('G' . $row, number_format($sub_qty_feb, 0));
-				$sheet->setCellValue('H' . $row, number_format($sub_val_feb, 2));
-				$sheet->setCellValue('I' . $row, number_format($sub_qty_mar, 0));
-				$sheet->setCellValue('J' . $row, number_format($sub_val_mar, 2));
-				$sheet->setCellValue('K' . $row, number_format($sub_qty_apr, 0));
-				$sheet->setCellValue('L' . $row, number_format($sub_val_apr, 2));
-				$sheet->setCellValue('M' . $row, number_format($sub_qty_mei, 0));
-				$sheet->setCellValue('N' . $row, number_format($sub_val_mei, 2));
-				$sheet->setCellValue('O' . $row, number_format($sub_qty_jun, 0));
-				$sheet->setCellValue('P' . $row, number_format($sub_val_jun, 2));
-				$sheet->setCellValue('Q' . $row, number_format($sub_qty_jul, 0));
-				$sheet->setCellValue('R' . $row, number_format($sub_val_jul, 2));
-				$sheet->setCellValue('S' . $row, number_format($sub_qty_agu, 0));
-				$sheet->setCellValue('T' . $row, number_format($sub_val_agu, 2));
-				$sheet->setCellValue('U' . $row, number_format($sub_qty_sep, 0));
-				$sheet->setCellValue('V' . $row, number_format($sub_val_sep, 2));
-				$sheet->setCellValue('W' . $row, number_format($sub_qty_okt, 0));
-				$sheet->setCellValue('X' . $row, number_format($sub_val_okt, 2));
-				$sheet->setCellValue('Y' . $row, number_format($sub_qty_nop, 0));
-				$sheet->setCellValue('Z' . $row, number_format($sub_val_nop, 2));
-				$sheet->setCellValue('AA' . $row, number_format($sub_qty_des, 0));
-				$sheet->setCellValue('AB' . $row, number_format($sub_val_des, 2));
-				$sheet->setCellValue('AC' . $row, number_format($sub_qty_year, 0));
-				$sheet->setCellValue('AD' . $row, number_format($sub_val_year, 2));
-				$sheet->setCellValue('AE' . $row, number_format($sub_qty_year/12, 0));
-				$sheet->setCellValue('AF' . $row, number_format($sub_val_year/12, 2));
+				$sheet->setCellValue('E' . $row, $sub_qty_jan);
+				$sheet->setCellValue('F' . $row, $sub_val_jan);
+				$sheet->setCellValue('G' . $row, $sub_qty_feb);
+				$sheet->setCellValue('H' . $row, $sub_val_feb);
+				$sheet->setCellValue('I' . $row, $sub_qty_mar);
+				$sheet->setCellValue('J' . $row, $sub_val_mar);
+				$sheet->setCellValue('K' . $row, $sub_qty_apr);
+				$sheet->setCellValue('L' . $row, $sub_val_apr);
+				$sheet->setCellValue('M' . $row, $sub_qty_mei);
+				$sheet->setCellValue('N' . $row, $sub_val_mei);
+				$sheet->setCellValue('O' . $row, $sub_qty_jun);
+				$sheet->setCellValue('P' . $row, $sub_val_jun);
+				$sheet->setCellValue('Q' . $row, $sub_qty_jul);
+				$sheet->setCellValue('R' . $row, $sub_val_jul);
+				$sheet->setCellValue('S' . $row, $sub_qty_agu);
+				$sheet->setCellValue('T' . $row, $sub_val_agu);
+				$sheet->setCellValue('U' . $row, $sub_qty_sep);
+				$sheet->setCellValue('V' . $row, $sub_val_sep);
+				$sheet->setCellValue('W' . $row, $sub_qty_okt);
+				$sheet->setCellValue('X' . $row, $sub_val_okt);
+				$sheet->setCellValue('Y' . $row, $sub_qty_nop);
+				$sheet->setCellValue('Z' . $row, $sub_val_nop);
+				$sheet->setCellValue('AA' . $row, $sub_qty_des);
+				$sheet->setCellValue('AB' . $row, $sub_val_des);
+				$sheet->setCellValue('AC' . $row, $sub_qty_year);
+				$sheet->setCellValue('AD' . $row, $sub_val_year);
+				$sheet->setCellValue('AE' . $row, $sub_qty_year/12);
+				$sheet->setCellValue('AF' . $row, $sub_val_year/12);
 
 				// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 				$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -13592,6 +13885,35 @@ class Report extends Controller {
 				$sheet->getStyle('AE' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 				$sheet->getStyle('AF' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
+				$sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('T' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('U' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('V' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('W' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('X' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('Y' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('Z' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('AA' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('AB' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('AC' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('AD' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('AE' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('AF' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+
 				$sheet->getStyle('A' . $row . ':AF' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');
 				$sheet->getStyle('A' . $row . ':AF' . $row)->getFont()->setBold(true);
 
@@ -13632,34 +13954,34 @@ class Report extends Controller {
     		$sheet->setCellValue('B' . $row, $rows['cust_code']);
 			$sheet->setCellValue('C' . $row, $rows['distributor']);
 			$sheet->setCellValue('D' . $row, $rows['area']);
-			$sheet->setCellValue('E' . $row, number_format($rows['qty_jan'], 0));
-			$sheet->setCellValue('F' . $row, number_format($rows['val_jan'], 2));
-			$sheet->setCellValue('G' . $row, number_format($rows['qty_feb'], 0));
-			$sheet->setCellValue('H' . $row, number_format($rows['val_feb'], 2));
-			$sheet->setCellValue('I' . $row, number_format($rows['qty_mar'], 0));
-			$sheet->setCellValue('J' . $row, number_format($rows['val_mar'], 2));
-			$sheet->setCellValue('K' . $row, number_format($rows['qty_apr'], 0));
-			$sheet->setCellValue('L' . $row, number_format($rows['val_apr'], 2));
-			$sheet->setCellValue('M' . $row, number_format($rows['qty_mei'], 0));
-			$sheet->setCellValue('N' . $row, number_format($rows['val_mei'], 2));
-			$sheet->setCellValue('O' . $row, number_format($rows['qty_jun'], 0));
-			$sheet->setCellValue('P' . $row, number_format($rows['val_jun'], 2));
-			$sheet->setCellValue('Q' . $row, number_format($rows['qty_jul'], 0));
-			$sheet->setCellValue('R' . $row, number_format($rows['val_jul'], 2));
-			$sheet->setCellValue('S' . $row, number_format($rows['qty_agu'], 0));
-			$sheet->setCellValue('T' . $row, number_format($rows['val_agu'], 2));
-			$sheet->setCellValue('U' . $row, number_format($rows['qty_sep'], 0));
-			$sheet->setCellValue('V' . $row, number_format($rows['val_sep'], 2));
-			$sheet->setCellValue('W' . $row, number_format($rows['qty_okt'], 0));
-			$sheet->setCellValue('X' . $row, number_format($rows['val_okt'], 2));
-			$sheet->setCellValue('Y' . $row, number_format($rows['qty_nop'], 0));
-			$sheet->setCellValue('Z' . $row, number_format($rows['val_nop'], 2));
-			$sheet->setCellValue('AA' . $row, number_format($rows['qty_des'], 0));
-			$sheet->setCellValue('AB' . $row, number_format($rows['val_des'], 2));
-			$sheet->setCellValue('AC' . $row, number_format($rows['qty_year'], 0));
-			$sheet->setCellValue('AD' . $row, number_format($rows['val_year'], 2));
-			$sheet->setCellValue('AE' . $row, number_format($rows['qty_year']/12, 0));
-			$sheet->setCellValue('AF' . $row, number_format($rows['val_year']/12, 2));
+			$sheet->setCellValue('E' . $row, $rows['qty_jan']);
+			$sheet->setCellValue('F' . $row, $rows['val_jan']);
+			$sheet->setCellValue('G' . $row, $rows['qty_feb']);
+			$sheet->setCellValue('H' . $row, $rows['val_feb']);
+			$sheet->setCellValue('I' . $row, $rows['qty_mar']);
+			$sheet->setCellValue('J' . $row, $rows['val_mar']);
+			$sheet->setCellValue('K' . $row, $rows['qty_apr']);
+			$sheet->setCellValue('L' . $row, $rows['val_apr']);
+			$sheet->setCellValue('M' . $row, $rows['qty_mei']);
+			$sheet->setCellValue('N' . $row, $rows['val_mei']);
+			$sheet->setCellValue('O' . $row, $rows['qty_jun']);
+			$sheet->setCellValue('P' . $row, $rows['val_jun']);
+			$sheet->setCellValue('Q' . $row, $rows['qty_jul']);
+			$sheet->setCellValue('R' . $row, $rows['val_jul']);
+			$sheet->setCellValue('S' . $row, $rows['qty_agu']);
+			$sheet->setCellValue('T' . $row, $rows['val_agu']);
+			$sheet->setCellValue('U' . $row, $rows['qty_sep']);
+			$sheet->setCellValue('V' . $row, $rows['val_sep']);
+			$sheet->setCellValue('W' . $row, $rows['qty_okt']);
+			$sheet->setCellValue('X' . $row, $rows['val_okt']);
+			$sheet->setCellValue('Y' . $row, $rows['qty_nop']);
+			$sheet->setCellValue('Z' . $row, $rows['val_nop']);
+			$sheet->setCellValue('AA' . $row, $rows['qty_des']);
+			$sheet->setCellValue('AB' . $row, $rows['val_des']);
+			$sheet->setCellValue('AC' . $row, $rows['qty_year']);
+			$sheet->setCellValue('AD' . $row, $rows['val_year']);
+			$sheet->setCellValue('AE' . $row, $rows['qty_year']/12);
+			$sheet->setCellValue('AF' . $row, $rows['val_year']/12);
 
 			// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 			$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -13727,6 +14049,35 @@ class Report extends Controller {
 			$sheet->getStyle('AD' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 			$sheet->getStyle('AE' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 			$sheet->getStyle('AF' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+			$sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('T' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('U' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('V' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('W' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('X' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('Y' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('Z' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('AA' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AB' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('AC' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AD' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('AE' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AF' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 
 			$region = $rows['region'];
 			$island = $rows['island'];
@@ -13825,34 +14176,34 @@ class Report extends Controller {
 		$sheet->setCellValue('B' . $row, '');
 		$sheet->setCellValue('C' . $row, '');
 		$sheet->setCellValue('D' . $row, $region);
-		$sheet->setCellValue('E' . $row, number_format($qty_jan, 0));
-		$sheet->setCellValue('F' . $row, number_format($val_jan, 2));
-		$sheet->setCellValue('G' . $row, number_format($qty_feb, 0));
-		$sheet->setCellValue('H' . $row, number_format($val_feb, 2));
-		$sheet->setCellValue('I' . $row, number_format($qty_mar, 0));
-		$sheet->setCellValue('J' . $row, number_format($val_mar, 2));
-		$sheet->setCellValue('K' . $row, number_format($qty_apr, 0));
-		$sheet->setCellValue('L' . $row, number_format($val_apr, 2));
-		$sheet->setCellValue('M' . $row, number_format($qty_mei, 0));
-		$sheet->setCellValue('N' . $row, number_format($val_mei, 2));
-		$sheet->setCellValue('O' . $row, number_format($qty_jun, 0));
-		$sheet->setCellValue('P' . $row, number_format($val_jun, 2));
-		$sheet->setCellValue('Q' . $row, number_format($qty_jul, 0));
-		$sheet->setCellValue('R' . $row, number_format($val_jul, 2));
-		$sheet->setCellValue('S' . $row, number_format($qty_agu, 0));
-		$sheet->setCellValue('T' . $row, number_format($val_agu, 2));
-		$sheet->setCellValue('U' . $row, number_format($qty_sep, 0));
-		$sheet->setCellValue('V' . $row, number_format($val_sep, 2));
-		$sheet->setCellValue('W' . $row, number_format($qty_okt, 0));
-		$sheet->setCellValue('X' . $row, number_format($val_okt, 2));
-		$sheet->setCellValue('Y' . $row, number_format($qty_nop, 0));
-		$sheet->setCellValue('Z' . $row, number_format($val_nop, 2));
-		$sheet->setCellValue('AA' . $row, number_format($qty_des, 0));
-		$sheet->setCellValue('AB' . $row, number_format($val_des, 2));
-		$sheet->setCellValue('AC' . $row, number_format($qty_year, 0));
-		$sheet->setCellValue('AD' . $row, number_format($val_year, 2));
-		$sheet->setCellValue('AE' . $row, number_format($qty_year/12, 0));
-		$sheet->setCellValue('AF' . $row, number_format($val_year/12, 2));
+		$sheet->setCellValue('E' . $row, $qty_jan);
+		$sheet->setCellValue('F' . $row, $val_jan);
+		$sheet->setCellValue('G' . $row, $qty_feb);
+		$sheet->setCellValue('H' . $row, $val_feb);
+		$sheet->setCellValue('I' . $row, $qty_mar);
+		$sheet->setCellValue('J' . $row, $val_mar);
+		$sheet->setCellValue('K' . $row, $qty_apr);
+		$sheet->setCellValue('L' . $row, $val_apr);
+		$sheet->setCellValue('M' . $row, $qty_mei);
+		$sheet->setCellValue('N' . $row, $val_mei);
+		$sheet->setCellValue('O' . $row, $qty_jun);
+		$sheet->setCellValue('P' . $row, $val_jun);
+		$sheet->setCellValue('Q' . $row, $qty_jul);
+		$sheet->setCellValue('R' . $row, $val_jul);
+		$sheet->setCellValue('S' . $row, $qty_agu);
+		$sheet->setCellValue('T' . $row, $val_agu);
+		$sheet->setCellValue('U' . $row, $qty_sep);
+		$sheet->setCellValue('V' . $row, $val_sep);
+		$sheet->setCellValue('W' . $row, $qty_okt);
+		$sheet->setCellValue('X' . $row, $val_okt);
+		$sheet->setCellValue('Y' . $row, $qty_nop);
+		$sheet->setCellValue('Z' . $row, $val_nop);
+		$sheet->setCellValue('AA' . $row, $qty_des);
+		$sheet->setCellValue('AB' . $row, $val_des);
+		$sheet->setCellValue('AC' . $row, $qty_year);
+		$sheet->setCellValue('AD' . $row, $val_year);
+		$sheet->setCellValue('AE' . $row, $qty_year/12);
+		$sheet->setCellValue('AF' . $row, $val_year/12);
 
 		// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 		$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -13920,6 +14271,35 @@ class Report extends Controller {
 		$sheet->getStyle('AD' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('AE' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('AF' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+		$sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('T' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('U' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('V' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('W' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('X' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('Y' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('Z' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AA' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AB' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AC' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AD' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AE' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AF' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 
 		$sheet->getStyle('A' . $row . ':AF' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFE4B5');
 		$sheet->getStyle('A' . $row . ':AF' . $row)->getFont()->setBold(true);
@@ -13930,34 +14310,34 @@ class Report extends Controller {
 		$sheet->setCellValue('B' . $row, '');
 		$sheet->setCellValue('C' . $row, '');
 		$sheet->setCellValue('D' . $row, $island);
-		$sheet->setCellValue('E' . $row, number_format($sub_qty_jan, 0));
-		$sheet->setCellValue('F' . $row, number_format($sub_val_jan, 2));
-		$sheet->setCellValue('G' . $row, number_format($sub_qty_feb, 0));
-		$sheet->setCellValue('H' . $row, number_format($sub_val_feb, 2));
-		$sheet->setCellValue('I' . $row, number_format($sub_qty_mar, 0));
-		$sheet->setCellValue('J' . $row, number_format($sub_val_mar, 2));
-		$sheet->setCellValue('K' . $row, number_format($sub_qty_apr, 0));
-		$sheet->setCellValue('L' . $row, number_format($sub_val_apr, 2));
-		$sheet->setCellValue('M' . $row, number_format($sub_qty_mei, 0));
-		$sheet->setCellValue('N' . $row, number_format($sub_val_mei, 2));
-		$sheet->setCellValue('O' . $row, number_format($sub_qty_jun, 0));
-		$sheet->setCellValue('P' . $row, number_format($sub_val_jun, 2));
-		$sheet->setCellValue('Q' . $row, number_format($sub_qty_jul, 0));
-		$sheet->setCellValue('R' . $row, number_format($sub_val_jul, 2));
-		$sheet->setCellValue('S' . $row, number_format($sub_qty_agu, 0));
-		$sheet->setCellValue('T' . $row, number_format($sub_val_agu, 2));
-		$sheet->setCellValue('U' . $row, number_format($sub_qty_sep, 0));
-		$sheet->setCellValue('V' . $row, number_format($sub_val_sep, 2));
-		$sheet->setCellValue('W' . $row, number_format($sub_qty_okt, 0));
-		$sheet->setCellValue('X' . $row, number_format($sub_val_okt, 2));
-		$sheet->setCellValue('Y' . $row, number_format($sub_qty_nop, 0));
-		$sheet->setCellValue('Z' . $row, number_format($sub_val_nop, 2));
-		$sheet->setCellValue('AA' . $row, number_format($sub_qty_des, 0));
-		$sheet->setCellValue('AB' . $row, number_format($sub_val_des, 2));
-		$sheet->setCellValue('AC' . $row, number_format($sub_qty_year, 0));
-		$sheet->setCellValue('AD' . $row, number_format($sub_val_year, 2));
-		$sheet->setCellValue('AE' . $row, number_format($sub_qty_year/12, 0));
-		$sheet->setCellValue('AF' . $row, number_format($sub_val_year/12, 2));
+		$sheet->setCellValue('E' . $row, $sub_qty_jan);
+		$sheet->setCellValue('F' . $row, $sub_val_jan);
+		$sheet->setCellValue('G' . $row, $sub_qty_feb);
+		$sheet->setCellValue('H' . $row, $sub_val_feb);
+		$sheet->setCellValue('I' . $row, $sub_qty_mar);
+		$sheet->setCellValue('J' . $row, $sub_val_mar);
+		$sheet->setCellValue('K' . $row, $sub_qty_apr);
+		$sheet->setCellValue('L' . $row, $sub_val_apr);
+		$sheet->setCellValue('M' . $row, $sub_qty_mei);
+		$sheet->setCellValue('N' . $row, $sub_val_mei);
+		$sheet->setCellValue('O' . $row, $sub_qty_jun);
+		$sheet->setCellValue('P' . $row, $sub_val_jun);
+		$sheet->setCellValue('Q' . $row, $sub_qty_jul);
+		$sheet->setCellValue('R' . $row, $sub_val_jul);
+		$sheet->setCellValue('S' . $row, $sub_qty_agu);
+		$sheet->setCellValue('T' . $row, $sub_val_agu);
+		$sheet->setCellValue('U' . $row, $sub_qty_sep);
+		$sheet->setCellValue('V' . $row, $sub_val_sep);
+		$sheet->setCellValue('W' . $row, $sub_qty_okt);
+		$sheet->setCellValue('X' . $row, $sub_val_okt);
+		$sheet->setCellValue('Y' . $row, $sub_qty_nop);
+		$sheet->setCellValue('Z' . $row, $sub_val_nop);
+		$sheet->setCellValue('AA' . $row, $sub_qty_des);
+		$sheet->setCellValue('AB' . $row, $sub_val_des);
+		$sheet->setCellValue('AC' . $row, $sub_qty_year);
+		$sheet->setCellValue('AD' . $row, $sub_val_year);
+		$sheet->setCellValue('AE' . $row, $sub_qty_year/12);
+		$sheet->setCellValue('AF' . $row, $sub_val_year/12);
 
 		// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 		$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -14025,6 +14405,35 @@ class Report extends Controller {
 		$sheet->getStyle('AD' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('AE' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('AF' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+		$sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('T' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('U' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('V' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('W' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('X' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('Y' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('Z' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AA' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AB' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AC' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AD' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AE' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AF' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 
 		$sheet->getStyle('A' . $row . ':AF' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');
 		$sheet->getStyle('A' . $row . ':AF' . $row)->getFont()->setBold(true);
@@ -14035,34 +14444,34 @@ class Report extends Controller {
 		$sheet->setCellValue('B' . $row, '');
 		$sheet->setCellValue('C' . $row, '');
 		$sheet->setCellValue('D' . $row, 'NATIONAL');
-		$sheet->setCellValue('E' . $row, number_format($total_qty_jan, 0));
-		$sheet->setCellValue('F' . $row, number_format($total_val_jan, 2));
-		$sheet->setCellValue('G' . $row, number_format($total_qty_feb, 0));
-		$sheet->setCellValue('H' . $row, number_format($total_val_feb, 2));
-		$sheet->setCellValue('I' . $row, number_format($total_qty_mar, 0));
-		$sheet->setCellValue('J' . $row, number_format($total_val_mar, 2));
-		$sheet->setCellValue('K' . $row, number_format($total_qty_apr, 0));
-		$sheet->setCellValue('L' . $row, number_format($total_val_apr, 2));
-		$sheet->setCellValue('M' . $row, number_format($total_qty_mei, 0));
-		$sheet->setCellValue('N' . $row, number_format($total_val_mei, 2));
-		$sheet->setCellValue('O' . $row, number_format($total_qty_jun, 0));
-		$sheet->setCellValue('P' . $row, number_format($total_val_jun, 2));
-		$sheet->setCellValue('Q' . $row, number_format($total_qty_jul, 0));
-		$sheet->setCellValue('R' . $row, number_format($total_val_jul, 2));
-		$sheet->setCellValue('S' . $row, number_format($total_qty_agu, 0));
-		$sheet->setCellValue('T' . $row, number_format($total_val_agu, 2));
-		$sheet->setCellValue('U' . $row, number_format($total_qty_sep, 0));
-		$sheet->setCellValue('V' . $row, number_format($total_val_sep, 2));
-		$sheet->setCellValue('W' . $row, number_format($total_qty_okt, 0));
-		$sheet->setCellValue('X' . $row, number_format($total_val_okt, 2));
-		$sheet->setCellValue('Y' . $row, number_format($total_qty_nop, 0));
-		$sheet->setCellValue('Z' . $row, number_format($total_val_nop, 2));
-		$sheet->setCellValue('AA' . $row, number_format($total_qty_des, 0));
-		$sheet->setCellValue('AB' . $row, number_format($total_val_des, 2));
-		$sheet->setCellValue('AC' . $row, number_format($total_qty_year, 0));
-		$sheet->setCellValue('AD' . $row, number_format($total_val_year, 2));
-		$sheet->setCellValue('AE' . $row, number_format($total_qty_year/12, 0));
-		$sheet->setCellValue('AF' . $row, number_format($total_val_year/12, 2));
+		$sheet->setCellValue('E' . $row, $total_qty_jan);
+		$sheet->setCellValue('F' . $row, $total_val_jan);
+		$sheet->setCellValue('G' . $row, $total_qty_feb);
+		$sheet->setCellValue('H' . $row, $total_val_feb);
+		$sheet->setCellValue('I' . $row, $total_qty_mar);
+		$sheet->setCellValue('J' . $row, $total_val_mar);
+		$sheet->setCellValue('K' . $row, $total_qty_apr);
+		$sheet->setCellValue('L' . $row, $total_val_apr);
+		$sheet->setCellValue('M' . $row, $total_qty_mei);
+		$sheet->setCellValue('N' . $row, $total_val_mei);
+		$sheet->setCellValue('O' . $row, $total_qty_jun);
+		$sheet->setCellValue('P' . $row, $total_val_jun);
+		$sheet->setCellValue('Q' . $row, $total_qty_jul);
+		$sheet->setCellValue('R' . $row, $total_val_jul);
+		$sheet->setCellValue('S' . $row, $total_qty_agu);
+		$sheet->setCellValue('T' . $row, $total_val_agu);
+		$sheet->setCellValue('U' . $row, $total_qty_sep);
+		$sheet->setCellValue('V' . $row, $total_val_sep);
+		$sheet->setCellValue('W' . $row, $total_qty_okt);
+		$sheet->setCellValue('X' . $row, $total_val_okt);
+		$sheet->setCellValue('Y' . $row, $total_qty_nop);
+		$sheet->setCellValue('Z' . $row, $total_val_nop);
+		$sheet->setCellValue('AA' . $row, $total_qty_des);
+		$sheet->setCellValue('AB' . $row, $total_val_des);
+		$sheet->setCellValue('AC' . $row, $total_qty_year);
+		$sheet->setCellValue('AD' . $row, $total_val_year);
+		$sheet->setCellValue('AE' . $row, $total_qty_year/12);
+		$sheet->setCellValue('AF' . $row, $total_val_year/12);
 
 		// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 		$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -14130,6 +14539,35 @@ class Report extends Controller {
 		$sheet->getStyle('AD' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('AE' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('AF' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+		$sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('T' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('U' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('V' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('W' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('X' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('Y' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('Z' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AA' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AB' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AC' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AD' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AE' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AF' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 
 		$sheet->getStyle('A' . $row . ':AF' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');
 		$sheet->getStyle('A' . $row . ':AF' . $row)->getFont()->setBold(true);
@@ -14527,34 +14965,34 @@ class Report extends Controller {
 				$sheet->setCellValue('B' . $row, '');
 				$sheet->setCellValue('C' . $row, '');
 				$sheet->setCellValue('D' . $row, $region);
-				$sheet->setCellValue('E' . $row, number_format($qty_jan, 0));
-				$sheet->setCellValue('F' . $row, number_format($val_jan, 2));
-				$sheet->setCellValue('G' . $row, number_format($qty_feb, 0));
-				$sheet->setCellValue('H' . $row, number_format($val_feb, 2));
-				$sheet->setCellValue('I' . $row, number_format($qty_mar, 0));
-				$sheet->setCellValue('J' . $row, number_format($val_mar, 2));
-				$sheet->setCellValue('K' . $row, number_format($qty_apr, 0));
-				$sheet->setCellValue('L' . $row, number_format($val_apr, 2));
-				$sheet->setCellValue('M' . $row, number_format($qty_mei, 0));
-				$sheet->setCellValue('N' . $row, number_format($val_mei, 2));
-				$sheet->setCellValue('O' . $row, number_format($qty_jun, 0));
-				$sheet->setCellValue('P' . $row, number_format($val_jun, 2));
-				$sheet->setCellValue('Q' . $row, number_format($qty_jul, 0));
-				$sheet->setCellValue('R' . $row, number_format($val_jul, 2));
-				$sheet->setCellValue('S' . $row, number_format($qty_agu, 0));
-				$sheet->setCellValue('T' . $row, number_format($val_agu, 2));
-				$sheet->setCellValue('U' . $row, number_format($qty_sep, 0));
-				$sheet->setCellValue('V' . $row, number_format($val_sep, 2));
-				$sheet->setCellValue('W' . $row, number_format($qty_okt, 0));
-				$sheet->setCellValue('X' . $row, number_format($val_okt, 2));
-				$sheet->setCellValue('Y' . $row, number_format($qty_nop, 0));
-				$sheet->setCellValue('Z' . $row, number_format($val_nop, 2));
-				$sheet->setCellValue('AA' . $row, number_format($qty_des, 0));
-				$sheet->setCellValue('AB' . $row, number_format($val_des, 2));
-				$sheet->setCellValue('AC' . $row, number_format($qty_year, 0));
-				$sheet->setCellValue('AD' . $row, number_format($val_year, 2));
-				$sheet->setCellValue('AE' . $row, number_format($qty_year/12, 0));
-				$sheet->setCellValue('AF' . $row, number_format($val_year/12, 2));
+				$sheet->setCellValue('E' . $row, $qty_jan);
+				$sheet->setCellValue('F' . $row, $val_jan);
+				$sheet->setCellValue('G' . $row, $qty_feb);
+				$sheet->setCellValue('H' . $row, $val_feb);
+				$sheet->setCellValue('I' . $row, $qty_mar);
+				$sheet->setCellValue('J' . $row, $val_mar);
+				$sheet->setCellValue('K' . $row, $qty_apr);
+				$sheet->setCellValue('L' . $row, $val_apr);
+				$sheet->setCellValue('M' . $row, $qty_mei);
+				$sheet->setCellValue('N' . $row, $val_mei);
+				$sheet->setCellValue('O' . $row, $qty_jun);
+				$sheet->setCellValue('P' . $row, $val_jun);
+				$sheet->setCellValue('Q' . $row, $qty_jul);
+				$sheet->setCellValue('R' . $row, $val_jul);
+				$sheet->setCellValue('S' . $row, $qty_agu);
+				$sheet->setCellValue('T' . $row, $val_agu);
+				$sheet->setCellValue('U' . $row, $qty_sep);
+				$sheet->setCellValue('V' . $row, $val_sep);
+				$sheet->setCellValue('W' . $row, $qty_okt);
+				$sheet->setCellValue('X' . $row, $val_okt);
+				$sheet->setCellValue('Y' . $row, $qty_nop);
+				$sheet->setCellValue('Z' . $row, $val_nop);
+				$sheet->setCellValue('AA' . $row, $qty_des);
+				$sheet->setCellValue('AB' . $row, $val_des);
+				$sheet->setCellValue('AC' . $row, $qty_year);
+				$sheet->setCellValue('AD' . $row, $val_year);
+				$sheet->setCellValue('AE' . $row, $qty_year/12);
+				$sheet->setCellValue('AF' . $row, $val_year/12);
 
 				// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 				$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -14622,6 +15060,35 @@ class Report extends Controller {
 				$sheet->getStyle('AD' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 				$sheet->getStyle('AE' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 				$sheet->getStyle('AF' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+				$sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('T' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('U' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('V' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('W' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('X' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('Y' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('Z' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('AA' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('AB' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('AC' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('AD' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('AE' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('AF' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 
 				$sheet->getStyle('A' . $row . ':AF' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFE4B5');
 				$sheet->getStyle('A' . $row . ':AF' . $row)->getFont()->setBold(true);
@@ -14666,34 +15133,34 @@ class Report extends Controller {
 				$sheet->setCellValue('B' . $row, '');
 				$sheet->setCellValue('C' . $row, '');
 				$sheet->setCellValue('D' . $row, $island);
-				$sheet->setCellValue('E' . $row, number_format($sub_qty_jan, 0));
-				$sheet->setCellValue('F' . $row, number_format($sub_val_jan, 2));
-				$sheet->setCellValue('G' . $row, number_format($sub_qty_feb, 0));
-				$sheet->setCellValue('H' . $row, number_format($sub_val_feb, 2));
-				$sheet->setCellValue('I' . $row, number_format($sub_qty_mar, 0));
-				$sheet->setCellValue('J' . $row, number_format($sub_val_mar, 2));
-				$sheet->setCellValue('K' . $row, number_format($sub_qty_apr, 0));
-				$sheet->setCellValue('L' . $row, number_format($sub_val_apr, 2));
-				$sheet->setCellValue('M' . $row, number_format($sub_qty_mei, 0));
-				$sheet->setCellValue('N' . $row, number_format($sub_val_mei, 2));
-				$sheet->setCellValue('O' . $row, number_format($sub_qty_jun, 0));
-				$sheet->setCellValue('P' . $row, number_format($sub_val_jun, 2));
-				$sheet->setCellValue('Q' . $row, number_format($sub_qty_jul, 0));
-				$sheet->setCellValue('R' . $row, number_format($sub_val_jul, 2));
-				$sheet->setCellValue('S' . $row, number_format($sub_qty_agu, 0));
-				$sheet->setCellValue('T' . $row, number_format($sub_val_agu, 2));
-				$sheet->setCellValue('U' . $row, number_format($sub_qty_sep, 0));
-				$sheet->setCellValue('V' . $row, number_format($sub_val_sep, 2));
-				$sheet->setCellValue('W' . $row, number_format($sub_qty_okt, 0));
-				$sheet->setCellValue('X' . $row, number_format($sub_val_okt, 2));
-				$sheet->setCellValue('Y' . $row, number_format($sub_qty_nop, 0));
-				$sheet->setCellValue('Z' . $row, number_format($sub_val_nop, 2));
-				$sheet->setCellValue('AA' . $row, number_format($sub_qty_des, 0));
-				$sheet->setCellValue('AB' . $row, number_format($sub_val_des, 2));
-				$sheet->setCellValue('AC' . $row, number_format($sub_qty_year, 0));
-				$sheet->setCellValue('AD' . $row, number_format($sub_val_year, 2));
-				$sheet->setCellValue('AE' . $row, number_format($sub_qty_year/12, 0));
-				$sheet->setCellValue('AF' . $row, number_format($sub_val_year/12, 2));
+				$sheet->setCellValue('E' . $row, $sub_qty_jan);
+				$sheet->setCellValue('F' . $row, $sub_val_jan);
+				$sheet->setCellValue('G' . $row, $sub_qty_feb);
+				$sheet->setCellValue('H' . $row, $sub_val_feb);
+				$sheet->setCellValue('I' . $row, $sub_qty_mar);
+				$sheet->setCellValue('J' . $row, $sub_val_mar);
+				$sheet->setCellValue('K' . $row, $sub_qty_apr);
+				$sheet->setCellValue('L' . $row, $sub_val_apr);
+				$sheet->setCellValue('M' . $row, $sub_qty_mei);
+				$sheet->setCellValue('N' . $row, $sub_val_mei);
+				$sheet->setCellValue('O' . $row, $sub_qty_jun);
+				$sheet->setCellValue('P' . $row, $sub_val_jun);
+				$sheet->setCellValue('Q' . $row, $sub_qty_jul);
+				$sheet->setCellValue('R' . $row, $sub_val_jul);
+				$sheet->setCellValue('S' . $row, $sub_qty_agu);
+				$sheet->setCellValue('T' . $row, $sub_val_agu);
+				$sheet->setCellValue('U' . $row, $sub_qty_sep);
+				$sheet->setCellValue('V' . $row, $sub_val_sep);
+				$sheet->setCellValue('W' . $row, $sub_qty_okt);
+				$sheet->setCellValue('X' . $row, $sub_val_okt);
+				$sheet->setCellValue('Y' . $row, $sub_qty_nop);
+				$sheet->setCellValue('Z' . $row, $sub_val_nop);
+				$sheet->setCellValue('AA' . $row, $sub_qty_des);
+				$sheet->setCellValue('AB' . $row, $sub_val_des);
+				$sheet->setCellValue('AC' . $row, $sub_qty_year);
+				$sheet->setCellValue('AD' . $row, $sub_val_year);
+				$sheet->setCellValue('AE' . $row, $sub_qty_year/12);
+				$sheet->setCellValue('AF' . $row, $sub_val_year/12);
 
 				// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 				$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -14762,6 +15229,35 @@ class Report extends Controller {
 				$sheet->getStyle('AE' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 				$sheet->getStyle('AF' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
+				$sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('T' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('U' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('V' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('W' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('X' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('Y' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('Z' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('AA' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('AB' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('AC' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('AD' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('AE' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('AF' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+
 				$sheet->getStyle('A' . $row . ':AF' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');
 				$sheet->getStyle('A' . $row . ':AF' . $row)->getFont()->setBold(true);
 
@@ -14802,34 +15298,34 @@ class Report extends Controller {
     		$sheet->setCellValue('B' . $row, $rows['cust_code']);
 			$sheet->setCellValue('C' . $row, $rows['distributor']);
 			$sheet->setCellValue('D' . $row, $rows['area']);
-			$sheet->setCellValue('E' . $row, number_format($rows['qty_jan'], 0));
-			$sheet->setCellValue('F' . $row, number_format($rows['val_jan'], 2));
-			$sheet->setCellValue('G' . $row, number_format($rows['qty_feb'], 0));
-			$sheet->setCellValue('H' . $row, number_format($rows['val_feb'], 2));
-			$sheet->setCellValue('I' . $row, number_format($rows['qty_mar'], 0));
-			$sheet->setCellValue('J' . $row, number_format($rows['val_mar'], 2));
-			$sheet->setCellValue('K' . $row, number_format($rows['qty_apr'], 0));
-			$sheet->setCellValue('L' . $row, number_format($rows['val_apr'], 2));
-			$sheet->setCellValue('M' . $row, number_format($rows['qty_mei'], 0));
-			$sheet->setCellValue('N' . $row, number_format($rows['val_mei'], 2));
-			$sheet->setCellValue('O' . $row, number_format($rows['qty_jun'], 0));
-			$sheet->setCellValue('P' . $row, number_format($rows['val_jun'], 2));
-			$sheet->setCellValue('Q' . $row, number_format($rows['qty_jul'], 0));
-			$sheet->setCellValue('R' . $row, number_format($rows['val_jul'], 2));
-			$sheet->setCellValue('S' . $row, number_format($rows['qty_agu'], 0));
-			$sheet->setCellValue('T' . $row, number_format($rows['val_agu'], 2));
-			$sheet->setCellValue('U' . $row, number_format($rows['qty_sep'], 0));
-			$sheet->setCellValue('V' . $row, number_format($rows['val_sep'], 2));
-			$sheet->setCellValue('W' . $row, number_format($rows['qty_okt'], 0));
-			$sheet->setCellValue('X' . $row, number_format($rows['val_okt'], 2));
-			$sheet->setCellValue('Y' . $row, number_format($rows['qty_nop'], 0));
-			$sheet->setCellValue('Z' . $row, number_format($rows['val_nop'], 2));
-			$sheet->setCellValue('AA' . $row, number_format($rows['qty_des'], 0));
-			$sheet->setCellValue('AB' . $row, number_format($rows['val_des'], 2));
-			$sheet->setCellValue('AC' . $row, number_format($rows['qty_year'], 0));
-			$sheet->setCellValue('AD' . $row, number_format($rows['val_year'], 2));
-			$sheet->setCellValue('AE' . $row, number_format($rows['qty_year']/12, 0));
-			$sheet->setCellValue('AF' . $row, number_format($rows['val_year']/12, 2));
+			$sheet->setCellValue('E' . $row, $rows['qty_jan']);
+			$sheet->setCellValue('F' . $row, $rows['val_jan']);
+			$sheet->setCellValue('G' . $row, $rows['qty_feb']);
+			$sheet->setCellValue('H' . $row, $rows['val_feb']);
+			$sheet->setCellValue('I' . $row, $rows['qty_mar']);
+			$sheet->setCellValue('J' . $row, $rows['val_mar']);
+			$sheet->setCellValue('K' . $row, $rows['qty_apr']);
+			$sheet->setCellValue('L' . $row, $rows['val_apr']);
+			$sheet->setCellValue('M' . $row, $rows['qty_mei']);
+			$sheet->setCellValue('N' . $row, $rows['val_mei']);
+			$sheet->setCellValue('O' . $row, $rows['qty_jun']);
+			$sheet->setCellValue('P' . $row, $rows['val_jun']);
+			$sheet->setCellValue('Q' . $row, $rows['qty_jul']);
+			$sheet->setCellValue('R' . $row, $rows['val_jul']);
+			$sheet->setCellValue('S' . $row, $rows['qty_agu']);
+			$sheet->setCellValue('T' . $row, $rows['val_agu']);
+			$sheet->setCellValue('U' . $row, $rows['qty_sep']);
+			$sheet->setCellValue('V' . $row, $rows['val_sep']);
+			$sheet->setCellValue('W' . $row, $rows['qty_okt']);
+			$sheet->setCellValue('X' . $row, $rows['val_okt']);
+			$sheet->setCellValue('Y' . $row, $rows['qty_nop']);
+			$sheet->setCellValue('Z' . $row, $rows['val_nop']);
+			$sheet->setCellValue('AA' . $row, $rows['qty_des']);
+			$sheet->setCellValue('AB' . $row, $rows['val_des']);
+			$sheet->setCellValue('AC' . $row, $rows['qty_year']);
+			$sheet->setCellValue('AD' . $row, $rows['val_year']);
+			$sheet->setCellValue('AE' . $row, $rows['qty_year']/12);
+			$sheet->setCellValue('AF' . $row, $rows['val_year']/12);
 
 			// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 			$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -14897,6 +15393,35 @@ class Report extends Controller {
 			$sheet->getStyle('AD' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 			$sheet->getStyle('AE' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 			$sheet->getStyle('AF' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+			$sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('T' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('U' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('V' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('W' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('X' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('Y' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('Z' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('AA' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AB' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('AC' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AD' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('AE' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AF' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 
 			$region = $rows['region'];
 			$island = $rows['island'];
@@ -14995,34 +15520,34 @@ class Report extends Controller {
 		$sheet->setCellValue('B' . $row, '');
 		$sheet->setCellValue('C' . $row, '');
 		$sheet->setCellValue('D' . $row, $region);
-		$sheet->setCellValue('E' . $row, number_format($qty_jan, 0));
-		$sheet->setCellValue('F' . $row, number_format($val_jan, 2));
-		$sheet->setCellValue('G' . $row, number_format($qty_feb, 0));
-		$sheet->setCellValue('H' . $row, number_format($val_feb, 2));
-		$sheet->setCellValue('I' . $row, number_format($qty_mar, 0));
-		$sheet->setCellValue('J' . $row, number_format($val_mar, 2));
-		$sheet->setCellValue('K' . $row, number_format($qty_apr, 0));
-		$sheet->setCellValue('L' . $row, number_format($val_apr, 2));
-		$sheet->setCellValue('M' . $row, number_format($qty_mei, 0));
-		$sheet->setCellValue('N' . $row, number_format($val_mei, 2));
-		$sheet->setCellValue('O' . $row, number_format($qty_jun, 0));
-		$sheet->setCellValue('P' . $row, number_format($val_jun, 2));
-		$sheet->setCellValue('Q' . $row, number_format($qty_jul, 0));
-		$sheet->setCellValue('R' . $row, number_format($val_jul, 2));
-		$sheet->setCellValue('S' . $row, number_format($qty_agu, 0));
-		$sheet->setCellValue('T' . $row, number_format($val_agu, 2));
-		$sheet->setCellValue('U' . $row, number_format($qty_sep, 0));
-		$sheet->setCellValue('V' . $row, number_format($val_sep, 2));
-		$sheet->setCellValue('W' . $row, number_format($qty_okt, 0));
-		$sheet->setCellValue('X' . $row, number_format($val_okt, 2));
-		$sheet->setCellValue('Y' . $row, number_format($qty_nop, 0));
-		$sheet->setCellValue('Z' . $row, number_format($val_nop, 2));
-		$sheet->setCellValue('AA' . $row, number_format($qty_des, 0));
-		$sheet->setCellValue('AB' . $row, number_format($val_des, 2));
-		$sheet->setCellValue('AC' . $row, number_format($qty_year, 0));
-		$sheet->setCellValue('AD' . $row, number_format($val_year, 2));
-		$sheet->setCellValue('AE' . $row, number_format($qty_year/12, 0));
-		$sheet->setCellValue('AF' . $row, number_format($val_year/12, 2));
+		$sheet->setCellValue('E' . $row, $qty_jan);
+		$sheet->setCellValue('F' . $row, $val_jan);
+		$sheet->setCellValue('G' . $row, $qty_feb);
+		$sheet->setCellValue('H' . $row, $val_feb);
+		$sheet->setCellValue('I' . $row, $qty_mar);
+		$sheet->setCellValue('J' . $row, $val_mar);
+		$sheet->setCellValue('K' . $row, $qty_apr);
+		$sheet->setCellValue('L' . $row, $val_apr);
+		$sheet->setCellValue('M' . $row, $qty_mei);
+		$sheet->setCellValue('N' . $row, $val_mei);
+		$sheet->setCellValue('O' . $row, $qty_jun);
+		$sheet->setCellValue('P' . $row, $val_jun);
+		$sheet->setCellValue('Q' . $row, $qty_jul);
+		$sheet->setCellValue('R' . $row, $val_jul);
+		$sheet->setCellValue('S' . $row, $qty_agu);
+		$sheet->setCellValue('T' . $row, $val_agu);
+		$sheet->setCellValue('U' . $row, $qty_sep);
+		$sheet->setCellValue('V' . $row, $val_sep);
+		$sheet->setCellValue('W' . $row, $qty_okt);
+		$sheet->setCellValue('X' . $row, $val_okt);
+		$sheet->setCellValue('Y' . $row, $qty_nop);
+		$sheet->setCellValue('Z' . $row, $val_nop);
+		$sheet->setCellValue('AA' . $row, $qty_des);
+		$sheet->setCellValue('AB' . $row, $val_des);
+		$sheet->setCellValue('AC' . $row, $qty_year);
+		$sheet->setCellValue('AD' . $row, $val_year);
+		$sheet->setCellValue('AE' . $row, $qty_year/12);
+		$sheet->setCellValue('AF' . $row, $val_year/12);
 
 		// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 		$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -15090,6 +15615,35 @@ class Report extends Controller {
 		$sheet->getStyle('AD' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('AE' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('AF' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+		$sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('T' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('U' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('V' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('W' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('X' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('Y' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('Z' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AA' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AB' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AC' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AD' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AE' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AF' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 
 		$sheet->getStyle('A' . $row . ':AF' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFE4B5');
 		$sheet->getStyle('A' . $row . ':AF' . $row)->getFont()->setBold(true);
@@ -15100,34 +15654,34 @@ class Report extends Controller {
 		$sheet->setCellValue('B' . $row, '');
 		$sheet->setCellValue('C' . $row, '');
 		$sheet->setCellValue('D' . $row, $island);
-		$sheet->setCellValue('E' . $row, number_format($sub_qty_jan, 0));
-		$sheet->setCellValue('F' . $row, number_format($sub_val_jan, 2));
-		$sheet->setCellValue('G' . $row, number_format($sub_qty_feb, 0));
-		$sheet->setCellValue('H' . $row, number_format($sub_val_feb, 2));
-		$sheet->setCellValue('I' . $row, number_format($sub_qty_mar, 0));
-		$sheet->setCellValue('J' . $row, number_format($sub_val_mar, 2));
-		$sheet->setCellValue('K' . $row, number_format($sub_qty_apr, 0));
-		$sheet->setCellValue('L' . $row, number_format($sub_val_apr, 2));
-		$sheet->setCellValue('M' . $row, number_format($sub_qty_mei, 0));
-		$sheet->setCellValue('N' . $row, number_format($sub_val_mei, 2));
-		$sheet->setCellValue('O' . $row, number_format($sub_qty_jun, 0));
-		$sheet->setCellValue('P' . $row, number_format($sub_val_jun, 2));
-		$sheet->setCellValue('Q' . $row, number_format($sub_qty_jul, 0));
-		$sheet->setCellValue('R' . $row, number_format($sub_val_jul, 2));
-		$sheet->setCellValue('S' . $row, number_format($sub_qty_agu, 0));
-		$sheet->setCellValue('T' . $row, number_format($sub_val_agu, 2));
-		$sheet->setCellValue('U' . $row, number_format($sub_qty_sep, 0));
-		$sheet->setCellValue('V' . $row, number_format($sub_val_sep, 2));
-		$sheet->setCellValue('W' . $row, number_format($sub_qty_okt, 0));
-		$sheet->setCellValue('X' . $row, number_format($sub_val_okt, 2));
-		$sheet->setCellValue('Y' . $row, number_format($sub_qty_nop, 0));
-		$sheet->setCellValue('Z' . $row, number_format($sub_val_nop, 2));
-		$sheet->setCellValue('AA' . $row, number_format($sub_qty_des, 0));
-		$sheet->setCellValue('AB' . $row, number_format($sub_val_des, 2));
-		$sheet->setCellValue('AC' . $row, number_format($sub_qty_year, 0));
-		$sheet->setCellValue('AD' . $row, number_format($sub_val_year, 2));
-		$sheet->setCellValue('AE' . $row, number_format($sub_qty_year/12, 0));
-		$sheet->setCellValue('AF' . $row, number_format($sub_val_year/12, 2));
+		$sheet->setCellValue('E' . $row, $sub_qty_jan);
+		$sheet->setCellValue('F' . $row, $sub_val_jan);
+		$sheet->setCellValue('G' . $row, $sub_qty_feb);
+		$sheet->setCellValue('H' . $row, $sub_val_feb);
+		$sheet->setCellValue('I' . $row, $sub_qty_mar);
+		$sheet->setCellValue('J' . $row, $sub_val_mar);
+		$sheet->setCellValue('K' . $row, $sub_qty_apr);
+		$sheet->setCellValue('L' . $row, $sub_val_apr);
+		$sheet->setCellValue('M' . $row, $sub_qty_mei);
+		$sheet->setCellValue('N' . $row, $sub_val_mei);
+		$sheet->setCellValue('O' . $row, $sub_qty_jun);
+		$sheet->setCellValue('P' . $row, $sub_val_jun);
+		$sheet->setCellValue('Q' . $row, $sub_qty_jul);
+		$sheet->setCellValue('R' . $row, $sub_val_jul);
+		$sheet->setCellValue('S' . $row, $sub_qty_agu);
+		$sheet->setCellValue('T' . $row, $sub_val_agu);
+		$sheet->setCellValue('U' . $row, $sub_qty_sep);
+		$sheet->setCellValue('V' . $row, $sub_val_sep);
+		$sheet->setCellValue('W' . $row, $sub_qty_okt);
+		$sheet->setCellValue('X' . $row, $sub_val_okt);
+		$sheet->setCellValue('Y' . $row, $sub_qty_nop);
+		$sheet->setCellValue('Z' . $row, $sub_val_nop);
+		$sheet->setCellValue('AA' . $row, $sub_qty_des);
+		$sheet->setCellValue('AB' . $row, $sub_val_des);
+		$sheet->setCellValue('AC' . $row, $sub_qty_year);
+		$sheet->setCellValue('AD' . $row, $sub_val_year);
+		$sheet->setCellValue('AE' . $row, $sub_qty_year/12);
+		$sheet->setCellValue('AF' . $row, $sub_val_year/12);
 
 		// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 		$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -15195,6 +15749,35 @@ class Report extends Controller {
 		$sheet->getStyle('AD' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('AE' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('AF' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+		$sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('T' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('U' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('V' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('W' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('X' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('Y' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('Z' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AA' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AB' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AC' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AD' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AE' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AF' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 
 		$sheet->getStyle('A' . $row . ':AF' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');
 		$sheet->getStyle('A' . $row . ':AF' . $row)->getFont()->setBold(true);
@@ -15205,34 +15788,34 @@ class Report extends Controller {
 		$sheet->setCellValue('B' . $row, '');
 		$sheet->setCellValue('C' . $row, '');
 		$sheet->setCellValue('D' . $row, 'NATIONAL');
-		$sheet->setCellValue('E' . $row, number_format($total_qty_jan, 0));
-		$sheet->setCellValue('F' . $row, number_format($total_val_jan, 2));
-		$sheet->setCellValue('G' . $row, number_format($total_qty_feb, 0));
-		$sheet->setCellValue('H' . $row, number_format($total_val_feb, 2));
-		$sheet->setCellValue('I' . $row, number_format($total_qty_mar, 0));
-		$sheet->setCellValue('J' . $row, number_format($total_val_mar, 2));
-		$sheet->setCellValue('K' . $row, number_format($total_qty_apr, 0));
-		$sheet->setCellValue('L' . $row, number_format($total_val_apr, 2));
-		$sheet->setCellValue('M' . $row, number_format($total_qty_mei, 0));
-		$sheet->setCellValue('N' . $row, number_format($total_val_mei, 2));
-		$sheet->setCellValue('O' . $row, number_format($total_qty_jun, 0));
-		$sheet->setCellValue('P' . $row, number_format($total_val_jun, 2));
-		$sheet->setCellValue('Q' . $row, number_format($total_qty_jul, 0));
-		$sheet->setCellValue('R' . $row, number_format($total_val_jul, 2));
-		$sheet->setCellValue('S' . $row, number_format($total_qty_agu, 0));
-		$sheet->setCellValue('T' . $row, number_format($total_val_agu, 2));
-		$sheet->setCellValue('U' . $row, number_format($total_qty_sep, 0));
-		$sheet->setCellValue('V' . $row, number_format($total_val_sep, 2));
-		$sheet->setCellValue('W' . $row, number_format($total_qty_okt, 0));
-		$sheet->setCellValue('X' . $row, number_format($total_val_okt, 2));
-		$sheet->setCellValue('Y' . $row, number_format($total_qty_nop, 0));
-		$sheet->setCellValue('Z' . $row, number_format($total_val_nop, 2));
-		$sheet->setCellValue('AA' . $row, number_format($total_qty_des, 0));
-		$sheet->setCellValue('AB' . $row, number_format($total_val_des, 2));
-		$sheet->setCellValue('AC' . $row, number_format($total_qty_year, 0));
-		$sheet->setCellValue('AD' . $row, number_format($total_val_year, 2));
-		$sheet->setCellValue('AE' . $row, number_format($total_qty_year/12, 0));
-		$sheet->setCellValue('AF' . $row, number_format($total_val_year/12, 2));
+		$sheet->setCellValue('E' . $row, $total_qty_jan);
+		$sheet->setCellValue('F' . $row, $total_val_jan);
+		$sheet->setCellValue('G' . $row, $total_qty_feb);
+		$sheet->setCellValue('H' . $row, $total_val_feb);
+		$sheet->setCellValue('I' . $row, $total_qty_mar);
+		$sheet->setCellValue('J' . $row, $total_val_mar);
+		$sheet->setCellValue('K' . $row, $total_qty_apr);
+		$sheet->setCellValue('L' . $row, $total_val_apr);
+		$sheet->setCellValue('M' . $row, $total_qty_mei);
+		$sheet->setCellValue('N' . $row, $total_val_mei);
+		$sheet->setCellValue('O' . $row, $total_qty_jun);
+		$sheet->setCellValue('P' . $row, $total_val_jun);
+		$sheet->setCellValue('Q' . $row, $total_qty_jul);
+		$sheet->setCellValue('R' . $row, $total_val_jul);
+		$sheet->setCellValue('S' . $row, $total_qty_agu);
+		$sheet->setCellValue('T' . $row, $total_val_agu);
+		$sheet->setCellValue('U' . $row, $total_qty_sep);
+		$sheet->setCellValue('V' . $row, $total_val_sep);
+		$sheet->setCellValue('W' . $row, $total_qty_okt);
+		$sheet->setCellValue('X' . $row, $total_val_okt);
+		$sheet->setCellValue('Y' . $row, $total_qty_nop);
+		$sheet->setCellValue('Z' . $row, $total_val_nop);
+		$sheet->setCellValue('AA' . $row, $total_qty_des);
+		$sheet->setCellValue('AB' . $row, $total_val_des);
+		$sheet->setCellValue('AC' . $row, $total_qty_year);
+		$sheet->setCellValue('AD' . $row, $total_val_year);
+		$sheet->setCellValue('AE' . $row, $total_qty_year/12);
+		$sheet->setCellValue('AF' . $row, $total_val_year/12);
 
 		// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 		$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -15300,6 +15883,35 @@ class Report extends Controller {
 		$sheet->getStyle('AD' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('AE' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('AF' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+		$sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('T' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('U' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('V' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('W' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('X' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('Y' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('Z' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AA' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AB' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AC' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AD' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AE' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AF' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 
 		$sheet->getStyle('A' . $row . ':AF' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');
 		$sheet->getStyle('A' . $row . ':AF' . $row)->getFont()->setBold(true);
@@ -15560,19 +16172,19 @@ class Report extends Controller {
 				$sheet->setCellValue('D' . $row, '');
 				$sheet->setCellValue('E' . $row, 'Sub Total ' . $item_group);
 				$sheet->setCellValue('F' . $row, '');
-				$sheet->setCellValue('G' . $row, number_format($qty_jan, 0));
-				$sheet->setCellValue('H' . $row, number_format($qty_feb, 0));
-				$sheet->setCellValue('I' . $row, number_format($qty_mar, 0));
-				$sheet->setCellValue('J' . $row, number_format($qty_apr, 0));
-				$sheet->setCellValue('K' . $row, number_format($qty_mei, 0));
-				$sheet->setCellValue('L' . $row, number_format($qty_jun, 0));
-				$sheet->setCellValue('M' . $row, number_format($qty_jul, 0));
-				$sheet->setCellValue('N' . $row, number_format($qty_agu, 0));
-				$sheet->setCellValue('O' . $row, number_format($qty_sep, 0));
-				$sheet->setCellValue('P' . $row, number_format($qty_okt, 0));
-				$sheet->setCellValue('Q' . $row, number_format($qty_nop, 0));
-				$sheet->setCellValue('R' . $row, number_format($qty_des, 0));
-				$sheet->setCellValue('S' . $row, number_format($qty_year, 0));
+				$sheet->setCellValue('G' . $row, $qty_jan);
+				$sheet->setCellValue('H' . $row, $qty_feb);
+				$sheet->setCellValue('I' . $row, $qty_mar);
+				$sheet->setCellValue('J' . $row, $qty_apr);
+				$sheet->setCellValue('K' . $row, $qty_mei);
+				$sheet->setCellValue('L' . $row, $qty_jun);
+				$sheet->setCellValue('M' . $row, $qty_jul);
+				$sheet->setCellValue('N' . $row, $qty_agu);
+				$sheet->setCellValue('O' . $row, $qty_sep);
+				$sheet->setCellValue('P' . $row, $qty_okt);
+				$sheet->setCellValue('Q' . $row, $qty_nop);
+				$sheet->setCellValue('R' . $row, $qty_des);
+				$sheet->setCellValue('S' . $row, $qty_year);
 
 				// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 				$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -15614,6 +16226,20 @@ class Report extends Controller {
 				$sheet->getStyle('Q' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 				$sheet->getStyle('R' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 				$sheet->getStyle('S' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+				$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
 
 				$sheet->getStyle('A' . $row . ':S' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFE4B5');
 				$sheet->getStyle('A' . $row . ':S' . $row)->getFont()->setBold(true);
@@ -15645,19 +16271,19 @@ class Report extends Controller {
 				$sheet->setCellValue('D' . $row, '');
 				$sheet->setCellValue('E' . $row, 'TOTAL ' . $principal);
 				$sheet->setCellValue('F' . $row, '');
-				$sheet->setCellValue('G' . $row, number_format($sub_qty_jan, 0));
-				$sheet->setCellValue('H' . $row, number_format($sub_qty_feb, 0));
-				$sheet->setCellValue('I' . $row, number_format($sub_qty_mar, 0));
-				$sheet->setCellValue('J' . $row, number_format($sub_qty_apr, 0));
-				$sheet->setCellValue('K' . $row, number_format($sub_qty_mei, 0));
-				$sheet->setCellValue('L' . $row, number_format($sub_qty_jun, 0));
-				$sheet->setCellValue('M' . $row, number_format($sub_qty_jul, 0));
-				$sheet->setCellValue('N' . $row, number_format($sub_qty_agu, 0));
-				$sheet->setCellValue('O' . $row, number_format($sub_qty_sep, 0));
-				$sheet->setCellValue('P' . $row, number_format($sub_qty_okt, 0));
-				$sheet->setCellValue('Q' . $row, number_format($sub_qty_nop, 0));
-				$sheet->setCellValue('R' . $row, number_format($sub_qty_des, 0));
-				$sheet->setCellValue('S' . $row, number_format($sub_qty_year, 0));
+				$sheet->setCellValue('G' . $row, $sub_qty_jan);
+				$sheet->setCellValue('H' . $row, $sub_qty_feb);
+				$sheet->setCellValue('I' . $row, $sub_qty_mar);
+				$sheet->setCellValue('J' . $row, $sub_qty_apr);
+				$sheet->setCellValue('K' . $row, $sub_qty_mei);
+				$sheet->setCellValue('L' . $row, $sub_qty_jun);
+				$sheet->setCellValue('M' . $row, $sub_qty_jul);
+				$sheet->setCellValue('N' . $row, $sub_qty_agu);
+				$sheet->setCellValue('O' . $row, $sub_qty_sep);
+				$sheet->setCellValue('P' . $row, $sub_qty_okt);
+				$sheet->setCellValue('Q' . $row, $sub_qty_nop);
+				$sheet->setCellValue('R' . $row, $sub_qty_des);
+				$sheet->setCellValue('S' . $row, $sub_qty_year);
 
 				// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 				$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -15700,6 +16326,20 @@ class Report extends Controller {
 				$sheet->getStyle('R' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 				$sheet->getStyle('S' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
+				$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
+
 				$sheet->getStyle('A' . $row . ':S' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');
 				$sheet->getStyle('A' . $row . ':S' . $row)->getFont()->setBold(true);
 
@@ -15727,19 +16367,19 @@ class Report extends Controller {
 			$sheet->setCellValue('D' . $row, $rows['item_code']);
 			$sheet->setCellValue('E' . $row, $rows['item_name']);
 			$sheet->setCellValue('F' . $row, $rows['unit']);
-			$sheet->setCellValue('G' . $row, number_format($rows['qty_jan'], 0));			
-			$sheet->setCellValue('H' . $row, number_format($rows['qty_feb'], 0));			
-			$sheet->setCellValue('I' . $row, number_format($rows['qty_mar'], 0));			
-			$sheet->setCellValue('J' . $row, number_format($rows['qty_apr'], 0));			
-			$sheet->setCellValue('K' . $row, number_format($rows['qty_mei'], 0));			
-			$sheet->setCellValue('L' . $row, number_format($rows['qty_jun'], 0));			
-			$sheet->setCellValue('M' . $row, number_format($rows['qty_jul'], 0));			
-			$sheet->setCellValue('N' . $row, number_format($rows['qty_agu'], 0));			
-			$sheet->setCellValue('O' . $row, number_format($rows['qty_sep'], 0));			
-			$sheet->setCellValue('P' . $row, number_format($rows['qty_okt'], 0));			
-			$sheet->setCellValue('Q' . $row, number_format($rows['qty_nop'], 0));			
-			$sheet->setCellValue('R' . $row, number_format($rows['qty_des'], 0));			
-			$sheet->setCellValue('S' . $row, number_format($rows['qty_total'], 0));
+			$sheet->setCellValue('G' . $row, $rows['qty_jan']);			
+			$sheet->setCellValue('H' . $row, $rows['qty_feb']);			
+			$sheet->setCellValue('I' . $row, $rows['qty_mar']);			
+			$sheet->setCellValue('J' . $row, $rows['qty_apr']);			
+			$sheet->setCellValue('K' . $row, $rows['qty_mei']);			
+			$sheet->setCellValue('L' . $row, $rows['qty_jun']);			
+			$sheet->setCellValue('M' . $row, $rows['qty_jul']);			
+			$sheet->setCellValue('N' . $row, $rows['qty_agu']);			
+			$sheet->setCellValue('O' . $row, $rows['qty_sep']);			
+			$sheet->setCellValue('P' . $row, $rows['qty_okt']);			
+			$sheet->setCellValue('Q' . $row, $rows['qty_nop']);			
+			$sheet->setCellValue('R' . $row, $rows['qty_des']);			
+			$sheet->setCellValue('S' . $row, $rows['qty_total']);
 
 			// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 			$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -15781,6 +16421,20 @@ class Report extends Controller {
 			$sheet->getStyle('Q' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 			$sheet->getStyle('R' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 			$sheet->getStyle('S' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+			$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
 
 			$item_group = $rows['item_group'];
 			$principal = $rows['principal'];
@@ -15839,19 +16493,19 @@ class Report extends Controller {
 		$sheet->setCellValue('D' . $row, '');
 		$sheet->setCellValue('E' . $row, 'Sub Total ' . $item_group);
 		$sheet->setCellValue('F' . $row, '');
-		$sheet->setCellValue('G' . $row, number_format($qty_jan, 0));
-		$sheet->setCellValue('H' . $row, number_format($qty_feb, 0));
-		$sheet->setCellValue('I' . $row, number_format($qty_mar, 0));
-		$sheet->setCellValue('J' . $row, number_format($qty_apr, 0));
-		$sheet->setCellValue('K' . $row, number_format($qty_mei, 0));
-		$sheet->setCellValue('L' . $row, number_format($qty_jun, 0));
-		$sheet->setCellValue('M' . $row, number_format($qty_jul, 0));
-		$sheet->setCellValue('N' . $row, number_format($qty_agu, 0));
-		$sheet->setCellValue('O' . $row, number_format($qty_sep, 0));
-		$sheet->setCellValue('P' . $row, number_format($qty_okt, 0));
-		$sheet->setCellValue('Q' . $row, number_format($qty_nop, 0));
-		$sheet->setCellValue('R' . $row, number_format($qty_des, 0));
-		$sheet->setCellValue('S' . $row, number_format($qty_year, 0));
+		$sheet->setCellValue('G' . $row, $qty_jan);
+		$sheet->setCellValue('H' . $row, $qty_feb);
+		$sheet->setCellValue('I' . $row, $qty_mar);
+		$sheet->setCellValue('J' . $row, $qty_apr);
+		$sheet->setCellValue('K' . $row, $qty_mei);
+		$sheet->setCellValue('L' . $row, $qty_jun);
+		$sheet->setCellValue('M' . $row, $qty_jul);
+		$sheet->setCellValue('N' . $row, $qty_agu);
+		$sheet->setCellValue('O' . $row, $qty_sep);
+		$sheet->setCellValue('P' . $row, $qty_okt);
+		$sheet->setCellValue('Q' . $row, $qty_nop);
+		$sheet->setCellValue('R' . $row, $qty_des);
+		$sheet->setCellValue('S' . $row, $qty_year);
 
 		// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 		$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -15893,6 +16547,20 @@ class Report extends Controller {
 		$sheet->getStyle('Q' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('R' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('S' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+		$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
 
 		$sheet->getStyle('A' . $row . ':S' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFE4B5');
 		$sheet->getStyle('A' . $row . ':S' . $row)->getFont()->setBold(true);
@@ -15905,19 +16573,19 @@ class Report extends Controller {
 		$sheet->setCellValue('D' . $row, '');
 		$sheet->setCellValue('E' . $row, 'TOTAL ' . $principal);
 		$sheet->setCellValue('F' . $row, '');
-		$sheet->setCellValue('G' . $row, number_format($sub_qty_jan, 0));
-		$sheet->setCellValue('H' . $row, number_format($sub_qty_feb, 0));
-		$sheet->setCellValue('I' . $row, number_format($sub_qty_mar, 0));
-		$sheet->setCellValue('J' . $row, number_format($sub_qty_apr, 0));
-		$sheet->setCellValue('K' . $row, number_format($sub_qty_mei, 0));
-		$sheet->setCellValue('L' . $row, number_format($sub_qty_jun, 0));
-		$sheet->setCellValue('M' . $row, number_format($sub_qty_jul, 0));
-		$sheet->setCellValue('N' . $row, number_format($sub_qty_agu, 0));
-		$sheet->setCellValue('O' . $row, number_format($sub_qty_sep, 0));
-		$sheet->setCellValue('P' . $row, number_format($sub_qty_okt, 0));
-		$sheet->setCellValue('Q' . $row, number_format($sub_qty_nop, 0));
-		$sheet->setCellValue('R' . $row, number_format($sub_qty_des, 0));
-		$sheet->setCellValue('S' . $row, number_format($sub_qty_year, 0));
+		$sheet->setCellValue('G' . $row, $sub_qty_jan);
+		$sheet->setCellValue('H' . $row, $sub_qty_feb);
+		$sheet->setCellValue('I' . $row, $sub_qty_mar);
+		$sheet->setCellValue('J' . $row, $sub_qty_apr);
+		$sheet->setCellValue('K' . $row, $sub_qty_mei);
+		$sheet->setCellValue('L' . $row, $sub_qty_jun);
+		$sheet->setCellValue('M' . $row, $sub_qty_jul);
+		$sheet->setCellValue('N' . $row, $sub_qty_agu);
+		$sheet->setCellValue('O' . $row, $sub_qty_sep);
+		$sheet->setCellValue('P' . $row, $sub_qty_okt);
+		$sheet->setCellValue('Q' . $row, $sub_qty_nop);
+		$sheet->setCellValue('R' . $row, $sub_qty_des);
+		$sheet->setCellValue('S' . $row, $sub_qty_year);
 
 		// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 		$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -15959,6 +16627,20 @@ class Report extends Controller {
 		$sheet->getStyle('Q' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('R' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('S' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+		$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
 
 		$sheet->getStyle('A' . $row . ':S' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');
 		$sheet->getStyle('A' . $row . ':S' . $row)->getFont()->setBold(true);
@@ -15971,19 +16653,19 @@ class Report extends Controller {
 		$sheet->setCellValue('D' . $row, '');
 		$sheet->setCellValue('E' . $row, 'GRAND TOTAL');
 		$sheet->setCellValue('F' . $row, '');
-		$sheet->setCellValue('G' . $row, number_format($total_qty_jan, 0));
-		$sheet->setCellValue('H' . $row, number_format($total_qty_feb, 0));
-		$sheet->setCellValue('I' . $row, number_format($total_qty_mar, 0));
-		$sheet->setCellValue('J' . $row, number_format($total_qty_apr, 0));
-		$sheet->setCellValue('K' . $row, number_format($total_qty_mei, 0));
-		$sheet->setCellValue('L' . $row, number_format($total_qty_jun, 0));
-		$sheet->setCellValue('M' . $row, number_format($total_qty_jul, 0));
-		$sheet->setCellValue('N' . $row, number_format($total_qty_agu, 0));
-		$sheet->setCellValue('O' . $row, number_format($total_qty_sep, 0));
-		$sheet->setCellValue('P' . $row, number_format($total_qty_okt, 0));
-		$sheet->setCellValue('Q' . $row, number_format($total_qty_nop, 0));
-		$sheet->setCellValue('R' . $row, number_format($total_qty_des, 0));
-		$sheet->setCellValue('S' . $row, number_format($total_qty_year, 0));
+		$sheet->setCellValue('G' . $row, $total_qty_jan);
+		$sheet->setCellValue('H' . $row, $total_qty_feb);
+		$sheet->setCellValue('I' . $row, $total_qty_mar);
+		$sheet->setCellValue('J' . $row, $total_qty_apr);
+		$sheet->setCellValue('K' . $row, $total_qty_mei);
+		$sheet->setCellValue('L' . $row, $total_qty_jun);
+		$sheet->setCellValue('M' . $row, $total_qty_jul);
+		$sheet->setCellValue('N' . $row, $total_qty_agu);
+		$sheet->setCellValue('O' . $row, $total_qty_sep);
+		$sheet->setCellValue('P' . $row, $total_qty_okt);
+		$sheet->setCellValue('Q' . $row, $total_qty_nop);
+		$sheet->setCellValue('R' . $row, $total_qty_des);
+		$sheet->setCellValue('S' . $row, $total_qty_year);
 
 		// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 		$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -16025,6 +16707,20 @@ class Report extends Controller {
 		$sheet->getStyle('Q' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('R' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('S' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+		$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
 
 		$sheet->getStyle('A' . $row . ':S' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');
 		$sheet->getStyle('A' . $row . ':S' . $row)->getFont()->setBold(true);
@@ -16272,19 +16968,19 @@ class Report extends Controller {
 				$sheet->setCellValue('D' . $row, '');
 				$sheet->setCellValue('E' . $row, 'Sub Total ' . $item_group);
 				$sheet->setCellValue('F' . $row, '');
-				$sheet->setCellValue('G' . $row, number_format($qty_jan, 0));
-				$sheet->setCellValue('H' . $row, number_format($qty_feb, 0));
-				$sheet->setCellValue('I' . $row, number_format($qty_mar, 0));
-				$sheet->setCellValue('J' . $row, number_format($qty_apr, 0));
-				$sheet->setCellValue('K' . $row, number_format($qty_mei, 0));
-				$sheet->setCellValue('L' . $row, number_format($qty_jun, 0));
-				$sheet->setCellValue('M' . $row, number_format($qty_jul, 0));
-				$sheet->setCellValue('N' . $row, number_format($qty_agu, 0));
-				$sheet->setCellValue('O' . $row, number_format($qty_sep, 0));
-				$sheet->setCellValue('P' . $row, number_format($qty_okt, 0));
-				$sheet->setCellValue('Q' . $row, number_format($qty_nop, 0));
-				$sheet->setCellValue('R' . $row, number_format($qty_des, 0));
-				$sheet->setCellValue('S' . $row, number_format($qty_year, 0));
+				$sheet->setCellValue('G' . $row, $qty_jan);
+				$sheet->setCellValue('H' . $row, $qty_feb);
+				$sheet->setCellValue('I' . $row, $qty_mar);
+				$sheet->setCellValue('J' . $row, $qty_apr);
+				$sheet->setCellValue('K' . $row, $qty_mei);
+				$sheet->setCellValue('L' . $row, $qty_jun);
+				$sheet->setCellValue('M' . $row, $qty_jul);
+				$sheet->setCellValue('N' . $row, $qty_agu);
+				$sheet->setCellValue('O' . $row, $qty_sep);
+				$sheet->setCellValue('P' . $row, $qty_okt);
+				$sheet->setCellValue('Q' . $row, $qty_nop);
+				$sheet->setCellValue('R' . $row, $qty_des);
+				$sheet->setCellValue('S' . $row, $qty_year);
 
 				// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 				$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -16326,6 +17022,20 @@ class Report extends Controller {
 				$sheet->getStyle('Q' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 				$sheet->getStyle('R' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 				$sheet->getStyle('S' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+				$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 
 				$sheet->getStyle('A' . $row . ':S' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFE4B5');
 				$sheet->getStyle('A' . $row . ':S' . $row)->getFont()->setBold(true);
@@ -16357,19 +17067,19 @@ class Report extends Controller {
 				$sheet->setCellValue('D' . $row, '');
 				$sheet->setCellValue('E' . $row, 'TOTAL ' . $principal);
 				$sheet->setCellValue('F' . $row, '');
-				$sheet->setCellValue('G' . $row, number_format($sub_qty_jan, 0));
-				$sheet->setCellValue('H' . $row, number_format($sub_qty_feb, 0));
-				$sheet->setCellValue('I' . $row, number_format($sub_qty_mar, 0));
-				$sheet->setCellValue('J' . $row, number_format($sub_qty_apr, 0));
-				$sheet->setCellValue('K' . $row, number_format($sub_qty_mei, 0));
-				$sheet->setCellValue('L' . $row, number_format($sub_qty_jun, 0));
-				$sheet->setCellValue('M' . $row, number_format($sub_qty_jul, 0));
-				$sheet->setCellValue('N' . $row, number_format($sub_qty_agu, 0));
-				$sheet->setCellValue('O' . $row, number_format($sub_qty_sep, 0));
-				$sheet->setCellValue('P' . $row, number_format($sub_qty_okt, 0));
-				$sheet->setCellValue('Q' . $row, number_format($sub_qty_nop, 0));
-				$sheet->setCellValue('R' . $row, number_format($sub_qty_des, 0));
-				$sheet->setCellValue('S' . $row, number_format($sub_qty_year, 0));
+				$sheet->setCellValue('G' . $row, $sub_qty_jan);
+				$sheet->setCellValue('H' . $row, $sub_qty_feb);
+				$sheet->setCellValue('I' . $row, $sub_qty_mar);
+				$sheet->setCellValue('J' . $row, $sub_qty_apr);
+				$sheet->setCellValue('K' . $row, $sub_qty_mei);
+				$sheet->setCellValue('L' . $row, $sub_qty_jun);
+				$sheet->setCellValue('M' . $row, $sub_qty_jul);
+				$sheet->setCellValue('N' . $row, $sub_qty_agu);
+				$sheet->setCellValue('O' . $row, $sub_qty_sep);
+				$sheet->setCellValue('P' . $row, $sub_qty_okt);
+				$sheet->setCellValue('Q' . $row, $sub_qty_nop);
+				$sheet->setCellValue('R' . $row, $sub_qty_des);
+				$sheet->setCellValue('S' . $row, $sub_qty_year);
 
 				// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 				$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -16412,6 +17122,20 @@ class Report extends Controller {
 				$sheet->getStyle('R' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 				$sheet->getStyle('S' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
+				$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+
 				$sheet->getStyle('A' . $row . ':S' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');
 				$sheet->getStyle('A' . $row . ':S' . $row)->getFont()->setBold(true);
 
@@ -16439,19 +17163,19 @@ class Report extends Controller {
 			$sheet->setCellValue('D' . $row, $rows['item_code']);
 			$sheet->setCellValue('E' . $row, $rows['item_name']);
 			$sheet->setCellValue('F' . $row, $rows['unit']);
-			$sheet->setCellValue('G' . $row, number_format($rows['value_jan'], 0));			
-			$sheet->setCellValue('H' . $row, number_format($rows['value_feb'], 0));			
-			$sheet->setCellValue('I' . $row, number_format($rows['value_mar'], 0));			
-			$sheet->setCellValue('J' . $row, number_format($rows['value_apr'], 0));			
-			$sheet->setCellValue('K' . $row, number_format($rows['value_mei'], 0));			
-			$sheet->setCellValue('L' . $row, number_format($rows['value_jun'], 0));			
-			$sheet->setCellValue('M' . $row, number_format($rows['value_jul'], 0));			
-			$sheet->setCellValue('N' . $row, number_format($rows['value_agu'], 0));			
-			$sheet->setCellValue('O' . $row, number_format($rows['value_sep'], 0));			
-			$sheet->setCellValue('P' . $row, number_format($rows['value_okt'], 0));			
-			$sheet->setCellValue('Q' . $row, number_format($rows['value_nop'], 0));			
-			$sheet->setCellValue('R' . $row, number_format($rows['value_des'], 0));			
-			$sheet->setCellValue('S' . $row, number_format($rows['value_total'], 0));
+			$sheet->setCellValue('G' . $row, $rows['value_jan']);			
+			$sheet->setCellValue('H' . $row, $rows['value_feb']);			
+			$sheet->setCellValue('I' . $row, $rows['value_mar']);			
+			$sheet->setCellValue('J' . $row, $rows['value_apr']);			
+			$sheet->setCellValue('K' . $row, $rows['value_mei']);			
+			$sheet->setCellValue('L' . $row, $rows['value_jun']);			
+			$sheet->setCellValue('M' . $row, $rows['value_jul']);			
+			$sheet->setCellValue('N' . $row, $rows['value_agu']);			
+			$sheet->setCellValue('O' . $row, $rows['value_sep']);			
+			$sheet->setCellValue('P' . $row, $rows['value_okt']);			
+			$sheet->setCellValue('Q' . $row, $rows['value_nop']);			
+			$sheet->setCellValue('R' . $row, $rows['value_des']);			
+			$sheet->setCellValue('S' . $row, $rows['value_total']);
 
 			// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 			$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -16493,6 +17217,20 @@ class Report extends Controller {
 			$sheet->getStyle('Q' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 			$sheet->getStyle('R' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 			$sheet->getStyle('S' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+			$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 
 			$item_group = $rows['item_group'];
 			$principal = $rows['principal'];
@@ -16551,19 +17289,19 @@ class Report extends Controller {
 		$sheet->setCellValue('D' . $row, '');
 		$sheet->setCellValue('E' . $row, 'Sub Total ' . $item_group);
 		$sheet->setCellValue('F' . $row, '');
-		$sheet->setCellValue('G' . $row, number_format($qty_jan, 0));
-		$sheet->setCellValue('H' . $row, number_format($qty_feb, 0));
-		$sheet->setCellValue('I' . $row, number_format($qty_mar, 0));
-		$sheet->setCellValue('J' . $row, number_format($qty_apr, 0));
-		$sheet->setCellValue('K' . $row, number_format($qty_mei, 0));
-		$sheet->setCellValue('L' . $row, number_format($qty_jun, 0));
-		$sheet->setCellValue('M' . $row, number_format($qty_jul, 0));
-		$sheet->setCellValue('N' . $row, number_format($qty_agu, 0));
-		$sheet->setCellValue('O' . $row, number_format($qty_sep, 0));
-		$sheet->setCellValue('P' . $row, number_format($qty_okt, 0));
-		$sheet->setCellValue('Q' . $row, number_format($qty_nop, 0));
-		$sheet->setCellValue('R' . $row, number_format($qty_des, 0));
-		$sheet->setCellValue('S' . $row, number_format($qty_year, 0));
+		$sheet->setCellValue('G' . $row, $qty_jan);
+		$sheet->setCellValue('H' . $row, $qty_feb);
+		$sheet->setCellValue('I' . $row, $qty_mar);
+		$sheet->setCellValue('J' . $row, $qty_apr);
+		$sheet->setCellValue('K' . $row, $qty_mei);
+		$sheet->setCellValue('L' . $row, $qty_jun);
+		$sheet->setCellValue('M' . $row, $qty_jul);
+		$sheet->setCellValue('N' . $row, $qty_agu);
+		$sheet->setCellValue('O' . $row, $qty_sep);
+		$sheet->setCellValue('P' . $row, $qty_okt);
+		$sheet->setCellValue('Q' . $row, $qty_nop);
+		$sheet->setCellValue('R' . $row, $qty_des);
+		$sheet->setCellValue('S' . $row, $qty_year);
 
 		// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 		$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -16605,6 +17343,20 @@ class Report extends Controller {
 		$sheet->getStyle('Q' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('R' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('S' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+		$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 
 		$sheet->getStyle('A' . $row . ':S' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFE4B5');
 		$sheet->getStyle('A' . $row . ':S' . $row)->getFont()->setBold(true);
@@ -16617,19 +17369,19 @@ class Report extends Controller {
 		$sheet->setCellValue('D' . $row, '');
 		$sheet->setCellValue('E' . $row, 'TOTAL ' . $principal);
 		$sheet->setCellValue('F' . $row, '');
-		$sheet->setCellValue('G' . $row, number_format($sub_qty_jan, 0));
-		$sheet->setCellValue('H' . $row, number_format($sub_qty_feb, 0));
-		$sheet->setCellValue('I' . $row, number_format($sub_qty_mar, 0));
-		$sheet->setCellValue('J' . $row, number_format($sub_qty_apr, 0));
-		$sheet->setCellValue('K' . $row, number_format($sub_qty_mei, 0));
-		$sheet->setCellValue('L' . $row, number_format($sub_qty_jun, 0));
-		$sheet->setCellValue('M' . $row, number_format($sub_qty_jul, 0));
-		$sheet->setCellValue('N' . $row, number_format($sub_qty_agu, 0));
-		$sheet->setCellValue('O' . $row, number_format($sub_qty_sep, 0));
-		$sheet->setCellValue('P' . $row, number_format($sub_qty_okt, 0));
-		$sheet->setCellValue('Q' . $row, number_format($sub_qty_nop, 0));
-		$sheet->setCellValue('R' . $row, number_format($sub_qty_des, 0));
-		$sheet->setCellValue('S' . $row, number_format($sub_qty_year, 0));
+		$sheet->setCellValue('G' . $row, $sub_qty_jan);
+		$sheet->setCellValue('H' . $row, $sub_qty_feb);
+		$sheet->setCellValue('I' . $row, $sub_qty_mar);
+		$sheet->setCellValue('J' . $row, $sub_qty_apr);
+		$sheet->setCellValue('K' . $row, $sub_qty_mei);
+		$sheet->setCellValue('L' . $row, $sub_qty_jun);
+		$sheet->setCellValue('M' . $row, $sub_qty_jul);
+		$sheet->setCellValue('N' . $row, $sub_qty_agu);
+		$sheet->setCellValue('O' . $row, $sub_qty_sep);
+		$sheet->setCellValue('P' . $row, $sub_qty_okt);
+		$sheet->setCellValue('Q' . $row, $sub_qty_nop);
+		$sheet->setCellValue('R' . $row, $sub_qty_des);
+		$sheet->setCellValue('S' . $row, $sub_qty_year);
 
 		// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 		$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -16671,6 +17423,20 @@ class Report extends Controller {
 		$sheet->getStyle('Q' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('R' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('S' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+		$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 
 		$sheet->getStyle('A' . $row . ':S' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');
 		$sheet->getStyle('A' . $row . ':S' . $row)->getFont()->setBold(true);
@@ -16683,19 +17449,19 @@ class Report extends Controller {
 		$sheet->setCellValue('D' . $row, '');
 		$sheet->setCellValue('E' . $row, 'GRAND TOTAL');
 		$sheet->setCellValue('F' . $row, '');
-		$sheet->setCellValue('G' . $row, number_format($total_qty_jan, 0));
-		$sheet->setCellValue('H' . $row, number_format($total_qty_feb, 0));
-		$sheet->setCellValue('I' . $row, number_format($total_qty_mar, 0));
-		$sheet->setCellValue('J' . $row, number_format($total_qty_apr, 0));
-		$sheet->setCellValue('K' . $row, number_format($total_qty_mei, 0));
-		$sheet->setCellValue('L' . $row, number_format($total_qty_jun, 0));
-		$sheet->setCellValue('M' . $row, number_format($total_qty_jul, 0));
-		$sheet->setCellValue('N' . $row, number_format($total_qty_agu, 0));
-		$sheet->setCellValue('O' . $row, number_format($total_qty_sep, 0));
-		$sheet->setCellValue('P' . $row, number_format($total_qty_okt, 0));
-		$sheet->setCellValue('Q' . $row, number_format($total_qty_nop, 0));
-		$sheet->setCellValue('R' . $row, number_format($total_qty_des, 0));
-		$sheet->setCellValue('S' . $row, number_format($total_qty_year, 0));
+		$sheet->setCellValue('G' . $row, $total_qty_jan);
+		$sheet->setCellValue('H' . $row, $total_qty_feb);
+		$sheet->setCellValue('I' . $row, $total_qty_mar);
+		$sheet->setCellValue('J' . $row, $total_qty_apr);
+		$sheet->setCellValue('K' . $row, $total_qty_mei);
+		$sheet->setCellValue('L' . $row, $total_qty_jun);
+		$sheet->setCellValue('M' . $row, $total_qty_jul);
+		$sheet->setCellValue('N' . $row, $total_qty_agu);
+		$sheet->setCellValue('O' . $row, $total_qty_sep);
+		$sheet->setCellValue('P' . $row, $total_qty_okt);
+		$sheet->setCellValue('Q' . $row, $total_qty_nop);
+		$sheet->setCellValue('R' . $row, $total_qty_des);
+		$sheet->setCellValue('S' . $row, $total_qty_year);
 
 		// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 		$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -16737,6 +17503,20 @@ class Report extends Controller {
 		$sheet->getStyle('Q' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('R' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('S' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+		$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 
 		$sheet->getStyle('A' . $row . ':S' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');
 		$sheet->getStyle('A' . $row . ':S' . $row)->getFont()->setBold(true);
@@ -16985,19 +17765,19 @@ class Report extends Controller {
 				$sheet->setCellValue('D' . $row, '');
 				$sheet->setCellValue('E' . $row, 'Sub Total ' . $item_group);
 				$sheet->setCellValue('F' . $row, '');
-				$sheet->setCellValue('G' . $row, number_format($qty_jan, 0));
-				$sheet->setCellValue('H' . $row, number_format($qty_feb, 0));
-				$sheet->setCellValue('I' . $row, number_format($qty_mar, 0));
-				$sheet->setCellValue('J' . $row, number_format($qty_apr, 0));
-				$sheet->setCellValue('K' . $row, number_format($qty_mei, 0));
-				$sheet->setCellValue('L' . $row, number_format($qty_jun, 0));
-				$sheet->setCellValue('M' . $row, number_format($qty_jul, 0));
-				$sheet->setCellValue('N' . $row, number_format($qty_agu, 0));
-				$sheet->setCellValue('O' . $row, number_format($qty_sep, 0));
-				$sheet->setCellValue('P' . $row, number_format($qty_okt, 0));
-				$sheet->setCellValue('Q' . $row, number_format($qty_nop, 0));
-				$sheet->setCellValue('R' . $row, number_format($qty_des, 0));
-				$sheet->setCellValue('S' . $row, number_format($qty_year, 0));
+				$sheet->setCellValue('G' . $row, $qty_jan);
+				$sheet->setCellValue('H' . $row, $qty_feb);
+				$sheet->setCellValue('I' . $row, $qty_mar);
+				$sheet->setCellValue('J' . $row, $qty_apr);
+				$sheet->setCellValue('K' . $row, $qty_mei);
+				$sheet->setCellValue('L' . $row, $qty_jun);
+				$sheet->setCellValue('M' . $row, $qty_jul);
+				$sheet->setCellValue('N' . $row, $qty_agu);
+				$sheet->setCellValue('O' . $row, $qty_sep);
+				$sheet->setCellValue('P' . $row, $qty_okt);
+				$sheet->setCellValue('Q' . $row, $qty_nop);
+				$sheet->setCellValue('R' . $row, $qty_des);
+				$sheet->setCellValue('S' . $row, $qty_year);
 
 				// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 				$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -17039,6 +17819,20 @@ class Report extends Controller {
 				$sheet->getStyle('Q' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 				$sheet->getStyle('R' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 				$sheet->getStyle('S' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+				$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
 
 				$sheet->getStyle('A' . $row . ':S' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFE4B5');
 				$sheet->getStyle('A' . $row . ':S' . $row)->getFont()->setBold(true);
@@ -17070,19 +17864,19 @@ class Report extends Controller {
 				$sheet->setCellValue('D' . $row, '');
 				$sheet->setCellValue('E' . $row, 'TOTAL ' . $principal);
 				$sheet->setCellValue('F' . $row, '');
-				$sheet->setCellValue('G' . $row, number_format($sub_qty_jan, 0));
-				$sheet->setCellValue('H' . $row, number_format($sub_qty_feb, 0));
-				$sheet->setCellValue('I' . $row, number_format($sub_qty_mar, 0));
-				$sheet->setCellValue('J' . $row, number_format($sub_qty_apr, 0));
-				$sheet->setCellValue('K' . $row, number_format($sub_qty_mei, 0));
-				$sheet->setCellValue('L' . $row, number_format($sub_qty_jun, 0));
-				$sheet->setCellValue('M' . $row, number_format($sub_qty_jul, 0));
-				$sheet->setCellValue('N' . $row, number_format($sub_qty_agu, 0));
-				$sheet->setCellValue('O' . $row, number_format($sub_qty_sep, 0));
-				$sheet->setCellValue('P' . $row, number_format($sub_qty_okt, 0));
-				$sheet->setCellValue('Q' . $row, number_format($sub_qty_nop, 0));
-				$sheet->setCellValue('R' . $row, number_format($sub_qty_des, 0));
-				$sheet->setCellValue('S' . $row, number_format($sub_qty_year, 0));
+				$sheet->setCellValue('G' . $row, $sub_qty_jan);
+				$sheet->setCellValue('H' . $row, $sub_qty_feb);
+				$sheet->setCellValue('I' . $row, $sub_qty_mar);
+				$sheet->setCellValue('J' . $row, $sub_qty_apr);
+				$sheet->setCellValue('K' . $row, $sub_qty_mei);
+				$sheet->setCellValue('L' . $row, $sub_qty_jun);
+				$sheet->setCellValue('M' . $row, $sub_qty_jul);
+				$sheet->setCellValue('N' . $row, $sub_qty_agu);
+				$sheet->setCellValue('O' . $row, $sub_qty_sep);
+				$sheet->setCellValue('P' . $row, $sub_qty_okt);
+				$sheet->setCellValue('Q' . $row, $sub_qty_nop);
+				$sheet->setCellValue('R' . $row, $sub_qty_des);
+				$sheet->setCellValue('S' . $row, $sub_qty_year);
 
 				// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 				$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -17125,6 +17919,20 @@ class Report extends Controller {
 				$sheet->getStyle('R' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 				$sheet->getStyle('S' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
+				$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
+
 				$sheet->getStyle('A' . $row . ':S' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');
 				$sheet->getStyle('A' . $row . ':S' . $row)->getFont()->setBold(true);
 
@@ -17152,19 +17960,19 @@ class Report extends Controller {
 			$sheet->setCellValue('D' . $row, $rows['item_code']);
 			$sheet->setCellValue('E' . $row, $rows['item_name']);
 			$sheet->setCellValue('F' . $row, $rows['unit']);
-			$sheet->setCellValue('G' . $row, number_format($rows['qty_jan'], 0));			
-			$sheet->setCellValue('H' . $row, number_format($rows['qty_feb'], 0));			
-			$sheet->setCellValue('I' . $row, number_format($rows['qty_mar'], 0));			
-			$sheet->setCellValue('J' . $row, number_format($rows['qty_apr'], 0));			
-			$sheet->setCellValue('K' . $row, number_format($rows['qty_mei'], 0));			
-			$sheet->setCellValue('L' . $row, number_format($rows['qty_jun'], 0));			
-			$sheet->setCellValue('M' . $row, number_format($rows['qty_jul'], 0));			
-			$sheet->setCellValue('N' . $row, number_format($rows['qty_agu'], 0));			
-			$sheet->setCellValue('O' . $row, number_format($rows['qty_sep'], 0));			
-			$sheet->setCellValue('P' . $row, number_format($rows['qty_okt'], 0));			
-			$sheet->setCellValue('Q' . $row, number_format($rows['qty_nop'], 0));			
-			$sheet->setCellValue('R' . $row, number_format($rows['qty_des'], 0));			
-			$sheet->setCellValue('S' . $row, number_format($rows['qty_total'], 0));
+			$sheet->setCellValue('G' . $row, $rows['qty_jan']);			
+			$sheet->setCellValue('H' . $row, $rows['qty_feb']);			
+			$sheet->setCellValue('I' . $row, $rows['qty_mar']);			
+			$sheet->setCellValue('J' . $row, $rows['qty_apr']);			
+			$sheet->setCellValue('K' . $row, $rows['qty_mei']);			
+			$sheet->setCellValue('L' . $row, $rows['qty_jun']);			
+			$sheet->setCellValue('M' . $row, $rows['qty_jul']);			
+			$sheet->setCellValue('N' . $row, $rows['qty_agu']);			
+			$sheet->setCellValue('O' . $row, $rows['qty_sep']);			
+			$sheet->setCellValue('P' . $row, $rows['qty_okt']);			
+			$sheet->setCellValue('Q' . $row, $rows['qty_nop']);			
+			$sheet->setCellValue('R' . $row, $rows['qty_des']);			
+			$sheet->setCellValue('S' . $row, $rows['qty_total']);
 
 			// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 			$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -17206,6 +18014,20 @@ class Report extends Controller {
 			$sheet->getStyle('Q' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 			$sheet->getStyle('R' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 			$sheet->getStyle('S' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+			$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
 
 			$item_group = $rows['item_group'];
 			$principal = $rows['principal'];
@@ -17264,19 +18086,19 @@ class Report extends Controller {
 		$sheet->setCellValue('D' . $row, '');
 		$sheet->setCellValue('E' . $row, 'Sub Total ' . $item_group);
 		$sheet->setCellValue('F' . $row, '');
-		$sheet->setCellValue('G' . $row, number_format($qty_jan, 0));
-		$sheet->setCellValue('H' . $row, number_format($qty_feb, 0));
-		$sheet->setCellValue('I' . $row, number_format($qty_mar, 0));
-		$sheet->setCellValue('J' . $row, number_format($qty_apr, 0));
-		$sheet->setCellValue('K' . $row, number_format($qty_mei, 0));
-		$sheet->setCellValue('L' . $row, number_format($qty_jun, 0));
-		$sheet->setCellValue('M' . $row, number_format($qty_jul, 0));
-		$sheet->setCellValue('N' . $row, number_format($qty_agu, 0));
-		$sheet->setCellValue('O' . $row, number_format($qty_sep, 0));
-		$sheet->setCellValue('P' . $row, number_format($qty_okt, 0));
-		$sheet->setCellValue('Q' . $row, number_format($qty_nop, 0));
-		$sheet->setCellValue('R' . $row, number_format($qty_des, 0));
-		$sheet->setCellValue('S' . $row, number_format($qty_year, 0));
+		$sheet->setCellValue('G' . $row, $qty_jan);
+		$sheet->setCellValue('H' . $row, $qty_feb);
+		$sheet->setCellValue('I' . $row, $qty_mar);
+		$sheet->setCellValue('J' . $row, $qty_apr);
+		$sheet->setCellValue('K' . $row, $qty_mei);
+		$sheet->setCellValue('L' . $row, $qty_jun);
+		$sheet->setCellValue('M' . $row, $qty_jul);
+		$sheet->setCellValue('N' . $row, $qty_agu);
+		$sheet->setCellValue('O' . $row, $qty_sep);
+		$sheet->setCellValue('P' . $row, $qty_okt);
+		$sheet->setCellValue('Q' . $row, $qty_nop);
+		$sheet->setCellValue('R' . $row, $qty_des);
+		$sheet->setCellValue('S' . $row, $qty_year);
 
 		// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 		$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -17318,6 +18140,20 @@ class Report extends Controller {
 		$sheet->getStyle('Q' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('R' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('S' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+		$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
 
 		$sheet->getStyle('A' . $row . ':S' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFE4B5');
 		$sheet->getStyle('A' . $row . ':S' . $row)->getFont()->setBold(true);
@@ -17330,19 +18166,19 @@ class Report extends Controller {
 		$sheet->setCellValue('D' . $row, '');
 		$sheet->setCellValue('E' . $row, 'TOTAL ' . $principal);
 		$sheet->setCellValue('F' . $row, '');
-		$sheet->setCellValue('G' . $row, number_format($sub_qty_jan, 0));
-		$sheet->setCellValue('H' . $row, number_format($sub_qty_feb, 0));
-		$sheet->setCellValue('I' . $row, number_format($sub_qty_mar, 0));
-		$sheet->setCellValue('J' . $row, number_format($sub_qty_apr, 0));
-		$sheet->setCellValue('K' . $row, number_format($sub_qty_mei, 0));
-		$sheet->setCellValue('L' . $row, number_format($sub_qty_jun, 0));
-		$sheet->setCellValue('M' . $row, number_format($sub_qty_jul, 0));
-		$sheet->setCellValue('N' . $row, number_format($sub_qty_agu, 0));
-		$sheet->setCellValue('O' . $row, number_format($sub_qty_sep, 0));
-		$sheet->setCellValue('P' . $row, number_format($sub_qty_okt, 0));
-		$sheet->setCellValue('Q' . $row, number_format($sub_qty_nop, 0));
-		$sheet->setCellValue('R' . $row, number_format($sub_qty_des, 0));
-		$sheet->setCellValue('S' . $row, number_format($sub_qty_year, 0));
+		$sheet->setCellValue('G' . $row, $sub_qty_jan);
+		$sheet->setCellValue('H' . $row, $sub_qty_feb);
+		$sheet->setCellValue('I' . $row, $sub_qty_mar);
+		$sheet->setCellValue('J' . $row, $sub_qty_apr);
+		$sheet->setCellValue('K' . $row, $sub_qty_mei);
+		$sheet->setCellValue('L' . $row, $sub_qty_jun);
+		$sheet->setCellValue('M' . $row, $sub_qty_jul);
+		$sheet->setCellValue('N' . $row, $sub_qty_agu);
+		$sheet->setCellValue('O' . $row, $sub_qty_sep);
+		$sheet->setCellValue('P' . $row, $sub_qty_okt);
+		$sheet->setCellValue('Q' . $row, $sub_qty_nop);
+		$sheet->setCellValue('R' . $row, $sub_qty_des);
+		$sheet->setCellValue('S' . $row, $sub_qty_year);
 
 		// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 		$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -17384,6 +18220,20 @@ class Report extends Controller {
 		$sheet->getStyle('Q' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('R' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('S' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+		$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
 
 		$sheet->getStyle('A' . $row . ':S' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');
 		$sheet->getStyle('A' . $row . ':S' . $row)->getFont()->setBold(true);
@@ -17396,19 +18246,19 @@ class Report extends Controller {
 		$sheet->setCellValue('D' . $row, '');
 		$sheet->setCellValue('E' . $row, 'GRAND TOTAL');
 		$sheet->setCellValue('F' . $row, '');
-		$sheet->setCellValue('G' . $row, number_format($total_qty_jan, 0));
-		$sheet->setCellValue('H' . $row, number_format($total_qty_feb, 0));
-		$sheet->setCellValue('I' . $row, number_format($total_qty_mar, 0));
-		$sheet->setCellValue('J' . $row, number_format($total_qty_apr, 0));
-		$sheet->setCellValue('K' . $row, number_format($total_qty_mei, 0));
-		$sheet->setCellValue('L' . $row, number_format($total_qty_jun, 0));
-		$sheet->setCellValue('M' . $row, number_format($total_qty_jul, 0));
-		$sheet->setCellValue('N' . $row, number_format($total_qty_agu, 0));
-		$sheet->setCellValue('O' . $row, number_format($total_qty_sep, 0));
-		$sheet->setCellValue('P' . $row, number_format($total_qty_okt, 0));
-		$sheet->setCellValue('Q' . $row, number_format($total_qty_nop, 0));
-		$sheet->setCellValue('R' . $row, number_format($total_qty_des, 0));
-		$sheet->setCellValue('S' . $row, number_format($total_qty_year, 0));
+		$sheet->setCellValue('G' . $row, $total_qty_jan);
+		$sheet->setCellValue('H' . $row, $total_qty_feb);
+		$sheet->setCellValue('I' . $row, $total_qty_mar);
+		$sheet->setCellValue('J' . $row, $total_qty_apr);
+		$sheet->setCellValue('K' . $row, $total_qty_mei);
+		$sheet->setCellValue('L' . $row, $total_qty_jun);
+		$sheet->setCellValue('M' . $row, $total_qty_jul);
+		$sheet->setCellValue('N' . $row, $total_qty_agu);
+		$sheet->setCellValue('O' . $row, $total_qty_sep);
+		$sheet->setCellValue('P' . $row, $total_qty_okt);
+		$sheet->setCellValue('Q' . $row, $total_qty_nop);
+		$sheet->setCellValue('R' . $row, $total_qty_des);
+		$sheet->setCellValue('S' . $row, $total_qty_year);
 
 		// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 		$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -17450,6 +18300,20 @@ class Report extends Controller {
 		$sheet->getStyle('Q' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('R' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('S' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+		$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
 
 		$sheet->getStyle('A' . $row . ':S' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');
 		$sheet->getStyle('A' . $row . ':S' . $row)->getFont()->setBold(true);
@@ -17698,19 +18562,19 @@ class Report extends Controller {
 				$sheet->setCellValue('D' . $row, '');
 				$sheet->setCellValue('E' . $row, 'Sub Total ' . $item_group);
 				$sheet->setCellValue('F' . $row, '');
-				$sheet->setCellValue('G' . $row, number_format($qty_jan, 0));
-				$sheet->setCellValue('H' . $row, number_format($qty_feb, 0));
-				$sheet->setCellValue('I' . $row, number_format($qty_mar, 0));
-				$sheet->setCellValue('J' . $row, number_format($qty_apr, 0));
-				$sheet->setCellValue('K' . $row, number_format($qty_mei, 0));
-				$sheet->setCellValue('L' . $row, number_format($qty_jun, 0));
-				$sheet->setCellValue('M' . $row, number_format($qty_jul, 0));
-				$sheet->setCellValue('N' . $row, number_format($qty_agu, 0));
-				$sheet->setCellValue('O' . $row, number_format($qty_sep, 0));
-				$sheet->setCellValue('P' . $row, number_format($qty_okt, 0));
-				$sheet->setCellValue('Q' . $row, number_format($qty_nop, 0));
-				$sheet->setCellValue('R' . $row, number_format($qty_des, 0));
-				$sheet->setCellValue('S' . $row, number_format($qty_year, 0));
+				$sheet->setCellValue('G' . $row, $qty_jan);
+				$sheet->setCellValue('H' . $row, $qty_feb);
+				$sheet->setCellValue('I' . $row, $qty_mar);
+				$sheet->setCellValue('J' . $row, $qty_apr);
+				$sheet->setCellValue('K' . $row, $qty_mei);
+				$sheet->setCellValue('L' . $row, $qty_jun);
+				$sheet->setCellValue('M' . $row, $qty_jul);
+				$sheet->setCellValue('N' . $row, $qty_agu);
+				$sheet->setCellValue('O' . $row, $qty_sep);
+				$sheet->setCellValue('P' . $row, $qty_okt);
+				$sheet->setCellValue('Q' . $row, $qty_nop);
+				$sheet->setCellValue('R' . $row, $qty_des);
+				$sheet->setCellValue('S' . $row, $qty_year);
 
 				// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 				$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -17752,6 +18616,20 @@ class Report extends Controller {
 				$sheet->getStyle('Q' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 				$sheet->getStyle('R' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 				$sheet->getStyle('S' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+				$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
 
 				$sheet->getStyle('A' . $row . ':S' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFE4B5');
 				$sheet->getStyle('A' . $row . ':S' . $row)->getFont()->setBold(true);
@@ -17783,19 +18661,19 @@ class Report extends Controller {
 				$sheet->setCellValue('D' . $row, '');
 				$sheet->setCellValue('E' . $row, 'TOTAL ' . $principal);
 				$sheet->setCellValue('F' . $row, '');
-				$sheet->setCellValue('G' . $row, number_format($sub_qty_jan, 0));
-				$sheet->setCellValue('H' . $row, number_format($sub_qty_feb, 0));
-				$sheet->setCellValue('I' . $row, number_format($sub_qty_mar, 0));
-				$sheet->setCellValue('J' . $row, number_format($sub_qty_apr, 0));
-				$sheet->setCellValue('K' . $row, number_format($sub_qty_mei, 0));
-				$sheet->setCellValue('L' . $row, number_format($sub_qty_jun, 0));
-				$sheet->setCellValue('M' . $row, number_format($sub_qty_jul, 0));
-				$sheet->setCellValue('N' . $row, number_format($sub_qty_agu, 0));
-				$sheet->setCellValue('O' . $row, number_format($sub_qty_sep, 0));
-				$sheet->setCellValue('P' . $row, number_format($sub_qty_okt, 0));
-				$sheet->setCellValue('Q' . $row, number_format($sub_qty_nop, 0));
-				$sheet->setCellValue('R' . $row, number_format($sub_qty_des, 0));
-				$sheet->setCellValue('S' . $row, number_format($sub_qty_year, 0));
+				$sheet->setCellValue('G' . $row, $sub_qty_jan);
+				$sheet->setCellValue('H' . $row, $sub_qty_feb);
+				$sheet->setCellValue('I' . $row, $sub_qty_mar);
+				$sheet->setCellValue('J' . $row, $sub_qty_apr);
+				$sheet->setCellValue('K' . $row, $sub_qty_mei);
+				$sheet->setCellValue('L' . $row, $sub_qty_jun);
+				$sheet->setCellValue('M' . $row, $sub_qty_jul);
+				$sheet->setCellValue('N' . $row, $sub_qty_agu);
+				$sheet->setCellValue('O' . $row, $sub_qty_sep);
+				$sheet->setCellValue('P' . $row, $sub_qty_okt);
+				$sheet->setCellValue('Q' . $row, $sub_qty_nop);
+				$sheet->setCellValue('R' . $row, $sub_qty_des);
+				$sheet->setCellValue('S' . $row, $sub_qty_year);
 
 				// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 				$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -17838,6 +18716,20 @@ class Report extends Controller {
 				$sheet->getStyle('R' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 				$sheet->getStyle('S' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
+				$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
+
 				$sheet->getStyle('A' . $row . ':S' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');
 				$sheet->getStyle('A' . $row . ':S' . $row)->getFont()->setBold(true);
 
@@ -17865,19 +18757,19 @@ class Report extends Controller {
 			$sheet->setCellValue('D' . $row, $rows['item_code']);
 			$sheet->setCellValue('E' . $row, $rows['item_name']);
 			$sheet->setCellValue('F' . $row, $rows['unit']);
-			$sheet->setCellValue('G' . $row, number_format($rows['value_jan'], 0));			
-			$sheet->setCellValue('H' . $row, number_format($rows['value_feb'], 0));			
-			$sheet->setCellValue('I' . $row, number_format($rows['value_mar'], 0));			
-			$sheet->setCellValue('J' . $row, number_format($rows['value_apr'], 0));			
-			$sheet->setCellValue('K' . $row, number_format($rows['value_mei'], 0));			
-			$sheet->setCellValue('L' . $row, number_format($rows['value_jun'], 0));			
-			$sheet->setCellValue('M' . $row, number_format($rows['value_jul'], 0));			
-			$sheet->setCellValue('N' . $row, number_format($rows['value_agu'], 0));			
-			$sheet->setCellValue('O' . $row, number_format($rows['value_sep'], 0));			
-			$sheet->setCellValue('P' . $row, number_format($rows['value_okt'], 0));			
-			$sheet->setCellValue('Q' . $row, number_format($rows['value_nop'], 0));			
-			$sheet->setCellValue('R' . $row, number_format($rows['value_des'], 0));			
-			$sheet->setCellValue('S' . $row, number_format($rows['value_total'], 0));
+			$sheet->setCellValue('G' . $row, $rows['value_jan']);			
+			$sheet->setCellValue('H' . $row, $rows['value_feb']);			
+			$sheet->setCellValue('I' . $row, $rows['value_mar']);			
+			$sheet->setCellValue('J' . $row, $rows['value_apr']);			
+			$sheet->setCellValue('K' . $row, $rows['value_mei']);			
+			$sheet->setCellValue('L' . $row, $rows['value_jun']);			
+			$sheet->setCellValue('M' . $row, $rows['value_jul']);			
+			$sheet->setCellValue('N' . $row, $rows['value_agu']);			
+			$sheet->setCellValue('O' . $row, $rows['value_sep']);			
+			$sheet->setCellValue('P' . $row, $rows['value_okt']);			
+			$sheet->setCellValue('Q' . $row, $rows['value_nop']);			
+			$sheet->setCellValue('R' . $row, $rows['value_des']);			
+			$sheet->setCellValue('S' . $row, $rows['value_total']);
 
 			// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 			$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -17919,6 +18811,20 @@ class Report extends Controller {
 			$sheet->getStyle('Q' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 			$sheet->getStyle('R' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 			$sheet->getStyle('S' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+			$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
 
 			$item_group = $rows['item_group'];
 			$principal = $rows['principal'];
@@ -17977,19 +18883,19 @@ class Report extends Controller {
 		$sheet->setCellValue('D' . $row, '');
 		$sheet->setCellValue('E' . $row, 'Sub Total ' . $item_group);
 		$sheet->setCellValue('F' . $row, '');
-		$sheet->setCellValue('G' . $row, number_format($qty_jan, 0));
-		$sheet->setCellValue('H' . $row, number_format($qty_feb, 0));
-		$sheet->setCellValue('I' . $row, number_format($qty_mar, 0));
-		$sheet->setCellValue('J' . $row, number_format($qty_apr, 0));
-		$sheet->setCellValue('K' . $row, number_format($qty_mei, 0));
-		$sheet->setCellValue('L' . $row, number_format($qty_jun, 0));
-		$sheet->setCellValue('M' . $row, number_format($qty_jul, 0));
-		$sheet->setCellValue('N' . $row, number_format($qty_agu, 0));
-		$sheet->setCellValue('O' . $row, number_format($qty_sep, 0));
-		$sheet->setCellValue('P' . $row, number_format($qty_okt, 0));
-		$sheet->setCellValue('Q' . $row, number_format($qty_nop, 0));
-		$sheet->setCellValue('R' . $row, number_format($qty_des, 0));
-		$sheet->setCellValue('S' . $row, number_format($qty_year, 0));
+		$sheet->setCellValue('G' . $row, $qty_jan);
+		$sheet->setCellValue('H' . $row, $qty_feb);
+		$sheet->setCellValue('I' . $row, $qty_mar);
+		$sheet->setCellValue('J' . $row, $qty_apr);
+		$sheet->setCellValue('K' . $row, $qty_mei);
+		$sheet->setCellValue('L' . $row, $qty_jun);
+		$sheet->setCellValue('M' . $row, $qty_jul);
+		$sheet->setCellValue('N' . $row, $qty_agu);
+		$sheet->setCellValue('O' . $row, $qty_sep);
+		$sheet->setCellValue('P' . $row, $qty_okt);
+		$sheet->setCellValue('Q' . $row, $qty_nop);
+		$sheet->setCellValue('R' . $row, $qty_des);
+		$sheet->setCellValue('S' . $row, $qty_year);
 
 		// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 		$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -18031,6 +18937,20 @@ class Report extends Controller {
 		$sheet->getStyle('Q' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('R' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('S' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+		$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
 
 		$sheet->getStyle('A' . $row . ':S' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFE4B5');
 		$sheet->getStyle('A' . $row . ':S' . $row)->getFont()->setBold(true);
@@ -18043,19 +18963,19 @@ class Report extends Controller {
 		$sheet->setCellValue('D' . $row, '');
 		$sheet->setCellValue('E' . $row, 'TOTAL ' . $principal);
 		$sheet->setCellValue('F' . $row, '');
-		$sheet->setCellValue('G' . $row, number_format($sub_qty_jan, 0));
-		$sheet->setCellValue('H' . $row, number_format($sub_qty_feb, 0));
-		$sheet->setCellValue('I' . $row, number_format($sub_qty_mar, 0));
-		$sheet->setCellValue('J' . $row, number_format($sub_qty_apr, 0));
-		$sheet->setCellValue('K' . $row, number_format($sub_qty_mei, 0));
-		$sheet->setCellValue('L' . $row, number_format($sub_qty_jun, 0));
-		$sheet->setCellValue('M' . $row, number_format($sub_qty_jul, 0));
-		$sheet->setCellValue('N' . $row, number_format($sub_qty_agu, 0));
-		$sheet->setCellValue('O' . $row, number_format($sub_qty_sep, 0));
-		$sheet->setCellValue('P' . $row, number_format($sub_qty_okt, 0));
-		$sheet->setCellValue('Q' . $row, number_format($sub_qty_nop, 0));
-		$sheet->setCellValue('R' . $row, number_format($sub_qty_des, 0));
-		$sheet->setCellValue('S' . $row, number_format($sub_qty_year, 0));
+		$sheet->setCellValue('G' . $row, $sub_qty_jan);
+		$sheet->setCellValue('H' . $row, $sub_qty_feb);
+		$sheet->setCellValue('I' . $row, $sub_qty_mar);
+		$sheet->setCellValue('J' . $row, $sub_qty_apr);
+		$sheet->setCellValue('K' . $row, $sub_qty_mei);
+		$sheet->setCellValue('L' . $row, $sub_qty_jun);
+		$sheet->setCellValue('M' . $row, $sub_qty_jul);
+		$sheet->setCellValue('N' . $row, $sub_qty_agu);
+		$sheet->setCellValue('O' . $row, $sub_qty_sep);
+		$sheet->setCellValue('P' . $row, $sub_qty_okt);
+		$sheet->setCellValue('Q' . $row, $sub_qty_nop);
+		$sheet->setCellValue('R' . $row, $sub_qty_des);
+		$sheet->setCellValue('S' . $row, $sub_qty_year);
 
 		// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 		$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -18097,6 +19017,20 @@ class Report extends Controller {
 		$sheet->getStyle('Q' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('R' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('S' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+		$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
 
 		$sheet->getStyle('A' . $row . ':S' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');
 		$sheet->getStyle('A' . $row . ':S' . $row)->getFont()->setBold(true);
@@ -18109,19 +19043,19 @@ class Report extends Controller {
 		$sheet->setCellValue('D' . $row, '');
 		$sheet->setCellValue('E' . $row, 'GRAND TOTAL');
 		$sheet->setCellValue('F' . $row, '');
-		$sheet->setCellValue('G' . $row, number_format($total_qty_jan, 0));
-		$sheet->setCellValue('H' . $row, number_format($total_qty_feb, 0));
-		$sheet->setCellValue('I' . $row, number_format($total_qty_mar, 0));
-		$sheet->setCellValue('J' . $row, number_format($total_qty_apr, 0));
-		$sheet->setCellValue('K' . $row, number_format($total_qty_mei, 0));
-		$sheet->setCellValue('L' . $row, number_format($total_qty_jun, 0));
-		$sheet->setCellValue('M' . $row, number_format($total_qty_jul, 0));
-		$sheet->setCellValue('N' . $row, number_format($total_qty_agu, 0));
-		$sheet->setCellValue('O' . $row, number_format($total_qty_sep, 0));
-		$sheet->setCellValue('P' . $row, number_format($total_qty_okt, 0));
-		$sheet->setCellValue('Q' . $row, number_format($total_qty_nop, 0));
-		$sheet->setCellValue('R' . $row, number_format($total_qty_des, 0));
-		$sheet->setCellValue('S' . $row, number_format($total_qty_year, 0));
+		$sheet->setCellValue('G' . $row, $total_qty_jan);
+		$sheet->setCellValue('H' . $row, $total_qty_feb);
+		$sheet->setCellValue('I' . $row, $total_qty_mar);
+		$sheet->setCellValue('J' . $row, $total_qty_apr);
+		$sheet->setCellValue('K' . $row, $total_qty_mei);
+		$sheet->setCellValue('L' . $row, $total_qty_jun);
+		$sheet->setCellValue('M' . $row, $total_qty_jul);
+		$sheet->setCellValue('N' . $row, $total_qty_agu);
+		$sheet->setCellValue('O' . $row, $total_qty_sep);
+		$sheet->setCellValue('P' . $row, $total_qty_okt);
+		$sheet->setCellValue('Q' . $row, $total_qty_nop);
+		$sheet->setCellValue('R' . $row, $total_qty_des);
+		$sheet->setCellValue('S' . $row, $total_qty_year);
 
 		// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 		$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -18163,6 +19097,20 @@ class Report extends Controller {
 		$sheet->getStyle('Q' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('R' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('S' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+		$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
 
 		$sheet->getStyle('A' . $row . ':S' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');
 		$sheet->getStyle('A' . $row . ':S' . $row)->getFont()->setBold(true);
@@ -31862,22 +32810,22 @@ class Report extends Controller {
 				$sheet->setCellValue('D' . $row, '');
 				$sheet->setCellValue('E' . $row, 'Sub Total ' . $item_group);
 				$sheet->setCellValue('F' . $row, '');
-				$sheet->setCellValue('G' . $row, number_format($qty_w1, 0));
-				$sheet->setCellValue('H' . $row, number_format($value_w1, 2));
-				$sheet->setCellValue('I' . $row, number_format($qty_w2, 0));
-				$sheet->setCellValue('J' . $row, number_format($value_w2, 2));
-				$sheet->setCellValue('K' . $row, number_format($qty_w3, 0));
-				$sheet->setCellValue('L' . $row, number_format($value_w3, 2));
-				$sheet->setCellValue('M' . $row, number_format($qty_w4, 0));
-				$sheet->setCellValue('N' . $row, number_format($value_w4, 2));
-				$sheet->setCellValue('O' . $row, number_format($qty_w5, 0));
-				$sheet->setCellValue('P' . $row, number_format($value_w5, 2));
-				$sheet->setCellValue('Q' . $row, number_format($qty_w6, 0));
-				$sheet->setCellValue('R' . $row, number_format($value_w6, 2));
-				$sheet->setCellValue('S' . $row, number_format($qty_total, 0));
-				$sheet->setCellValue('T' . $row, number_format($value_total, 2));
-				$sheet->setCellValue('U' . $row, number_format($qty_target, 0));
-				$sheet->setCellValue('V' . $row, number_format($value_target, 2));
+				$sheet->setCellValue('G' . $row, $qty_w1);
+				$sheet->setCellValue('H' . $row, $value_w1);
+				$sheet->setCellValue('I' . $row, $qty_w2);
+				$sheet->setCellValue('J' . $row, $value_w2);
+				$sheet->setCellValue('K' . $row, $qty_w3);
+				$sheet->setCellValue('L' . $row, $value_w3);
+				$sheet->setCellValue('M' . $row, $qty_w4);
+				$sheet->setCellValue('N' . $row, $value_w4);
+				$sheet->setCellValue('O' . $row, $qty_w5);
+				$sheet->setCellValue('P' . $row, $value_w5);
+				$sheet->setCellValue('Q' . $row, $qty_w6);
+				$sheet->setCellValue('R' . $row, $value_w6);
+				$sheet->setCellValue('S' . $row, $qty_total);
+				$sheet->setCellValue('T' . $row, $value_total);
+				$sheet->setCellValue('U' . $row, $qty_target);
+				$sheet->setCellValue('V' . $row, $value_target);
 
 				if(qty_target != 0 and value_index != 0)
 				{
@@ -31890,25 +32838,25 @@ class Report extends Controller {
 					$value_index = 0;
 				}
 
-				$sheet->setCellValue('W' . $row, number_format($qty_index, 0));
-				$sheet->setCellValue('X' . $row, number_format($value_index, 0));
-				$sheet->setCellValue('Y' . $row, number_format($qty_ending, 0));
-				$sheet->setCellValue('Z' . $row, number_format($value_ending, 2));
-				$sheet->setCellValue('AA' . $row, number_format($qty_transit, 0));
-				$sheet->setCellValue('AB' . $row, number_format($value_transit, 2));
+				$sheet->setCellValue('W' . $row, $qty_index);
+				$sheet->setCellValue('X' . $row, $value_index);
+				$sheet->setCellValue('Y' . $row, $qty_ending);
+				$sheet->setCellValue('Z' . $row, $value_ending);
+				$sheet->setCellValue('AA' . $row, $qty_transit);
+				$sheet->setCellValue('AB' . $row, $value_transit);
 
 				$qty_total_ending = $qty_ending + $qty_transit;
 				$value_total_ending = $value_ending + $value_transit;
 
-				$sheet->setCellValue('AC' . $row, number_format($qty_total_ending, 0));
-				$sheet->setCellValue('AD' . $row, number_format($value_total_ending, 2));
+				$sheet->setCellValue('AC' . $row, $qty_total_ending);
+				$sheet->setCellValue('AD' . $row, $value_total_ending);
 
-				$sheet->setCellValue('AF' . $row, number_format($qty_w1, 0));
-				$sheet->setCellValue('AG' . $row, number_format($qty_w1 + $qty_w2, 0));
-				$sheet->setCellValue('AH' . $row, number_format($qty_w1 + $qty_w2 + $qty_w3, 0));
-				$sheet->setCellValue('AI' . $row, number_format($qty_w1 + $qty_w2 + $qty_w3 + $qty_w4, 0));
-				$sheet->setCellValue('AJ' . $row, number_format($qty_w1 + $qty_w2 + $qty_w3 + $qty_w4 + $qty_w5, 0));
-				$sheet->setCellValue('AK' . $row, number_format($qty_w1 + $qty_w2 + $qty_w3 + $qty_w4 + $qty_w5 + $qty_w6, 0));
+				$sheet->setCellValue('AF' . $row, $qty_w1);
+				$sheet->setCellValue('AG' . $row, $qty_w1 + $qty_w2);
+				$sheet->setCellValue('AH' . $row, $qty_w1 + $qty_w2 + $qty_w3);
+				$sheet->setCellValue('AI' . $row, $qty_w1 + $qty_w2 + $qty_w3 + $qty_w4);
+				$sheet->setCellValue('AJ' . $row, $qty_w1 + $qty_w2 + $qty_w3 + $qty_w4 + $qty_w5);
+				$sheet->setCellValue('AK' . $row, $qty_w1 + $qty_w2 + $qty_w3 + $qty_w4 + $qty_w5 + $qty_w6);
 
 				// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 				$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -31986,6 +32934,38 @@ class Report extends Controller {
 				$sheet->getStyle('AI' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 				$sheet->getStyle('AJ' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 				$sheet->getStyle('AK' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+				$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('T' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('U' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('V' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('W' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('X' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('Y' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('Z' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('AA' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('AB' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('AC' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('AD' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+
+				$sheet->getStyle('AF' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('AG' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('AH' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('AI' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('AJ' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('AK' . $row)->getNumberFormat()->setFormatCode('#,##0');
 	
 				$sheet->getStyle('A' . $row . ':AD' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFE4B5');
 				$sheet->getStyle('A' . $row . ':AD' . $row)->getFont()->setBold(true);
@@ -32027,22 +33007,22 @@ class Report extends Controller {
 				$sheet->setCellValue('D' . $row, '');
 				$sheet->setCellValue('E' . $row, 'TOTAL ' . $principal);
 				$sheet->setCellValue('F' . $row, '');
-				$sheet->setCellValue('G' . $row, number_format($sub_qty_w1, 0));
-				$sheet->setCellValue('H' . $row, number_format($sub_value_w1, 2));
-				$sheet->setCellValue('I' . $row, number_format($sub_qty_w2, 0));
-				$sheet->setCellValue('J' . $row, number_format($sub_value_w2, 2));
-				$sheet->setCellValue('K' . $row, number_format($sub_qty_w3, 0));
-				$sheet->setCellValue('L' . $row, number_format($sub_value_w3, 2));
-				$sheet->setCellValue('M' . $row, number_format($sub_qty_w4, 0));
-				$sheet->setCellValue('N' . $row, number_format($sub_value_w4, 2));
-				$sheet->setCellValue('O' . $row, number_format($sub_qty_w5, 0));
-				$sheet->setCellValue('P' . $row, number_format($sub_value_w5, 2));
-				$sheet->setCellValue('Q' . $row, number_format($sub_qty_w6, 0));
-				$sheet->setCellValue('R' . $row, number_format($sub_value_w6, 2));
-				$sheet->setCellValue('S' . $row, number_format($sub_qty_total, 0));
-				$sheet->setCellValue('T' . $row, number_format($sub_value_total, 2));
-				$sheet->setCellValue('U' . $row, number_format($sub_qty_target, 0));
-				$sheet->setCellValue('V' . $row, number_format($sub_value_target, 2));
+				$sheet->setCellValue('G' . $row, $sub_qty_w1);
+				$sheet->setCellValue('H' . $row, $sub_value_w1);
+				$sheet->setCellValue('I' . $row, $sub_qty_w2);
+				$sheet->setCellValue('J' . $row, $sub_value_w2);
+				$sheet->setCellValue('K' . $row, $sub_qty_w3);
+				$sheet->setCellValue('L' . $row, $sub_value_w3);
+				$sheet->setCellValue('M' . $row, $sub_qty_w4);
+				$sheet->setCellValue('N' . $row, $sub_value_w4);
+				$sheet->setCellValue('O' . $row, $sub_qty_w5);
+				$sheet->setCellValue('P' . $row, $sub_value_w5);
+				$sheet->setCellValue('Q' . $row, $sub_qty_w6);
+				$sheet->setCellValue('R' . $row, $sub_value_w6);
+				$sheet->setCellValue('S' . $row, $sub_qty_total);
+				$sheet->setCellValue('T' . $row, $sub_value_total);
+				$sheet->setCellValue('U' . $row, $sub_qty_target);
+				$sheet->setCellValue('V' . $row, $sub_value_target);
 
 				if(sub_qty_target != 0 and sub_value_target != 0)
 				{
@@ -32055,25 +33035,25 @@ class Report extends Controller {
 					$sub_value_index = 0;
 				}
 
-				$sheet->setCellValue('W' . $row, number_format($sub_qty_index, 0));
-				$sheet->setCellValue('X' . $row, number_format($sub_value_index, 0));
-				$sheet->setCellValue('Y' . $row, number_format($sub_qty_ending, 0));
-				$sheet->setCellValue('Z' . $row, number_format($sub_value_ending, 2));
-				$sheet->setCellValue('AA' . $row, number_format($sub_qty_transit, 0));
-				$sheet->setCellValue('AB' . $row, number_format($sub_value_transit, 2));
+				$sheet->setCellValue('W' . $row, $sub_qty_index);
+				$sheet->setCellValue('X' . $row, $sub_value_index);
+				$sheet->setCellValue('Y' . $row, $sub_qty_ending);
+				$sheet->setCellValue('Z' . $row, $sub_value_ending);
+				$sheet->setCellValue('AA' . $row, $sub_qty_transit);
+				$sheet->setCellValue('AB' . $row, $sub_value_transit);
 
 				$sub_qty_total_ending = $sub_qty_ending + $sub_qty_transit;
 				$sub_value_total_ending = $sub_value_ending + $sub_value_transit;
 
-				$sheet->setCellValue('AC' . $row, number_format($qty_total_ending, 0));
-				$sheet->setCellValue('AD' . $row, number_format($value_total_ending, 2));
+				$sheet->setCellValue('AC' . $row, $qty_total_ending);
+				$sheet->setCellValue('AD' . $row, $value_total_ending);
 
-				$sheet->setCellValue('AF' . $row, number_format($sub_qty_w1, 0));
-				$sheet->setCellValue('AG' . $row, number_format($sub_qty_w1 + $sub_qty_w2, 0));
-				$sheet->setCellValue('AH' . $row, number_format($sub_qty_w1 + $sub_qty_w2 + $sub_qty_w3, 0));
-				$sheet->setCellValue('AI' . $row, number_format($sub_qty_w1 + $sub_qty_w2 + $sub_qty_w3 + $sub_qty_w4, 0));
-				$sheet->setCellValue('AJ' . $row, number_format($sub_qty_w1 + $sub_qty_w2 + $sub_qty_w3 + $sub_qty_w4 + $sub_qty_w5, 0));
-				$sheet->setCellValue('AK' . $row, number_format($sub_qty_w1 + $sub_qty_w2 + $sub_qty_w3 + $sub_qty_w4 + $sub_qty_w5 + $sub_qty_w6, 0));
+				$sheet->setCellValue('AF' . $row, $sub_qty_w1);
+				$sheet->setCellValue('AG' . $row, $sub_qty_w1 + $sub_qty_w2);
+				$sheet->setCellValue('AH' . $row, $sub_qty_w1 + $sub_qty_w2 + $sub_qty_w3);
+				$sheet->setCellValue('AI' . $row, $sub_qty_w1 + $sub_qty_w2 + $sub_qty_w3 + $sub_qty_w4);
+				$sheet->setCellValue('AJ' . $row, $sub_qty_w1 + $sub_qty_w2 + $sub_qty_w3 + $sub_qty_w4 + $sub_qty_w5);
+				$sheet->setCellValue('AK' . $row, $sub_qty_w1 + $sub_qty_w2 + $sub_qty_w3 + $sub_qty_w4 + $sub_qty_w5 + $sub_qty_w6);
 				
 				// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 				$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -32153,6 +33133,38 @@ class Report extends Controller {
 				$sheet->getStyle('AJ' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 				$sheet->getStyle('AK' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
+				$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('T' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('U' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('V' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('W' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('X' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('Y' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('Z' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('AA' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('AB' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('AC' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('AD' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+
+				$sheet->getStyle('AF' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('AG' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('AH' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('AI' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('AJ' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('AK' . $row)->getNumberFormat()->setFormatCode('#,##0');
+
 				$sheet->getStyle('A' . $row . ':AD' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');
 				$sheet->getStyle('A' . $row . ':AD' . $row)->getFont()->setBold(true);
 
@@ -32191,22 +33203,22 @@ class Report extends Controller {
 			$sheet->setCellValue('E' . $row, $rows['item_name']);
 			$sheet->setCellValue('F' . $row, $rows['unit']);
 
-			$sheet->setCellValue('G' . $row, number_format($rows['qty_w1'], 0));
-			$sheet->setCellValue('H' . $row, number_format($rows['value_w1'], 2));
-			$sheet->setCellValue('I' . $row, number_format($rows['qty_w2'], 0));
-			$sheet->setCellValue('J' . $row, number_format($rows['value_w2'], 2));
-			$sheet->setCellValue('K' . $row, number_format($rows['qty_w3'], 0));
-			$sheet->setCellValue('L' . $row, number_format($rows['value_w3'], 2));
-			$sheet->setCellValue('M' . $row, number_format($rows['qty_w4'], 0));
-			$sheet->setCellValue('N' . $row, number_format($rows['value_w4'], 2));
-			$sheet->setCellValue('O' . $row, number_format($rows['qty_w5'], 0));
-			$sheet->setCellValue('P' . $row, number_format($rows['value_w5'], 2));
-			$sheet->setCellValue('Q' . $row, number_format($rows['qty_w6'], 0));
-			$sheet->setCellValue('R' . $row, number_format($rows['value_w6'], 2));
-			$sheet->setCellValue('S' . $row, number_format($rows['qty_total'], 0));
-			$sheet->setCellValue('T' . $row, number_format($rows['value_total'], 2));
-			$sheet->setCellValue('U' . $row, number_format($rows['target_qty'], 0));
-			$sheet->setCellValue('V' . $row, number_format($rows['target_value'], 2));
+			$sheet->setCellValue('G' . $row, $rows['qty_w1']);
+			$sheet->setCellValue('H' . $row, $rows['value_w1']);
+			$sheet->setCellValue('I' . $row, $rows['qty_w2']);
+			$sheet->setCellValue('J' . $row, $rows['value_w2']);
+			$sheet->setCellValue('K' . $row, $rows['qty_w3']);
+			$sheet->setCellValue('L' . $row, $rows['value_w3']);
+			$sheet->setCellValue('M' . $row, $rows['qty_w4']);
+			$sheet->setCellValue('N' . $row, $rows['value_w4']);
+			$sheet->setCellValue('O' . $row, $rows['qty_w5']);
+			$sheet->setCellValue('P' . $row, $rows['value_w5']);
+			$sheet->setCellValue('Q' . $row, $rows['qty_w6']);
+			$sheet->setCellValue('R' . $row, $rows['value_w6']);
+			$sheet->setCellValue('S' . $row, $rows['qty_total']);
+			$sheet->setCellValue('T' . $row, $rows['value_total']);
+			$sheet->setCellValue('U' . $row, $rows['target_qty']);
+			$sheet->setCellValue('V' . $row, $rows['target_value']);
 
 			if($row['target_qty'] != 0 and $row['target_value'] != 0)
 			{
@@ -32219,25 +33231,25 @@ class Report extends Controller {
 			$index_val = 0;
 			}
 
-			$sheet->setCellValue('W' . $row, number_format($index_qty, 0));
-			$sheet->setCellValue('X' . $row, number_format($index_val, 0));
-			$sheet->setCellValue('Y' . $row, number_format($rows['ending_qty'], 0));
-			$sheet->setCellValue('Z' . $row, number_format($rows['ending_value'], 2));
-			$sheet->setCellValue('AA' . $row, number_format($rows['transit_qty'], 0));
-			$sheet->setCellValue('AB' . $row, number_format($rows['transit_value'], 2));
+			$sheet->setCellValue('W' . $row, $index_qty);
+			$sheet->setCellValue('X' . $row, $index_val);
+			$sheet->setCellValue('Y' . $row, $rows['ending_qty']);
+			$sheet->setCellValue('Z' . $row, $rows['ending_value']);
+			$sheet->setCellValue('AA' . $row, $rows['transit_qty']);
+			$sheet->setCellValue('AB' . $row, $rows['transit_value']);
 
 			$total_ending_qty = $row['ending_qty'] + $row['transit_qty'];
 			$total_ending_val = $row['ending_value'] + $row['transit_value'];
 
-			$sheet->setCellValue('AC' . $row, number_format($total_ending_qty, 0));
-			$sheet->setCellValue('AD' . $row, number_format($total_ending_val, 2));
+			$sheet->setCellValue('AC' . $row, $total_ending_qty);
+			$sheet->setCellValue('AD' . $row, $total_ending_val);
 
-			$sheet->setCellValue('AF' . $row, number_format($rows['qty_w1'], 0));
-			$sheet->setCellValue('AG' . $row, number_format($rows['qty_w1'] + $rows['qty_w2'], 0));
-			$sheet->setCellValue('AH' . $row, number_format($rows['qty_w1'] + $rows['qty_w2'] + $rows['qty_w3'], 0));
-			$sheet->setCellValue('AI' . $row, number_format($rows['qty_w1'] + $rows['qty_w2'] + $rows['qty_w3'] + $rows['qty_w4'], 0));
-			$sheet->setCellValue('AJ' . $row, number_format($rows['qty_w1'] + $rows['qty_w2'] + $rows['qty_w3'] + $rows['qty_w4'] + $rows['qty_w5'], 0));
-			$sheet->setCellValue('AK' . $row, number_format($rows['qty_w1'] + $rows['qty_w2'] + $rows['qty_w3'] + $rows['qty_w4'] + $rows['qty_w5'] + $rows['qty_w6'], 0));
+			$sheet->setCellValue('AF' . $row, $rows['qty_w1']);
+			$sheet->setCellValue('AG' . $row, $rows['qty_w1'] + $rows['qty_w2']);
+			$sheet->setCellValue('AH' . $row, $rows['qty_w1'] + $rows['qty_w2'] + $rows['qty_w3']);
+			$sheet->setCellValue('AI' . $row, $rows['qty_w1'] + $rows['qty_w2'] + $rows['qty_w3'] + $rows['qty_w4']);
+			$sheet->setCellValue('AJ' . $row, $rows['qty_w1'] + $rows['qty_w2'] + $rows['qty_w3'] + $rows['qty_w4'] + $rows['qty_w5']);
+			$sheet->setCellValue('AK' . $row, $rows['qty_w1'] + $rows['qty_w2'] + $rows['qty_w3'] + $rows['qty_w4'] + $rows['qty_w5'] + $rows['qty_w6']);
 
 			// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 			$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -32317,6 +33329,38 @@ class Report extends Controller {
 			$sheet->getStyle('AJ' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 			$sheet->getStyle('AK' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
+			$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('T' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('U' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('V' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('W' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('X' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('Y' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('Z' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('AA' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AB' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('AC' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AD' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+
+			$sheet->getStyle('AF' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AG' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AH' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AI' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AJ' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AK' . $row)->getNumberFormat()->setFormatCode('#,##0');
+
 			$item_group = $rows['item_group'];
 			$principal = $rows['principal'];
 
@@ -32395,22 +33439,22 @@ class Report extends Controller {
 		$sheet->setCellValue('D' . $row, '');
 		$sheet->setCellValue('E' . $row, 'Sub Total ' . $item_group);
 		$sheet->setCellValue('F' . $row, '');
-		$sheet->setCellValue('G' . $row, number_format($qty_w1, 0));
-		$sheet->setCellValue('H' . $row, number_format($value_w1, 2));
-		$sheet->setCellValue('I' . $row, number_format($qty_w2, 0));
-		$sheet->setCellValue('J' . $row, number_format($value_w2, 2));
-		$sheet->setCellValue('K' . $row, number_format($qty_w3, 0));
-		$sheet->setCellValue('L' . $row, number_format($value_w3, 2));
-		$sheet->setCellValue('M' . $row, number_format($qty_w4, 0));
-		$sheet->setCellValue('N' . $row, number_format($value_w4, 2));
-		$sheet->setCellValue('O' . $row, number_format($qty_w5, 0));
-		$sheet->setCellValue('P' . $row, number_format($value_w5, 2));
-		$sheet->setCellValue('Q' . $row, number_format($qty_w6, 0));
-		$sheet->setCellValue('R' . $row, number_format($value_w6, 2));
-		$sheet->setCellValue('S' . $row, number_format($qty_total, 0));
-		$sheet->setCellValue('T' . $row, number_format($value_total, 2));
-		$sheet->setCellValue('U' . $row, number_format($qty_target, 0));
-		$sheet->setCellValue('V' . $row, number_format($value_target, 2));
+		$sheet->setCellValue('G' . $row, $qty_w1);
+		$sheet->setCellValue('H' . $row, $value_w1);
+		$sheet->setCellValue('I' . $row, $qty_w2);
+		$sheet->setCellValue('J' . $row, $value_w2);
+		$sheet->setCellValue('K' . $row, $qty_w3);
+		$sheet->setCellValue('L' . $row, $value_w3);
+		$sheet->setCellValue('M' . $row, $qty_w4);
+		$sheet->setCellValue('N' . $row, $value_w4);
+		$sheet->setCellValue('O' . $row, $qty_w5);
+		$sheet->setCellValue('P' . $row, $value_w5);
+		$sheet->setCellValue('Q' . $row, $qty_w6);
+		$sheet->setCellValue('R' . $row, $value_w6);
+		$sheet->setCellValue('S' . $row, $qty_total);
+		$sheet->setCellValue('T' . $row, $value_total);
+		$sheet->setCellValue('U' . $row, $qty_target);
+		$sheet->setCellValue('V' . $row, $value_target);
 
 		if(qty_target != 0 and value_index != 0)
 		{
@@ -32423,25 +33467,25 @@ class Report extends Controller {
 			$value_index = 0;
 		}
 
-		$sheet->setCellValue('W' . $row, number_format($qty_index, 0));
-		$sheet->setCellValue('X' . $row, number_format($value_index, 2));
-		$sheet->setCellValue('Y' . $row, number_format($qty_ending, 0));
-		$sheet->setCellValue('Z' . $row, number_format($value_ending, 2));
-		$sheet->setCellValue('AA' . $row, number_format($qty_transit, 0));
-		$sheet->setCellValue('AB' . $row, number_format($value_transit, 2));
+		$sheet->setCellValue('W' . $row, $qty_index);
+		$sheet->setCellValue('X' . $row, $value_index);
+		$sheet->setCellValue('Y' . $row, $qty_ending);
+		$sheet->setCellValue('Z' . $row, $value_ending);
+		$sheet->setCellValue('AA' . $row, $qty_transit);
+		$sheet->setCellValue('AB' . $row, $value_transit);
 
 		$qty_total_ending = $qty_ending + $qty_transit;
 		$value_total_ending = $value_ending + $value_transit;
 
-		$sheet->setCellValue('AC' . $row, number_format($qty_total_ending, 0));
-		$sheet->setCellValue('AD' . $row, number_format($value_total_ending, 2));
+		$sheet->setCellValue('AC' . $row, $qty_total_ending);
+		$sheet->setCellValue('AD' . $row, $value_total_ending);
 
-		$sheet->setCellValue('AF' . $row, number_format($qty_w1, 0));
-		$sheet->setCellValue('AG' . $row, number_format($qty_w1 + $qty_w2, 0));
-		$sheet->setCellValue('AH' . $row, number_format($qty_w1 + $qty_w2 + $qty_w3, 0));
-		$sheet->setCellValue('AI' . $row, number_format($qty_w1 + $qty_w2 + $qty_w3 + $qty_w4, 0));
-		$sheet->setCellValue('AJ' . $row, number_format($qty_w1 + $qty_w2 + $qty_w3 + $qty_w4 + $qty_w5, 0));
-		$sheet->setCellValue('AK' . $row, number_format($qty_w1 + $qty_w2 + $qty_w3 + $qty_w4 + $qty_w5 + $qty_w6, 0));
+		$sheet->setCellValue('AF' . $row, $qty_w1);
+		$sheet->setCellValue('AG' . $row, $qty_w1 + $qty_w2);
+		$sheet->setCellValue('AH' . $row, $qty_w1 + $qty_w2 + $qty_w3);
+		$sheet->setCellValue('AI' . $row, $qty_w1 + $qty_w2 + $qty_w3 + $qty_w4);
+		$sheet->setCellValue('AJ' . $row, $qty_w1 + $qty_w2 + $qty_w3 + $qty_w4 + $qty_w5);
+		$sheet->setCellValue('AK' . $row, $qty_w1 + $qty_w2 + $qty_w3 + $qty_w4 + $qty_w5 + $qty_w6);
 
 
 		// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
@@ -32522,6 +33566,38 @@ class Report extends Controller {
 		$sheet->getStyle('AJ' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('AK' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
+		$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('T' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('U' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('V' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('W' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('X' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('Y' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('Z' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AA' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AB' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AC' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AD' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+
+		$sheet->getStyle('AF' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AG' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AH' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AI' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AJ' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AK' . $row)->getNumberFormat()->setFormatCode('#,##0');
+
 		$sheet->getStyle('A' . $row . ':AD' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFE4B5');
 		$sheet->getStyle('A' . $row . ':AD' . $row)->getFont()->setBold(true);
 		$sheet->getStyle('AF' . $row . ':AK' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFE4B5');
@@ -32535,22 +33611,22 @@ class Report extends Controller {
 		$sheet->setCellValue('D' . $row, '');
 		$sheet->setCellValue('E' . $row, 'TOTAL ' . $principal);
 		$sheet->setCellValue('F' . $row, '');
-		$sheet->setCellValue('G' . $row, number_format($sub_qty_w1, 0));
-		$sheet->setCellValue('H' . $row, number_format($sub_value_w1, 2));
-		$sheet->setCellValue('I' . $row, number_format($sub_qty_w2, 0));
-		$sheet->setCellValue('J' . $row, number_format($sub_value_w2, 2));
-		$sheet->setCellValue('K' . $row, number_format($sub_qty_w3, 0));
-		$sheet->setCellValue('L' . $row, number_format($sub_value_w3, 0));
-		$sheet->setCellValue('M' . $row, number_format($sub_qty_w4, 0));
-		$sheet->setCellValue('N' . $row, number_format($sub_value_w4, 2));
-		$sheet->setCellValue('O' . $row, number_format($sub_qty_w5, 0));
-		$sheet->setCellValue('P' . $row, number_format($sub_value_w5, 2));
-		$sheet->setCellValue('Q' . $row, number_format($sub_qty_w6, 0));
-		$sheet->setCellValue('R' . $row, number_format($sub_value_w6, 2));
-		$sheet->setCellValue('S' . $row, number_format($sub_qty_total, 0));
-		$sheet->setCellValue('T' . $row, number_format($sub_value_total, 2));
-		$sheet->setCellValue('U' . $row, number_format($sub_qty_target, 0));
-		$sheet->setCellValue('V' . $row, number_format($sub_value_target, 2));
+		$sheet->setCellValue('G' . $row, $sub_qty_w1);
+		$sheet->setCellValue('H' . $row, $sub_value_w1);
+		$sheet->setCellValue('I' . $row, $sub_qty_w2);
+		$sheet->setCellValue('J' . $row, $sub_value_w2);
+		$sheet->setCellValue('K' . $row, $sub_qty_w3);
+		$sheet->setCellValue('L' . $row, $sub_value_w3);
+		$sheet->setCellValue('M' . $row, $sub_qty_w4);
+		$sheet->setCellValue('N' . $row, $sub_value_w4);
+		$sheet->setCellValue('O' . $row, $sub_qty_w5);
+		$sheet->setCellValue('P' . $row, $sub_value_w5);
+		$sheet->setCellValue('Q' . $row, $sub_qty_w6);
+		$sheet->setCellValue('R' . $row, $sub_value_w6);
+		$sheet->setCellValue('S' . $row, $sub_qty_total);
+		$sheet->setCellValue('T' . $row, $sub_value_total);
+		$sheet->setCellValue('U' . $row, $sub_qty_target);
+		$sheet->setCellValue('V' . $row, $sub_value_target);
 
 		if(sub_qty_target != 0 and sub_value_target != 0)
 		{
@@ -32563,25 +33639,25 @@ class Report extends Controller {
 			$sub_value_index = 0;
 		}
 
-		$sheet->setCellValue('W' . $row, number_format($sub_qty_index, 0));
-		$sheet->setCellValue('X' . $row, number_format($sub_value_index, 0));
-		$sheet->setCellValue('Y' . $row, number_format($sub_qty_ending, 0));
-		$sheet->setCellValue('Z' . $row, number_format($sub_value_ending, 2));
-		$sheet->setCellValue('AA' . $row, number_format($sub_qty_transit, 0));
-		$sheet->setCellValue('AB' . $row, number_format($sub_value_transit, 2));
+		$sheet->setCellValue('W' . $row, $sub_qty_index);
+		$sheet->setCellValue('X' . $row, $sub_value_index);
+		$sheet->setCellValue('Y' . $row, $sub_qty_ending);
+		$sheet->setCellValue('Z' . $row, $sub_value_ending);
+		$sheet->setCellValue('AA' . $row, $sub_qty_transit);
+		$sheet->setCellValue('AB' . $row, $sub_value_transit);
 
 		$sub_qty_total_ending = $sub_qty_ending + $sub_qty_transit;
 		$sub_value_total_ending = $sub_value_ending + $sub_value_transit;
 
-		$sheet->setCellValue('AC' . $row, number_format($sub_qty_total_ending, 0));
-		$sheet->setCellValue('AD' . $row, number_format($sub_value_total_ending, 2));
+		$sheet->setCellValue('AC' . $row, $sub_qty_total_ending);
+		$sheet->setCellValue('AD' . $row, $sub_value_total_ending);
 
-		$sheet->setCellValue('AF' . $row, number_format($sub_qty_w1, 0));
-		$sheet->setCellValue('AG' . $row, number_format($sub_qty_w1 + $sub_qty_w2, 0));
-		$sheet->setCellValue('AH' . $row, number_format($sub_qty_w1 + $sub_qty_w2 + $sub_qty_w3, 0));
-		$sheet->setCellValue('AI' . $row, number_format($sub_qty_w1 + $sub_qty_w2 + $sub_qty_w3 + $sub_qty_w4, 0));
-		$sheet->setCellValue('AJ' . $row, number_format($sub_qty_w1 + $sub_qty_w2 + $sub_qty_w3 + $sub_qty_w4 + $sub_qty_w5, 0));
-		$sheet->setCellValue('AK' . $row, number_format($sub_qty_w1 + $sub_qty_w2 + $sub_qty_w3 + $sub_qty_w4 + $sub_qty_w5 + $sub_qty_w6, 0));
+		$sheet->setCellValue('AF' . $row, $sub_qty_w1);
+		$sheet->setCellValue('AG' . $row, $sub_qty_w1 + $sub_qty_w2);
+		$sheet->setCellValue('AH' . $row, $sub_qty_w1 + $sub_qty_w2 + $sub_qty_w3);
+		$sheet->setCellValue('AI' . $row, $sub_qty_w1 + $sub_qty_w2 + $sub_qty_w3 + $sub_qty_w4);
+		$sheet->setCellValue('AJ' . $row, $sub_qty_w1 + $sub_qty_w2 + $sub_qty_w3 + $sub_qty_w4 + $sub_qty_w5);
+		$sheet->setCellValue('AK' . $row, $sub_qty_w1 + $sub_qty_w2 + $sub_qty_w3 + $sub_qty_w4 + $sub_qty_w5 + $sub_qty_w6);
 		
 
 		// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
@@ -32662,6 +33738,38 @@ class Report extends Controller {
 		$sheet->getStyle('AJ' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('AK' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
+		$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('T' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('U' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('V' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('W' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('X' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('Y' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('Z' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AA' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AB' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AC' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AD' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+
+		$sheet->getStyle('AF' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AG' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AH' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AI' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AJ' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AK' . $row)->getNumberFormat()->setFormatCode('#,##0');
+
 		$sheet->getStyle('A' . $row . ':AD' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');
 		$sheet->getStyle('A' . $row . ':AD' . $row)->getFont()->setBold(true);
 		$sheet->getStyle('AF' . $row . ':AK' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');
@@ -32675,22 +33783,22 @@ class Report extends Controller {
 		$sheet->setCellValue('D' . $row, '');
 		$sheet->setCellValue('E' . $row, 'GRAND TOTAL');
 		$sheet->setCellValue('F' . $row, '');
-		$sheet->setCellValue('G' . $row, number_format($total_qty_w1, 0));
-		$sheet->setCellValue('H' . $row, number_format($total_value_w1, 2));
-		$sheet->setCellValue('I' . $row, number_format($total_qty_w2, 0));
-		$sheet->setCellValue('J' . $row, number_format($total_value_w2, 2));
-		$sheet->setCellValue('K' . $row, number_format($total_qty_w3, 0));
-		$sheet->setCellValue('L' . $row, number_format($total_value_w3, 2));
-		$sheet->setCellValue('M' . $row, number_format($total_qty_w4, 0));
-		$sheet->setCellValue('N' . $row, number_format($total_value_w4, 2));
-		$sheet->setCellValue('O' . $row, number_format($total_qty_w5, 0));
-		$sheet->setCellValue('P' . $row, number_format($total_value_w5, 2));
-		$sheet->setCellValue('Q' . $row, number_format($total_qty_w6, 0));
-		$sheet->setCellValue('R' . $row, number_format($total_value_w6, 2));
-		$sheet->setCellValue('S' . $row, number_format($total_qty_total, 0));
-		$sheet->setCellValue('T' . $row, number_format($total_value_total, 2));
-		$sheet->setCellValue('U' . $row, number_format($total_qty_target, 0));
-		$sheet->setCellValue('V' . $row, number_format($total_value_target, 2));
+		$sheet->setCellValue('G' . $row, $total_qty_w1);
+		$sheet->setCellValue('H' . $row, $total_value_w1);
+		$sheet->setCellValue('I' . $row, $total_qty_w2);
+		$sheet->setCellValue('J' . $row, $total_value_w2);
+		$sheet->setCellValue('K' . $row, $total_qty_w3);
+		$sheet->setCellValue('L' . $row, $total_value_w3);
+		$sheet->setCellValue('M' . $row, $total_qty_w4);
+		$sheet->setCellValue('N' . $row, $total_value_w4);
+		$sheet->setCellValue('O' . $row, $total_qty_w5);
+		$sheet->setCellValue('P' . $row, $total_value_w5);
+		$sheet->setCellValue('Q' . $row, $total_qty_w6);
+		$sheet->setCellValue('R' . $row, $total_value_w6);
+		$sheet->setCellValue('S' . $row, $total_qty_total);
+		$sheet->setCellValue('T' . $row, $total_value_total);
+		$sheet->setCellValue('U' . $row, $total_qty_target);
+		$sheet->setCellValue('V' . $row, $total_value_target);
 
 		if(total_qty_target != 0 and total_value_target != 0)
 		{
@@ -32703,25 +33811,25 @@ class Report extends Controller {
 			$total_value_index = 0;
 		}
 
-		$sheet->setCellValue('W' . $row, number_format($total_qty_index, 0));
-		$sheet->setCellValue('X' . $row, number_format($total_value_index, 0));
-		$sheet->setCellValue('Y' . $row, number_format($total_qty_ending, 0));
-		$sheet->setCellValue('Z' . $row, number_format($total_value_ending, 2));
-		$sheet->setCellValue('AA' . $row, number_format($total_qty_transit, 0));
-		$sheet->setCellValue('AB' . $row, number_format($total_value_transit, 2));
+		$sheet->setCellValue('W' . $row, $total_qty_index);
+		$sheet->setCellValue('X' . $row, $total_value_index);
+		$sheet->setCellValue('Y' . $row, $total_qty_ending);
+		$sheet->setCellValue('Z' . $row, $total_value_ending);
+		$sheet->setCellValue('AA' . $row, $total_qty_transit);
+		$sheet->setCellValue('AB' . $row, $total_value_transit);
 
 		$total_qty_total_ending = $total_qty_ending + $total_qty_transit;
 		$total_value_total_ending = $total_value_ending + $total_value_transit;
 
-		$sheet->setCellValue('AC' . $row, number_format($total_qty_total_ending, 0));
-		$sheet->setCellValue('AD' . $row, number_format($total_value_total_ending, 2));
+		$sheet->setCellValue('AC' . $row, $total_qty_total_ending);
+		$sheet->setCellValue('AD' . $row, $total_value_total_ending);
 
-		$sheet->setCellValue('AF' . $row, number_format($total_qty_w1, 0));
-		$sheet->setCellValue('AG' . $row, number_format($total_qty_w1 + $total_qty_w2, 0));
-		$sheet->setCellValue('AH' . $row, number_format($total_qty_w1 + $total_qty_w2 + $total_qty_w3, 0));
-		$sheet->setCellValue('AI' . $row, number_format($total_qty_w1 + $total_qty_w2 + $total_qty_w3 + $total_qty_w4, 0));
-		$sheet->setCellValue('AJ' . $row, number_format($total_qty_w1 + $total_qty_w2 + $total_qty_w3 + $total_qty_w4 + $total_qty_w5, 0));
-		$sheet->setCellValue('AK' . $row, number_format($total_qty_w1 + $total_qty_w2 + $total_qty_w3 + $total_qty_w4 + $total_qty_w5 + $total_qty_w6, 0));
+		$sheet->setCellValue('AF' . $row, $total_qty_w1);
+		$sheet->setCellValue('AG' . $row, $total_qty_w1 + $total_qty_w2);
+		$sheet->setCellValue('AH' . $row, $total_qty_w1 + $total_qty_w2 + $total_qty_w3);
+		$sheet->setCellValue('AI' . $row, $total_qty_w1 + $total_qty_w2 + $total_qty_w3 + $total_qty_w4);
+		$sheet->setCellValue('AJ' . $row, $total_qty_w1 + $total_qty_w2 + $total_qty_w3 + $total_qty_w4 + $total_qty_w5);
+		$sheet->setCellValue('AK' . $row, $total_qty_w1 + $total_qty_w2 + $total_qty_w3 + $total_qty_w4 + $total_qty_w5 + $total_qty_w6);
 
 		// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 		$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -32800,6 +33908,38 @@ class Report extends Controller {
 		$sheet->getStyle('AI' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('AJ' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('AK' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+		$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('T' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('U' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('V' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('W' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('X' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('Y' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('Z' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AA' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AB' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AC' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AD' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+
+		$sheet->getStyle('AF' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AG' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AH' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AI' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AJ' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AK' . $row)->getNumberFormat()->setFormatCode('#,##0');
 
 		$sheet->getStyle('A' . $row . ':AD' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');
 		$sheet->getStyle('A' . $row . ':AD' . $row)->getFont()->setBold(true);
@@ -33304,6 +34444,33 @@ class Report extends Controller {
 				$sheet->getStyle('AB' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 				$sheet->getStyle('AC' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 				$sheet->getStyle('AD' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+				$sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('T' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('U' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('V' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('W' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('X' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('Y' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('Z' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('AA' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('AB' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('AC' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('AD' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 	
 				$sheet->getStyle('A' . $row . ':AD' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFE4B5');
 				$sheet->getStyle('A' . $row . ':AD' . $row)->getFont()->setBold(true);
@@ -33425,6 +34592,33 @@ class Report extends Controller {
 				$sheet->getStyle('AB' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 				$sheet->getStyle('AC' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 				$sheet->getStyle('AD' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+				$sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('T' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('U' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('V' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$sheet->getStyle('W' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('X' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('Y' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('Z' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('AA' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('AB' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('AC' . $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->getStyle('AD' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 
 				$sheet->getStyle('A' . $row . ':AD' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');
 				$sheet->getStyle('A' . $row . ':AD' . $row)->getFont()->setBold(true);
@@ -33574,6 +34768,33 @@ class Report extends Controller {
 			$sheet->getStyle('AB' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 			$sheet->getStyle('AC' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 			$sheet->getStyle('AD' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+			$sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('T' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('U' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('V' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('W' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('X' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('Y' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('Z' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AA' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AB' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AC' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AD' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 
 			$item_group = $rows['item_group'];
 			$principal = $rows['principal'];
@@ -33730,6 +34951,33 @@ class Report extends Controller {
 		$sheet->getStyle('AC' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('AD' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
+		$sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('T' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('U' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('V' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('W' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('X' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('Y' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('Z' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AA' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AB' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AC' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AD' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+
 		$sheet->getStyle('A' . $row . ':AD' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFE4B5');
 		$sheet->getStyle('A' . $row . ':AD' . $row)->getFont()->setBold(true);
 
@@ -33831,6 +35079,33 @@ class Report extends Controller {
 		$sheet->getStyle('AC' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('AD' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
+		$sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('T' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('U' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('V' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('W' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('X' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('Y' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('Z' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AA' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AB' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AC' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AD' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+
 		$sheet->getStyle('A' . $row . ':AD' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');
 		$sheet->getStyle('A' . $row . ':AD' . $row)->getFont()->setBold(true);
 
@@ -33929,6 +35204,33 @@ class Report extends Controller {
 		$sheet->getStyle('AB' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('AC' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('AD' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+		$sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('T' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('U' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('V' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('W' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('X' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('Y' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('Z' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AA' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AB' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AC' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AD' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 
 		$sheet->getStyle('A' . $row . ':AD' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');
 		$sheet->getStyle('A' . $row . ':AD' . $row)->getFont()->setBold(true);
@@ -34713,78 +36015,78 @@ class Report extends Controller {
 			$sheet->setCellValue('A' . $row, $no);
     		$sheet->setCellValue('B' . $row, $rows['salesman']);
 
-			$sheet->setCellValue('C' . $row, number_format($rows['qty_jan'], 0));
-			$sheet->setCellValue('D' . $row, number_format($rows['value_jan'], 2));
-			$sheet->setCellValue('E' . $row, number_format($rows['target_qty_jan'], 0));
-			$sheet->setCellValue('F' . $row, number_format($rows['target_value_jan'], 2));
-			$sheet->setCellValue('G' . $row, number_format($rows['idx_qty_jan'], 0));
-			$sheet->setCellValue('H' . $row, number_format($rows['idx_value_jan'], 0));
-			$sheet->setCellValue('I' . $row, number_format($rows['qty_feb'], 0));
-			$sheet->setCellValue('J' . $row, number_format($rows['value_feb'], 2));
-			$sheet->setCellValue('K' . $row, number_format($rows['target_qty_feb'], 0));
-			$sheet->setCellValue('L' . $row, number_format($rows['target_value_feb'], 2));
-			$sheet->setCellValue('M' . $row, number_format($rows['idx_qty_feb'], 0));
-			$sheet->setCellValue('N' . $row, number_format($rows['idx_value_feb'], 0));
-			$sheet->setCellValue('O' . $row, number_format($rows['qty_mar'], 0));
-			$sheet->setCellValue('P' . $row, number_format($rows['value_mar'], 2));
-			$sheet->setCellValue('Q' . $row, number_format($rows['target_qty_mar'], 0));
-			$sheet->setCellValue('R' . $row, number_format($rows['target_value_mar'], 2));
-			$sheet->setCellValue('S' . $row, number_format($rows['idx_qty_mar'], 0));
-			$sheet->setCellValue('T' . $row, number_format($rows['idx_value_mar'], 0));
-			$sheet->setCellValue('U' . $row, number_format($rows['qty_apr'], 0));
-			$sheet->setCellValue('V' . $row, number_format($rows['value_apr'], 2));
-			$sheet->setCellValue('W' . $row, number_format($rows['target_qty_apr'], 0));
-			$sheet->setCellValue('X' . $row, number_format($rows['target_value_apr'], 2));
-			$sheet->setCellValue('Y' . $row, number_format($rows['idx_qty_apr'], 0));
-			$sheet->setCellValue('Z' . $row, number_format($rows['idx_value_apr'], 0));
-			$sheet->setCellValue('AA' . $row, number_format($rows['qty_mei'], 0));
-			$sheet->setCellValue('AB' . $row, number_format($rows['value_mei'], 2));
-			$sheet->setCellValue('AC' . $row, number_format($rows['target_qty_mei'], 0));
-			$sheet->setCellValue('AD' . $row, number_format($rows['target_value_mei'], 2));
-			$sheet->setCellValue('AE' . $row, number_format($rows['idx_qty_mei'], 0));
-			$sheet->setCellValue('AF' . $row, number_format($rows['idx_value_mei'], 0));
-			$sheet->setCellValue('AG' . $row, number_format($rows['qty_jun'], 0));
-			$sheet->setCellValue('AH' . $row, number_format($rows['value_jun'], 2));
-			$sheet->setCellValue('AI' . $row, number_format($rows['target_qty_jun'], 0));
-			$sheet->setCellValue('AJ' . $row, number_format($rows['target_value_jun'], 2));
-			$sheet->setCellValue('AK' . $row, number_format($rows['idx_qty_jun'], 0));
-			$sheet->setCellValue('AL' . $row, number_format($rows['idx_value_jun'], 0));
-			$sheet->setCellValue('AM' . $row, number_format($rows['qty_jul'], 0));
-			$sheet->setCellValue('AN' . $row, number_format($rows['value_jul'], 2));
-			$sheet->setCellValue('AO' . $row, number_format($rows['target_qty_jul'], 0));
-			$sheet->setCellValue('AP' . $row, number_format($rows['target_value_jul'], 2));
-			$sheet->setCellValue('AQ' . $row, number_format($rows['idx_qty_jul'], 0));
-			$sheet->setCellValue('AR' . $row, number_format($rows['idx_value_jul'], 0));
-			$sheet->setCellValue('AS' . $row, number_format($rows['qty_agu'], 0));
-			$sheet->setCellValue('AT' . $row, number_format($rows['value_agu'], 2));
-			$sheet->setCellValue('AU' . $row, number_format($rows['target_qty_agu'], 0));
-			$sheet->setCellValue('AV' . $row, number_format($rows['target_value_agu'], 2));
-			$sheet->setCellValue('AW' . $row, number_format($rows['idx_qty_agu'], 0));
-			$sheet->setCellValue('AX' . $row, number_format($rows['idx_value_agu'], 0));
-			$sheet->setCellValue('AY' . $row, number_format($rows['qty_sep'], 0));
-			$sheet->setCellValue('AZ' . $row, number_format($rows['value_sep'], 2));
-			$sheet->setCellValue('BA' . $row, number_format($rows['target_qty_sep'], 0));
-			$sheet->setCellValue('BB' . $row, number_format($rows['target_value_sep'], 2));
-			$sheet->setCellValue('BC' . $row, number_format($rows['idx_qty_sep'], 0));
-			$sheet->setCellValue('BD' . $row, number_format($rows['idx_value_sep'], 0));
-			$sheet->setCellValue('BE' . $row, number_format($rows['qty_okt'], 0));
-			$sheet->setCellValue('BF' . $row, number_format($rows['value_okt'], 2));
-			$sheet->setCellValue('BG' . $row, number_format($rows['target_qty_okt'], 0));
-			$sheet->setCellValue('BH' . $row, number_format($rows['target_value_okt'], 2));
-			$sheet->setCellValue('BI' . $row, number_format($rows['idx_qty_okt'], 0));
-			$sheet->setCellValue('BJ' . $row, number_format($rows['idx_value_okt'], 0));
-			$sheet->setCellValue('BK' . $row, number_format($rows['qty_nop'], 0));
-			$sheet->setCellValue('BL' . $row, number_format($rows['value_nop'], 2));
-			$sheet->setCellValue('BM' . $row, number_format($rows['target_qty_nop'], 0));
-			$sheet->setCellValue('BN' . $row, number_format($rows['target_value_nop'], 2));
-			$sheet->setCellValue('BO' . $row, number_format($rows['idx_qty_nop'], 0));
-			$sheet->setCellValue('BP' . $row, number_format($rows['idx_value_nop'], 0));
-			$sheet->setCellValue('BQ' . $row, number_format($rows['qty_des'], 0));
-			$sheet->setCellValue('BR' . $row, number_format($rows['value_des'], 2));
-			$sheet->setCellValue('BS' . $row, number_format($rows['target_qty_des'], 0));
-			$sheet->setCellValue('BT' . $row, number_format($rows['target_value_des'], 2));
-			$sheet->setCellValue('BU' . $row, number_format($rows['idx_qty_des'], 0));
-			$sheet->setCellValue('BV' . $row, number_format($rows['idx_value_des'], 0));
+			$sheet->setCellValue('C' . $row, $rows['qty_jan']);
+			$sheet->setCellValue('D' . $row, $rows['value_jan']);
+			$sheet->setCellValue('E' . $row, $rows['target_qty_jan']);
+			$sheet->setCellValue('F' . $row, $rows['target_value_jan']);
+			$sheet->setCellValue('G' . $row, $rows['idx_qty_jan']);
+			$sheet->setCellValue('H' . $row, $rows['idx_value_jan']);
+			$sheet->setCellValue('I' . $row, $rows['qty_feb']);
+			$sheet->setCellValue('J' . $row, $rows['value_feb']);
+			$sheet->setCellValue('K' . $row, $rows['target_qty_feb']);
+			$sheet->setCellValue('L' . $row, $rows['target_value_feb']);
+			$sheet->setCellValue('M' . $row, $rows['idx_qty_feb']);
+			$sheet->setCellValue('N' . $row, $rows['idx_value_feb']);
+			$sheet->setCellValue('O' . $row, $rows['qty_mar']);
+			$sheet->setCellValue('P' . $row, $rows['value_mar']);
+			$sheet->setCellValue('Q' . $row, $rows['target_qty_mar']);
+			$sheet->setCellValue('R' . $row, $rows['target_value_mar']);
+			$sheet->setCellValue('S' . $row, $rows['idx_qty_mar']);
+			$sheet->setCellValue('T' . $row, $rows['idx_value_mar']);
+			$sheet->setCellValue('U' . $row, $rows['qty_apr']);
+			$sheet->setCellValue('V' . $row, $rows['value_apr']);
+			$sheet->setCellValue('W' . $row, $rows['target_qty_apr']);
+			$sheet->setCellValue('X' . $row, $rows['target_value_apr']);
+			$sheet->setCellValue('Y' . $row, $rows['idx_qty_apr']);
+			$sheet->setCellValue('Z' . $row, $rows['idx_value_apr']);
+			$sheet->setCellValue('AA' . $row, $rows['qty_mei']);
+			$sheet->setCellValue('AB' . $row, $rows['value_mei']);
+			$sheet->setCellValue('AC' . $row, $rows['target_qty_mei']);
+			$sheet->setCellValue('AD' . $row, $rows['target_value_mei']);
+			$sheet->setCellValue('AE' . $row, $rows['idx_qty_mei']);
+			$sheet->setCellValue('AF' . $row, $rows['idx_value_mei']);
+			$sheet->setCellValue('AG' . $row, $rows['qty_jun']);
+			$sheet->setCellValue('AH' . $row, $rows['value_jun']);
+			$sheet->setCellValue('AI' . $row, $rows['target_qty_jun']);
+			$sheet->setCellValue('AJ' . $row, $rows['target_value_jun']);
+			$sheet->setCellValue('AK' . $row, $rows['idx_qty_jun']);
+			$sheet->setCellValue('AL' . $row, $rows['idx_value_jun']);
+			$sheet->setCellValue('AM' . $row, $rows['qty_jul']);
+			$sheet->setCellValue('AN' . $row, $rows['value_jul']);
+			$sheet->setCellValue('AO' . $row, $rows['target_qty_jul']);
+			$sheet->setCellValue('AP' . $row, $rows['target_value_jul']);
+			$sheet->setCellValue('AQ' . $row, $rows['idx_qty_jul']);
+			$sheet->setCellValue('AR' . $row, $rows['idx_value_jul']);
+			$sheet->setCellValue('AS' . $row, $rows['qty_agu']);
+			$sheet->setCellValue('AT' . $row, $rows['value_agu']);
+			$sheet->setCellValue('AU' . $row, $rows['target_qty_agu']);
+			$sheet->setCellValue('AV' . $row, $rows['target_value_agu']);
+			$sheet->setCellValue('AW' . $row, $rows['idx_qty_agu']);
+			$sheet->setCellValue('AX' . $row, $rows['idx_value_agu']);
+			$sheet->setCellValue('AY' . $row, $rows['qty_sep']);
+			$sheet->setCellValue('AZ' . $row, $rows['value_sep']);
+			$sheet->setCellValue('BA' . $row, $rows['target_qty_sep']);
+			$sheet->setCellValue('BB' . $row, $rows['target_value_sep']);
+			$sheet->setCellValue('BC' . $row, $rows['idx_qty_sep']);
+			$sheet->setCellValue('BD' . $row, $rows['idx_value_sep']);
+			$sheet->setCellValue('BE' . $row, $rows['qty_okt']);
+			$sheet->setCellValue('BF' . $row, $rows['value_okt']);
+			$sheet->setCellValue('BG' . $row, $rows['target_qty_okt']);
+			$sheet->setCellValue('BH' . $row, $rows['target_value_okt']);
+			$sheet->setCellValue('BI' . $row, $rows['idx_qty_okt']);
+			$sheet->setCellValue('BJ' . $row, $rows['idx_value_okt']);
+			$sheet->setCellValue('BK' . $row, $rows['qty_nop']);
+			$sheet->setCellValue('BL' . $row, $rows['value_nop']);
+			$sheet->setCellValue('BM' . $row, $rows['target_qty_nop']);
+			$sheet->setCellValue('BN' . $row, $rows['target_value_nop']);
+			$sheet->setCellValue('BO' . $row, $rows['idx_qty_nop']);
+			$sheet->setCellValue('BP' . $row, $rows['idx_value_nop']);
+			$sheet->setCellValue('BQ' . $row, $rows['qty_des']);
+			$sheet->setCellValue('BR' . $row, $rows['value_des']);
+			$sheet->setCellValue('BS' . $row, $rows['target_qty_des']);
+			$sheet->setCellValue('BT' . $row, $rows['target_value_des']);
+			$sheet->setCellValue('BU' . $row, $rows['idx_qty_des']);
+			$sheet->setCellValue('BV' . $row, $rows['idx_value_des']);
 
 			$qty_year = $rows['qty_jan'] + $rows['qty_feb'] + $rows['qty_mar'] + $rows['qty_apr'] + $rows['qty_mei'] + $rows['qty_jun'] + $rows['qty_jul'] + $rows['qty_agu'] + $rows['qty_sep'] + $rows['qty_okt'] + $rows['qty_nop'] + $rows['qty_des'];
 			$target_qty_year = $rows['target_qty_jan'] + $rows['target_qty_feb'] + $rows['target_qty_mar'] + $rows['target_qty_apr'] + $rows['target_qty_mei'] + $rows['target_qty_jun'] + $rows['target_qty_jul'] + $rows['target_qty_agu'] + $rows['target_qty_sep'] + $rows['target_qty_okt'] + $rows['target_qty_nop'] + $rows['target_qty_des'];
@@ -34799,12 +36101,12 @@ class Report extends Controller {
 			// $target_val_avg = $target_val_year / 12;
 			// $idx_val_avg = ($val_avg/($target_val_avg ?: 1))*100;
 
-			$sheet->setCellValue('BW' . $row, number_format($qty_year, 0));
-			$sheet->setCellValue('BX' . $row, number_format($val_year, 2));
-			$sheet->setCellValue('BY' . $row, number_format($target_qty_year, 0));
-			$sheet->setCellValue('BZ' . $row, number_format($target_val_year, 2));
-			$sheet->setCellValue('CA' . $row, number_format($idx_qty_year, 0));
-			$sheet->setCellValue('CB' . $row, number_format($idx_val_year, 0));
+			$sheet->setCellValue('BW' . $row, $qty_year);
+			$sheet->setCellValue('BX' . $row, $val_year);
+			$sheet->setCellValue('BY' . $row, $target_qty_year);
+			$sheet->setCellValue('BZ' . $row, $target_val_year);
+			$sheet->setCellValue('CA' . $row, $idx_qty_year);
+			$sheet->setCellValue('CB' . $row, $idx_val_year);
 
 			// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 			$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -34966,6 +36268,85 @@ class Report extends Controller {
 			$sheet->getStyle('BZ' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 			$sheet->getStyle('CA' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 			$sheet->getStyle('CB' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+			$sheet->getStyle('C' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('D' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('T' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('U' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('V' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('W' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('X' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('Y' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('Z' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AA' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AB' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('AC' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AD' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('AE' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AF' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AG' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AH' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('AI' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AJ' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('AK' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AL' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AM' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AN' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('AO' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AP' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('AQ' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AR' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AS' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AT' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('AU' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AV' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('AW' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AX' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AY' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AZ' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('BA' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('BB' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('BC' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('BD' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('BE' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('BF' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('BG' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('BH' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('BI' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('BJ' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('BK' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('BL' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('BM' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('BN' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('BO' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('BP' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('BQ' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('BR' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('BS' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('BT' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('BU' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('BV' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('BW' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('BX' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('BY' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('BZ' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('CA' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('CB' . $row)->getNumberFormat()->setFormatCode('#,##0');
 
 			$qty_jan += $rows['qty_jan'];
 			$qty_feb += $rows['qty_feb'];
@@ -35131,78 +36512,78 @@ class Report extends Controller {
 		//$row = $row + 1;
 		$sheet->setCellValue('A' . $row, '');
 		$sheet->setCellValue('B' . $row, 'TOTAL');
-		$sheet->setCellValue('C' . $row, number_format($total_qty_jan, 0));
-		$sheet->setCellValue('D' . $row, number_format($total_val_jan, 2));
-		$sheet->setCellValue('E' . $row, number_format($total_target_qty_jan, 0));
-		$sheet->setCellValue('F' . $row, number_format($total_target_val_jan, 2));
-		$sheet->setCellValue('G' . $row, number_format($total_idx_qty_jan, 0));
-		$sheet->setCellValue('H' . $row, number_format($total_idx_val_jan, 0));
-		$sheet->setCellValue('I' . $row, number_format($total_qty_feb, 0));
-		$sheet->setCellValue('J' . $row, number_format($total_val_feb, 2));
-		$sheet->setCellValue('K' . $row, number_format($total_target_qty_feb, 0));
-		$sheet->setCellValue('L' . $row, number_format($total_target_val_feb, 2));
-		$sheet->setCellValue('M' . $row, number_format($total_idx_qty_feb, 0));
-		$sheet->setCellValue('N' . $row, number_format($total_idx_val_feb, 0));
-		$sheet->setCellValue('O' . $row, number_format($total_qty_mar, 0));
-		$sheet->setCellValue('P' . $row, number_format($total_val_mar, 2));
-		$sheet->setCellValue('Q' . $row, number_format($total_target_qty_mar, 0));
-		$sheet->setCellValue('R' . $row, number_format($total_target_val_mar, 2));
-		$sheet->setCellValue('S' . $row, number_format($total_idx_qty_mar, 0));
-		$sheet->setCellValue('T' . $row, number_format($total_idx_val_mar, 0));
-		$sheet->setCellValue('U' . $row, number_format($total_qty_apr, 0));
-		$sheet->setCellValue('V' . $row, number_format($total_val_apr, 2));
-		$sheet->setCellValue('W' . $row, number_format($total_target_qty_apr, 0));
-		$sheet->setCellValue('X' . $row, number_format($total_target_val_apr, 2));
-		$sheet->setCellValue('Y' . $row, number_format($total_idx_qty_apr, 0));
-		$sheet->setCellValue('Z' . $row, number_format($total_idx_val_apr, 0));
-		$sheet->setCellValue('AA' . $row, number_format($total_qty_mei, 0));
-		$sheet->setCellValue('AB' . $row, number_format($total_val_mei, 2));
-		$sheet->setCellValue('AC' . $row, number_format($total_target_qty_mei, 0));
-		$sheet->setCellValue('AD' . $row, number_format($total_target_val_mei, 2));
-		$sheet->setCellValue('AE' . $row, number_format($total_idx_qty_mei, 0));
-		$sheet->setCellValue('AF' . $row, number_format($total_idx_val_mei, 0));
-		$sheet->setCellValue('AG' . $row, number_format($total_qty_jun, 0));
-		$sheet->setCellValue('AH' . $row, number_format($total_val_jun, 2));
-		$sheet->setCellValue('AI' . $row, number_format($total_target_qty_jun, 0));
-		$sheet->setCellValue('AJ' . $row, number_format($total_target_val_jun, 2));
-		$sheet->setCellValue('AK' . $row, number_format($total_idx_qty_jun, 0));
-		$sheet->setCellValue('AL' . $row, number_format($total_idx_val_jun, 0));
-		$sheet->setCellValue('AM' . $row, number_format($total_qty_jul, 0));
-		$sheet->setCellValue('AN' . $row, number_format($total_val_jul, 2));
-		$sheet->setCellValue('AO' . $row, number_format($total_target_qty_jul, 0));
-		$sheet->setCellValue('AP' . $row, number_format($total_target_val_jul, 2));
-		$sheet->setCellValue('AQ' . $row, number_format($total_idx_qty_jul, 0));
-		$sheet->setCellValue('AR' . $row, number_format($total_idx_val_jul, 0));
-		$sheet->setCellValue('AS' . $row, number_format($total_qty_agu, 0));
-		$sheet->setCellValue('AT' . $row, number_format($total_val_agu, 2));
-		$sheet->setCellValue('AU' . $row, number_format($total_target_qty_agu, 0));
-		$sheet->setCellValue('AV' . $row, number_format($total_target_val_agu, 2));
-		$sheet->setCellValue('AW' . $row, number_format($total_idx_qty_agu, 0));
-		$sheet->setCellValue('AX' . $row, number_format($total_idx_val_agu, 0));
-		$sheet->setCellValue('AY' . $row, number_format($total_qty_sep, 0));
-		$sheet->setCellValue('AZ' . $row, number_format($total_val_sep, 2));
-		$sheet->setCellValue('BA' . $row, number_format($total_target_qty_sep, 0));
-		$sheet->setCellValue('BB' . $row, number_format($total_target_val_sep, 2));
-		$sheet->setCellValue('BC' . $row, number_format($total_idx_qty_sep, 0));
-		$sheet->setCellValue('BD' . $row, number_format($total_idx_val_sep, 0));
-		$sheet->setCellValue('BE' . $row, number_format($total_qty_okt, 0));
-		$sheet->setCellValue('BF' . $row, number_format($total_val_okt, 2));
-		$sheet->setCellValue('BG' . $row, number_format($total_target_qty_okt, 0));
-		$sheet->setCellValue('BH' . $row, number_format($total_target_val_okt, 2));
-		$sheet->setCellValue('BI' . $row, number_format($total_idx_qty_okt, 0));
-		$sheet->setCellValue('BJ' . $row, number_format($total_idx_val_okt, 0));
-		$sheet->setCellValue('BK' . $row, number_format($total_qty_nop, 0));
-		$sheet->setCellValue('BL' . $row, number_format($total_val_nop, 2));
-		$sheet->setCellValue('BM' . $row, number_format($total_target_qty_nop, 0));
-		$sheet->setCellValue('BN' . $row, number_format($total_target_val_nop, 2));
-		$sheet->setCellValue('BO' . $row, number_format($total_idx_qty_nop, 0));
-		$sheet->setCellValue('BP' . $row, number_format($total_idx_val_nop, 0));
-		$sheet->setCellValue('BQ' . $row, number_format($total_qty_des, 0));
-		$sheet->setCellValue('BR' . $row, number_format($total_val_des, 2));
-		$sheet->setCellValue('BS' . $row, number_format($total_target_qty_des, 0));
-		$sheet->setCellValue('BT' . $row, number_format($total_target_val_des, 2));
-		$sheet->setCellValue('BU' . $row, number_format($total_idx_qty_des, 0));
-		$sheet->setCellValue('BV' . $row, number_format($total_idx_val_des, 0));
+		$sheet->setCellValue('C' . $row, $total_qty_jan);
+		$sheet->setCellValue('D' . $row, $total_val_jan);
+		$sheet->setCellValue('E' . $row, $total_target_qty_jan);
+		$sheet->setCellValue('F' . $row, $total_target_val_jan);
+		$sheet->setCellValue('G' . $row, $total_idx_qty_jan);
+		$sheet->setCellValue('H' . $row, $total_idx_val_jan);
+		$sheet->setCellValue('I' . $row, $total_qty_feb);
+		$sheet->setCellValue('J' . $row, $total_val_feb);
+		$sheet->setCellValue('K' . $row, $total_target_qty_feb);
+		$sheet->setCellValue('L' . $row, $total_target_val_feb);
+		$sheet->setCellValue('M' . $row, $total_idx_qty_feb);
+		$sheet->setCellValue('N' . $row, $total_idx_val_feb);
+		$sheet->setCellValue('O' . $row, $total_qty_mar);
+		$sheet->setCellValue('P' . $row, $total_val_mar);
+		$sheet->setCellValue('Q' . $row, $total_target_qty_mar);
+		$sheet->setCellValue('R' . $row, $total_target_val_mar);
+		$sheet->setCellValue('S' . $row, $total_idx_qty_mar);
+		$sheet->setCellValue('T' . $row, $total_idx_val_mar);
+		$sheet->setCellValue('U' . $row, $total_qty_apr);
+		$sheet->setCellValue('V' . $row, $total_val_apr);
+		$sheet->setCellValue('W' . $row, $total_target_qty_apr);
+		$sheet->setCellValue('X' . $row, $total_target_val_apr);
+		$sheet->setCellValue('Y' . $row, $total_idx_qty_apr);
+		$sheet->setCellValue('Z' . $row, $total_idx_val_apr);
+		$sheet->setCellValue('AA' . $row, $total_qty_mei);
+		$sheet->setCellValue('AB' . $row, $total_val_mei);
+		$sheet->setCellValue('AC' . $row, $total_target_qty_mei);
+		$sheet->setCellValue('AD' . $row, $total_target_val_mei);
+		$sheet->setCellValue('AE' . $row, $total_idx_qty_mei);
+		$sheet->setCellValue('AF' . $row, $total_idx_val_mei);
+		$sheet->setCellValue('AG' . $row, $total_qty_jun);
+		$sheet->setCellValue('AH' . $row, $total_val_jun);
+		$sheet->setCellValue('AI' . $row, $total_target_qty_jun);
+		$sheet->setCellValue('AJ' . $row, $total_target_val_jun);
+		$sheet->setCellValue('AK' . $row, $total_idx_qty_jun);
+		$sheet->setCellValue('AL' . $row, $total_idx_val_jun);
+		$sheet->setCellValue('AM' . $row, $total_qty_jul);
+		$sheet->setCellValue('AN' . $row, $total_val_jul);
+		$sheet->setCellValue('AO' . $row, $total_target_qty_jul);
+		$sheet->setCellValue('AP' . $row, $total_target_val_jul);
+		$sheet->setCellValue('AQ' . $row, $total_idx_qty_jul);
+		$sheet->setCellValue('AR' . $row, $total_idx_val_jul);
+		$sheet->setCellValue('AS' . $row, $total_qty_agu);
+		$sheet->setCellValue('AT' . $row, $total_val_agu);
+		$sheet->setCellValue('AU' . $row, $total_target_qty_agu);
+		$sheet->setCellValue('AV' . $row, $total_target_val_agu);
+		$sheet->setCellValue('AW' . $row, $total_idx_qty_agu);
+		$sheet->setCellValue('AX' . $row, $total_idx_val_agu);
+		$sheet->setCellValue('AY' . $row, $total_qty_sep);
+		$sheet->setCellValue('AZ' . $row, $total_val_sep);
+		$sheet->setCellValue('BA' . $row, $total_target_qty_sep);
+		$sheet->setCellValue('BB' . $row, $total_target_val_sep);
+		$sheet->setCellValue('BC' . $row, $total_idx_qty_sep);
+		$sheet->setCellValue('BD' . $row, $total_idx_val_sep);
+		$sheet->setCellValue('BE' . $row, $total_qty_okt);
+		$sheet->setCellValue('BF' . $row, $total_val_okt);
+		$sheet->setCellValue('BG' . $row, $total_target_qty_okt);
+		$sheet->setCellValue('BH' . $row, $total_target_val_okt);
+		$sheet->setCellValue('BI' . $row, $total_idx_qty_okt);
+		$sheet->setCellValue('BJ' . $row, $total_idx_val_okt);
+		$sheet->setCellValue('BK' . $row, $total_qty_nop);
+		$sheet->setCellValue('BL' . $row, $total_val_nop);
+		$sheet->setCellValue('BM' . $row, $total_target_qty_nop);
+		$sheet->setCellValue('BN' . $row, $total_target_val_nop);
+		$sheet->setCellValue('BO' . $row, $total_idx_qty_nop);
+		$sheet->setCellValue('BP' . $row, $total_idx_val_nop);
+		$sheet->setCellValue('BQ' . $row, $total_qty_des);
+		$sheet->setCellValue('BR' . $row, $total_val_des);
+		$sheet->setCellValue('BS' . $row, $total_target_qty_des);
+		$sheet->setCellValue('BT' . $row, $total_target_val_des);
+		$sheet->setCellValue('BU' . $row, $total_idx_qty_des);
+		$sheet->setCellValue('BV' . $row, $total_idx_val_des);
 
 		$total_qty_year = $total_qty_jan + $total_qty_feb + $total_qty_mar + $total_qty_apr + $total_qty_mei + $total_qty_jun + $total_qty_jul + $total_qty_agu + $total_qty_sep + $total_qty_okt + $total_qty_nop + $total_qty_des;
 		$total_target_qty_year = $total_target_qty_jan + $total_target_qty_feb + $total_target_qty_mar + $total_target_qty_apr + $total_target_qty_mei + $total_target_qty_jun + $total_target_qty_jul + $total_target_qty_agu + $total_target_qty_sep + $total_target_qty_okt + $total_target_qty_nop + $total_target_qty_des;
@@ -35211,12 +36592,12 @@ class Report extends Controller {
 		$total_target_val_year = $total_target_val_jan + $total_target_val_feb + $total_target_val_mar + $total_target_val_apr + $total_target_val_mei + $total_target_val_jun + $total_target_val_jul + $total_target_val_agu + $total_target_val_sep + $total_target_val_okt + $total_target_val_nop + $total_target_val_des;
 		$total_idx_val_year = ($total_val_year/($total_target_val_year ?: 1))*100;
 
-		$sheet->setCellValue('BW' . $row, number_format($total_qty_year, 0));
-		$sheet->setCellValue('BX' . $row, number_format($total_val_year, 2));
-		$sheet->setCellValue('BY' . $row, number_format($total_target_qty_year, 0));
-		$sheet->setCellValue('BZ' . $row, number_format($total_target_val_year, 2));
-		$sheet->setCellValue('CA' . $row, number_format($total_idx_qty_year, 0));
-		$sheet->setCellValue('CB' . $row, number_format($total_idx_val_year, 0));
+		$sheet->setCellValue('BW' . $row, $total_qty_year);
+		$sheet->setCellValue('BX' . $row, $total_val_year);
+		$sheet->setCellValue('BY' . $row, $total_target_qty_year);
+		$sheet->setCellValue('BZ' . $row, $total_target_val_year);
+		$sheet->setCellValue('CA' . $row, $total_idx_qty_year);
+		$sheet->setCellValue('CB' . $row, $total_idx_val_year);
 
 		// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 		$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -35379,6 +36760,85 @@ class Report extends Controller {
 		$sheet->getStyle('BZ' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('CA' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('CB' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+		$sheet->getStyle('C' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('D' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('T' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('U' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('V' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('W' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('X' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('Y' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('Z' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AA' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AB' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AC' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AD' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AE' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AF' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AG' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AH' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AI' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AJ' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AK' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AL' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AM' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AN' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AO' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AP' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AQ' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AR' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AS' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AT' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AU' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AV' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AW' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AX' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AY' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AZ' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('BA' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('BB' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('BC' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('BD' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('BE' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('BF' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('BG' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('BH' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('BI' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('BJ' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('BK' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('BL' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('BM' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('BN' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('BO' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('BP' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('BQ' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('BR' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('BS' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('BT' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('BU' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('BV' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('BW' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('BX' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('BY' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('BZ' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('CA' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('CB' . $row)->getNumberFormat()->setFormatCode('#,##0');
 
 		$sheet->getStyle('A' . $row . ':CB' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');
 		$sheet->getStyle('A' . $row . ':CB' . $row)->getFont()->setBold(true);
@@ -35733,17 +37193,19 @@ class Report extends Controller {
 			$a=1;
 			$baris=4;
 			foreach($data['sku_code'] as $sku):
-				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($rows['d'.$a], 0));
+				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $rows['d'.$a]);
 				$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 				$baris = $baris + 1;
-				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($rows['%'.$a], 2));
+				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $rows['%'.$a]);
+				$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0.00');
 				$a++;
 				$baris++;
 			endforeach;
 			
 			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $rows['dtotal']);
 			$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, number_format($rows['%total'], 0));
+			$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, $rows['%total']);
+			$sheet->getStyleByColumnAndRow($data_col + $baris + 1, $data_row)->getNumberFormat()->setFormatCode('#,##0.00');
 
 			$total_RO += $rows['RO'];
 			$x = 1;
@@ -35796,17 +37258,19 @@ class Report extends Controller {
 		$a=1;
 		$baris=4;
 		foreach($data['sku_code'] as $sku):
-			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($total_d[$a], 0));
+			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $total_d[$a]);
 			$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 			$baris = $baris + 1;
-			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($total_p[$a], 2));
+			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $total_p[$a]);
+			$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0.00');
 			$a++;
 			$baris++;
 		endforeach;
 		
 		$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $total_dAll);
 		$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, number_format($total_pAll, 2));
+		$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, $total_pAll);
+		$sheet->getStyleByColumnAndRow($data_col + $baris + 1, $data_row)->getNumberFormat()->setFormatCode('#,##0.00');
 
 		$sheet->getStyleByColumnAndRow(1, $data_row, $last_col + 2, $data_row)->applyFromArray($style_range);
 		$sheet->getStyleByColumnAndRow(1, $data_row, $last_col + 2, $data_row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');
@@ -36092,17 +37556,19 @@ class Report extends Controller {
 			$a=1;
 			$baris=4;
 			foreach($data['sku_code'] as $sku):
-				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($rows['d'.$a], 0));
+				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $rows['d'.$a]);
 				$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 				$baris = $baris + 1;
-				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($rows['%'.$a], 2));
+				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $rows['%'.$a]);
+				$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0.00');
 				$a++;
 				$baris++;
 			endforeach;
 			
 			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $rows['dtotal']);
 			$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, number_format($rows['%total'], 0));
+			$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, $rows['%total']);
+			$sheet->getStyleByColumnAndRow($data_col + $baris + 1, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 
 			$total_RO += $rows['RO'];
 			$x = 1;
@@ -36155,17 +37621,19 @@ class Report extends Controller {
 		$a=1;
 		$baris=4;
 		foreach($data['sku_code'] as $sku):
-			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($total_d[$a], 0));
+			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $total_d[$a]);
 			$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 			$baris = $baris + 1;
-			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($total_p[$a], 2));
+			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $total_p[$a]);
+			$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0.00');
 			$a++;
 			$baris++;
 		endforeach;
 		
 		$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $total_dAll);
 		$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, number_format($total_pAll, 2));
+		$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, $total_pAll);
+		$sheet->getStyleByColumnAndRow($data_col + $baris + 1, $data_row)->getNumberFormat()->setFormatCode('#,##0.00');
 
 		$sheet->getStyleByColumnAndRow(1, $data_row, $last_col + 2, $data_row)->applyFromArray($style_range);
 		$sheet->getStyleByColumnAndRow(1, $data_row, $last_col + 2, $data_row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');
@@ -36324,17 +37792,19 @@ class Report extends Controller {
 					$a=1;
 					$baris=4;
 					foreach($data['sku_code'] as $sku):
-						$sheet_arr[$arr]->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($row3['d'.$a], 0));
+						$sheet_arr[$arr]->setCellValueByColumnAndRow($data_col + $baris, $data_row, $row3['d'.$a]);
 						$sheet_arr[$arr]->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 						$baris = $baris + 1;
-						$sheet_arr[$arr]->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($row3['%'.$a], 2));
+						$sheet_arr[$arr]->setCellValueByColumnAndRow($data_col + $baris, $data_row, $row3['%'.$a]);
+						$sheet_arr[$arr]->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0.00');
 						$a++;
 						$baris++;
 					endforeach;
 					
 					$sheet_arr[$arr]->setCellValueByColumnAndRow($data_col + $baris, $data_row, $row3['dtotal']);
 					$sheet_arr[$arr]->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
-					$sheet_arr[$arr]->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, number_format($row3['%total'], 0));
+					$sheet_arr[$arr]->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, $row3['%total']);
+					$sheet_arr[$arr]->getStyleByColumnAndRow($data_col + $baris + 1, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 
 					$total_RO += $row3['RO'];
 					$x = 1;
@@ -36387,17 +37857,19 @@ class Report extends Controller {
 				$a=1;
 				$baris=4;
 				foreach($data['sku_code'] as $sku):
-					$sheet_arr[$arr]->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($total_d[$a], 0));
+					$sheet_arr[$arr]->setCellValueByColumnAndRow($data_col + $baris, $data_row, $total_d[$a]);
 					$sheet_arr[$arr]->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 					$baris = $baris + 1;
-					$sheet_arr[$arr]->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($total_p[$a], 2));
+					$sheet_arr[$arr]->setCellValueByColumnAndRow($data_col + $baris, $data_row, $total_p[$a]);
+					$sheet_arr[$arr]->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0.00');
 					$a++;
 					$baris++;
 				endforeach;
 				
 				$sheet_arr[$arr]->setCellValueByColumnAndRow($data_col + $baris, $data_row, $total_dAll);
 				$sheet_arr[$arr]->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet_arr[$arr]->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, number_format($total_pAll, 2));
+				$sheet_arr[$arr]->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, $total_pAll);
+				$sheet_arr[$arr]->getStyleByColumnAndRow($data_col + $baris + 1, $data_row)->getNumberFormat()->setFormatCode('#,##0.00');
 
 				$sheet_arr[$arr]->getStyleByColumnAndRow(1, $data_row, $last_col + 2, $data_row)->applyFromArray($style_range);
 				$sheet_arr[$arr]->getStyleByColumnAndRow(1, $data_row, $last_col + 2, $data_row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');
@@ -38892,19 +40364,24 @@ class Report extends Controller {
 			$sheet->setCellValueByColumnAndRow($data_col, $data_row, $no);
 			$sheet->setCellValueByColumnAndRow($data_col + 1, $data_row, $rows['desc_type']);
 			$sheet->setCellValueByColumnAndRow($data_col + 2, $data_row, $rows['outlet_type']);
-			$sheet->setCellValueByColumnAndRow($data_col + 3, $data_row, number_format($rows['RO'], 0));
+			$sheet->setCellValueByColumnAndRow($data_col + 3, $data_row, $rows['RO']);
+			$sheet->getStyleByColumnAndRow($data_col + 3, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 			$a=1;
 			$baris=4;
 			foreach($data['sku_code'] as $sku):
-				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($rows['d'.$a], 0));
+				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $rows['d'.$a]);
+				$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 				$baris = $baris + 1;
-				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($rows['%'.$a], 2));
+				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $rows['%'.$a]);
+				$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0.00');
 				$a++;
 				$baris++;
 			endforeach;
 			
-			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($rows['dtotal'], 0));
-			$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, number_format($rows['%total'], 0));
+			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $rows['dtotal']);
+			$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, $rows['%total']);
+			$sheet->getStyleByColumnAndRow($data_col + $baris + 1, $data_row)->getNumberFormat()->setFormatCode('#,##0.00');
 
 			$total_RO += $rows['RO'];
 			$x = 1;
@@ -38951,19 +40428,24 @@ class Report extends Controller {
 		$sheet->setCellValueByColumnAndRow($data_col, $data_row, '');
 		$sheet->setCellValueByColumnAndRow($data_col + 1, $data_row, 'TOTAL');
 		$sheet->setCellValueByColumnAndRow($data_col + 2, $data_row, '');
-		$sheet->setCellValueByColumnAndRow($data_col + 3, $data_row, number_format($total_RO, 0));
+		$sheet->setCellValueByColumnAndRow($data_col + 3, $data_row, $total_RO);
+		$sheet->getStyleByColumnAndRow($data_col + 3, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 		$a=1;
 		$baris=4;
 		foreach($data['sku_code'] as $sku):
-			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($total_d[$a], 0));
+			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $total_d[$a]);
+			$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 			$baris = $baris + 1;
-			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($total_p[$a], 2));
+			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $total_p[$a]);
+			$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0.00');
 			$a++;
 			$baris++;
 		endforeach;
 		
-		$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($total_dAll, 0));
-		$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, number_format($total_pAll, 2));
+		$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $total_dAll);
+		$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, $total_pAll);
+		$sheet->getStyleByColumnAndRow($data_col + $baris + 1, $data_row)->getNumberFormat()->setFormatCode('#,##0.00');
 		
 
 		$sheet->getStyleByColumnAndRow(1, $data_row, $last_col + 2, $data_row)->applyFromArray($style_range);
@@ -40139,7 +41621,9 @@ class Report extends Controller {
 					}
 					
 					$sheet->setCellValueByColumnAndRow($data_col, $row, $sub_ro[$i]);
+					$sheet->getStyleByColumnAndRow($data_col, $row)->getNumberFormat()->setFormatCode('#,##0');
 					$sheet->setCellValueByColumnAndRow($data_col + 1, $row, $sub_dist[$i]);
+					$sheet->getStyleByColumnAndRow($data_col + 1, $row)->getNumberFormat()->setFormatCode('#,##0');
 					if($sub_ro[$i] == null or $sub_ro[$i] == "0")
 					{
 						$sub_dist_ro = 0;
@@ -40150,6 +41634,7 @@ class Report extends Controller {
 					}
 					$sheet->setCellValueByColumnAndRow($data_col + 2, $row, number_format($sub_dist_ro, 0)." %");
 					$sheet->setCellValueByColumnAndRow($data_col + 3, $row, $sub_ao[$i]);
+					$sheet->getStyleByColumnAndRow($data_col + 3, $row)->getNumberFormat()->setFormatCode('#,##0');
 					if($sub_dist[$i] == null or $sub_dist[$i] == "0")
 					{
 						$sub_ao_dist = 0;
@@ -40164,9 +41649,11 @@ class Report extends Controller {
 				for($i = 1; $i <= 12; $i++)
 				{
 					$sheet->setCellValueByColumnAndRow($ro_col + $i, $row, $sub_ro[$i]);
+					$sheet->getStyleByColumnAndRow($ro_col + $i, $row)->getNumberFormat()->setFormatCode('#,##0');
 				}
 
 				$sheet->setCellValueByColumnAndRow($ro_col + 13, $row, $sub_ro_old);
+				$sheet->getStyleByColumnAndRow($ro_col + 13, $row)->getNumberFormat()->setFormatCode('#,##0');
 
 				if($sub_ro[$month_so] == 0 or $sub_ro_old == 0)
 				{
@@ -40180,9 +41667,11 @@ class Report extends Controller {
 				for($i = 1; $i <= 12; $i++)
 				{
 					$sheet->setCellValueByColumnAndRow($dist_col + $i, $row, $sub_dist[$i]);
+					$sheet->getStyleByColumnAndRow($dist_col + $i, $row)->getNumberFormat()->setFormatCode('#,##0');
 				}
 
 				$sheet->setCellValueByColumnAndRow($dist_col + 13, $row, $sub_dist_old);
+				$sheet->getStyleByColumnAndRow($dist_col + 13, $row)->getNumberFormat()->setFormatCode('#,##0');
 
 				if($sub_dist[$month_so] == 0 or $sub_dist_old == 0)
 				{
@@ -40196,9 +41685,11 @@ class Report extends Controller {
 				for($i = 1; $i <= 12; $i++)
 				{
 					$sheet->setCellValueByColumnAndRow($ao_col + $i, $row, $sub_ao[$i]);
+					$sheet->getStyleByColumnAndRow($ao_col + $i, $row)->getNumberFormat()->setFormatCode('#,##0');
 				}
 
 				$sheet->setCellValueByColumnAndRow($ao_col + 13, $row, $sub_ao_old);
+				$sheet->getStyleByColumnAndRow($ao_col + 13, $row)->getNumberFormat()->setFormatCode('#,##0');
 
 				if($sub_ao[$month_so] == 0 or $sub_ao_old == 0)
 				{
@@ -40219,114 +41710,6 @@ class Report extends Controller {
 				$sub_ro_old = 0;
 				$sub_dist_old = 0;
 				$sub_ao_old = 0;
-
-				$sheet->getStyle('D' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('T' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('U' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('V' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('W' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('X' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('Y' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('Z' . $row)->getNumberFormat()->setFormatCode('#,##0');
-
-				$sheet->getStyle('AA' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('AB' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('AC' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('AD' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('AE' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('AF' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('AG' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('AH' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('AI' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('AJ' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('AK' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('AL' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('AM' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('AN' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('AO' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('AP' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('AQ' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('AR' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('AS' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('AT' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('AU' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('AV' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('AW' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('AX' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('AY' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('AZ' . $row)->getNumberFormat()->setFormatCode('#,##0');
-
-				$sheet->getStyle('BA' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('BB' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('BC' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('BD' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('BE' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('BF' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('BG' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('BH' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('BI' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('BJ' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('BK' . $row)->getNumberFormat()->setFormatCode('#,##0');
-
-				$sheet->getStyle('BM' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('BN' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('BO' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('BP' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('BQ' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('BR' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('BS' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('BT' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('BU' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('BV' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('BW' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('BX' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('BY' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('BZ' . $row)->getNumberFormat()->setFormatCode('#,##0');
-
-				$sheet->getStyle('CB' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('CC' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('CD' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('CE' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('CF' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('CG' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('CH' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('CI' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('CJ' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('CK' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('CL' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('CM' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('CN' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('CO' . $row)->getNumberFormat()->setFormatCode('#,##0');
-
-				$sheet->getStyle('CQ' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('CR' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('CS' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('CT' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('CU' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('CV' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('CW' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('CX' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('CY' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('CZ' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('DA' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('DB' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('DC' . $row)->getNumberFormat()->setFormatCode('#,##0');
-				$sheet->getStyle('DD' . $row)->getNumberFormat()->setFormatCode('#,##0');
 
 				$sheet->getStyle('A' . $row)->applyFromArray($style_row);
 				$sheet->getStyle('B' . $row)->applyFromArray($style_row);
@@ -40363,8 +41746,10 @@ class Report extends Controller {
 					$data_col = 4;
 				}
 				
-				$sheet->setCellValueByColumnAndRow($data_col, $row, number_format($rows['RO_'.$i], 0));
-				$sheet->setCellValueByColumnAndRow($data_col + 1, $row, number_format($rows['DIST_'.$i], 0));
+				$sheet->setCellValueByColumnAndRow($data_col, $row, $rows['RO_'.$i]);
+				$sheet->getStyleByColumnAndRow($data_col, $row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->setCellValueByColumnAndRow($data_col + 1, $row, $rows['DIST_'.$i]);
+				$sheet->getStyleByColumnAndRow($data_col + 1, $row)->getNumberFormat()->setFormatCode('#,##0');
 				if($rows['RO_'.$i] == null or $rows['RO_'.$i] == "0")
 				{
 					$dist_ro = 0;
@@ -40374,7 +41759,8 @@ class Report extends Controller {
 					$dist_ro = ($rows['DIST_'.$i]/$rows['RO_'.$i])*100;
 				}
 				$sheet->setCellValueByColumnAndRow($data_col + 2, $row, number_format($dist_ro, 0)." %");
-				$sheet->setCellValueByColumnAndRow($data_col + 3, $row, number_format($rows['AO_'.$i], 0));
+				$sheet->setCellValueByColumnAndRow($data_col + 3, $row, $rows['AO_'.$i]);
+				$sheet->getStyleByColumnAndRow($data_col + 3, $row)->getNumberFormat()->setFormatCode('#,##0');
 				if($rows['DIST_'.$i] == null or $rows['DIST_'.$i] == "0")
 				{
 					$ao_dist = 0;
@@ -40396,10 +41782,12 @@ class Report extends Controller {
 
 			for($i = 1; $i <= 12; $i++)
 			{
-				$sheet->setCellValueByColumnAndRow($ro_col + $i, $row, number_format($rows['RO_'.$i], 0));
+				$sheet->setCellValueByColumnAndRow($ro_col + $i, $row, $rows['RO_'.$i]);
+				$sheet->getStyleByColumnAndRow($ro_col + $i, $row)->getNumberFormat()->setFormatCode('#,##0');
 			}
 
-			$sheet->setCellValueByColumnAndRow($ro_col + 13, $row, number_format($rows['RO_12_old'], 0));
+			$sheet->setCellValueByColumnAndRow($ro_col + 13, $row, $rows['RO_12_old']);
+			$sheet->getStyleByColumnAndRow($ro_col + 13, $row)->getNumberFormat()->setFormatCode('#,##0');
 
 			if($rows['RO_'.$month_so] == 0 or $rows['RO_12_old'] == 0)
 			{
@@ -40412,10 +41800,12 @@ class Report extends Controller {
 
 			for($i = 1; $i <= 12; $i++)
 			{
-				$sheet->setCellValueByColumnAndRow($dist_col + $i, $row, number_format($rows['DIST_'.$i], 0));
+				$sheet->setCellValueByColumnAndRow($dist_col + $i, $row, $rows['DIST_'.$i]);
+				$sheet->getStyleByColumnAndRow($dist_col + $i, $row)->getNumberFormat()->setFormatCode('#,##0');
 			}
 
-			$sheet->setCellValueByColumnAndRow($dist_col + 13, $row, number_format($rows['DIST_12_old'], 0));
+			$sheet->setCellValueByColumnAndRow($dist_col + 13, $row, $rows['DIST_12_old']);
+			$sheet->getStyleByColumnAndRow($dist_col + 13, $row)->getNumberFormat()->setFormatCode('#,##0');
 
 			if($rows['DIST_'.$month_so] == 0 or $rows['DIST_12_old'] == 0)
 			{
@@ -40428,10 +41818,12 @@ class Report extends Controller {
 
 			for($i = 1; $i <= 12; $i++)
 			{
-				$sheet->setCellValueByColumnAndRow($ao_col + $i, $row, number_format($rows['AO_'.$i], 0));
+				$sheet->setCellValueByColumnAndRow($ao_col + $i, $row, $rows['AO_'.$i]);
+				$sheet->getStyleByColumnAndRow($ao_col + $i, $row)->getNumberFormat()->setFormatCode('#,##0');
 			}
 
-			$sheet->setCellValueByColumnAndRow($ao_col + 13, $row, number_format($rows['AO_12_old'], 0));
+			$sheet->setCellValueByColumnAndRow($ao_col + 13, $row, $rows['AO_12_old']);
+			$sheet->getStyleByColumnAndRow($ao_col + 13, $row)->getNumberFormat()->setFormatCode('#,##0');
 
 			if($rows['AO_'.$month_so] == 0 or $rows['AO_12_old'] == 0)
 			{
@@ -40450,114 +41842,6 @@ class Report extends Controller {
 			$total_ao_old += $rows['AO_12_old'];
 
 			$channel = $rows['channel'];
-
-			$sheet->getStyle('D' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('T' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('U' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('V' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('W' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('X' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('Y' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('Z' . $row)->getNumberFormat()->setFormatCode('#,##0');
-
-			$sheet->getStyle('AA' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('AB' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('AC' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('AD' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('AE' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('AF' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('AG' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('AH' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('AI' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('AJ' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('AK' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('AL' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('AM' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('AN' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('AO' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('AP' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('AQ' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('AR' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('AS' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('AT' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('AU' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('AV' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('AW' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('AX' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('AY' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('AZ' . $row)->getNumberFormat()->setFormatCode('#,##0');
-
-			$sheet->getStyle('BA' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('BB' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('BC' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('BD' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('BE' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('BF' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('BG' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('BH' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('BI' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('BJ' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('BK' . $row)->getNumberFormat()->setFormatCode('#,##0');
-
-			$sheet->getStyle('BM' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('BN' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('BO' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('BP' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('BQ' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('BR' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('BS' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('BT' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('BU' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('BV' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('BW' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('BX' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('BY' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('BZ' . $row)->getNumberFormat()->setFormatCode('#,##0');
-
-			$sheet->getStyle('CB' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('CC' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('CD' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('CE' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('CF' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('CG' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('CH' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('CI' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('CJ' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('CK' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('CL' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('CM' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('CN' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('CO' . $row)->getNumberFormat()->setFormatCode('#,##0');
-
-			$sheet->getStyle('CQ' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('CR' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('CS' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('CT' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('CU' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('CV' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('CW' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('CX' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('CY' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('CZ' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('DA' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('DB' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('DC' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('DD' . $row)->getNumberFormat()->setFormatCode('#,##0');
 
 			$sheet->getStyle('A' . $row)->applyFromArray($style_row);
 			$sheet->getStyle('B' . $row)->applyFromArray($style_row);
@@ -40604,6 +41888,7 @@ class Report extends Controller {
 			}
 			$sheet->setCellValueByColumnAndRow($data_col + 2, $row, number_format($sub_dist_ro, 0)." %");
 			$sheet->setCellValueByColumnAndRow($data_col + 3, $row, $sub_ao[$i]);
+			$sheet->getStyleByColumnAndRow($data_col + 3, $row)->getNumberFormat()->setFormatCode('#,##0');
 			if($sub_dist[$i] == null or $sub_dist[$i] == "0")
 			{
 				$sub_ao_dist = 0;
@@ -40618,9 +41903,11 @@ class Report extends Controller {
 		for($i = 1; $i <= 12; $i++)
 		{
 			$sheet->setCellValueByColumnAndRow($ro_col + $i, $row, $sub_ro[$i]);
+			$sheet->getStyleByColumnAndRow($ro_col + $i, $row)->getNumberFormat()->setFormatCode('#,##0');
 		}
 
 		$sheet->setCellValueByColumnAndRow($ro_col + 13, $row, $sub_ro_old);
+		$sheet->getStyleByColumnAndRow($ro_col + 13, $row)->getNumberFormat()->setFormatCode('#,##0');
 
 		if($sub_ro[$month_so] == 0 or $sub_ro_old == 0)
 		{
@@ -40634,9 +41921,11 @@ class Report extends Controller {
 		for($i = 1; $i <= 12; $i++)
 		{
 			$sheet->setCellValueByColumnAndRow($dist_col + $i, $row, $sub_dist[$i]);
+			$sheet->getStyleByColumnAndRow($dist_col + $i, $row)->getNumberFormat()->setFormatCode('#,##0');
 		}
 
 		$sheet->setCellValueByColumnAndRow($dist_col + 13, $row, $sub_dist_old);
+		$sheet->getStyleByColumnAndRow($dist_col + 13, $row)->getNumberFormat()->setFormatCode('#,##0');
 
 		if($sub_dist[$month_so] == 0 or $sub_dist_old == 0)
 		{
@@ -40650,9 +41939,11 @@ class Report extends Controller {
 		for($i = 1; $i <= 12; $i++)
 		{
 			$sheet->setCellValueByColumnAndRow($ao_col + $i, $row, $sub_ao[$i]);
+			$sheet->getStyleByColumnAndRow($ao_col + $i, $row)->getNumberFormat()->setFormatCode('#,##0');
 		}
 
 		$sheet->setCellValueByColumnAndRow($ao_col + 13, $row, $sub_ao_old);
+		$sheet->getStyleByColumnAndRow($ao_col + 13, $row)->getNumberFormat()->setFormatCode('#,##0');
 
 		if($sub_ao[$month_so] == 0 or $sub_ao_old == 0)
 		{
@@ -40673,114 +41964,6 @@ class Report extends Controller {
 		$sub_ro_old = 0;
 		$sub_dist_old = 0;
 		$sub_ao_old = 0;
-
-		$sheet->getStyle('D' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('T' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('U' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('V' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('W' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('X' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('Y' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('Z' . $row)->getNumberFormat()->setFormatCode('#,##0');
-
-		$sheet->getStyle('AA' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AB' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AC' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AD' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AE' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AF' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AG' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AH' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AI' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AJ' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AK' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AL' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AM' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AN' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AO' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AP' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AQ' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AR' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AS' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AT' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AU' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AV' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AW' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AX' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AY' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AZ' . $row)->getNumberFormat()->setFormatCode('#,##0');
-
-		$sheet->getStyle('BA' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BB' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BC' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BD' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BE' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BF' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BG' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BH' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BI' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BJ' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BK' . $row)->getNumberFormat()->setFormatCode('#,##0');
-
-		$sheet->getStyle('BM' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BN' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BO' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BP' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BQ' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BR' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BS' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BT' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BU' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BV' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BW' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BX' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BY' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BZ' . $row)->getNumberFormat()->setFormatCode('#,##0');
-
-		$sheet->getStyle('CB' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('CC' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('CD' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('CE' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('CF' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('CG' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('CH' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('CI' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('CJ' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('CK' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('CL' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('CM' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('CN' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('CO' . $row)->getNumberFormat()->setFormatCode('#,##0');
-
-		$sheet->getStyle('CQ' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('CR' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('CS' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('CT' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('CU' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('CV' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('CW' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('CX' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('CY' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('CZ' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('DA' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('DB' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('DC' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('DD' . $row)->getNumberFormat()->setFormatCode('#,##0');
 
 		$sheet->getStyle('A' . $row)->applyFromArray($style_row);
 		$sheet->getStyle('B' . $row)->applyFromArray($style_row);
@@ -40819,6 +42002,7 @@ class Report extends Controller {
 			
 			$sheet->setCellValueByColumnAndRow($data_col, $row, $total_ro[$i]);
 			$sheet->setCellValueByColumnAndRow($data_col + 1, $row, $total_dist[$i]);
+			$sheet->getStyleByColumnAndRow($data_col + 1, $row)->getNumberFormat()->setFormatCode('#,##0');
 			if($total_ro[$i] == null or $total_ro[$i] == "0")
 			{
 				$total_dist_ro = 0;
@@ -40829,6 +42013,7 @@ class Report extends Controller {
 			}
 			$sheet->setCellValueByColumnAndRow($data_col + 2, $row, number_format($total_dist_ro, 0)." %");
 			$sheet->setCellValueByColumnAndRow($data_col + 3, $row, $total_ao[$i]);
+			$sheet->getStyleByColumnAndRow($data_col + 3, $row)->getNumberFormat()->setFormatCode('#,##0');
 			if($total_dist[$i] == null or $total_dist[$i] == "0")
 			{
 				$total_ao_dist = 0;
@@ -40843,9 +42028,11 @@ class Report extends Controller {
 		for($i = 1; $i <= 12; $i++)
 		{
 			$sheet->setCellValueByColumnAndRow($ro_col + $i, $row, $total_ro[$i]);
+			$sheet->getStyleByColumnAndRow($ro_col + $i, $row)->getNumberFormat()->setFormatCode('#,##0');
 		}
 
 		$sheet->setCellValueByColumnAndRow($ro_col + 13, $row, $total_ro_old);
+		$sheet->getStyleByColumnAndRow($ro_col + 13, $row)->getNumberFormat()->setFormatCode('#,##0');
 
 		if($total_ro[$month_so] == 0 or $total_ro_old == 0)
 		{
@@ -40859,9 +42046,11 @@ class Report extends Controller {
 		for($i = 1; $i <= 12; $i++)
 		{
 			$sheet->setCellValueByColumnAndRow($dist_col + $i, $row, $total_dist[$i]);
+			$sheet->getStyleByColumnAndRow($dist_col + $i, $row)->getNumberFormat()->setFormatCode('#,##0');
 		}
 
 		$sheet->setCellValueByColumnAndRow($dist_col + 13, $row, $total_dist_old);
+		$sheet->getStyleByColumnAndRow($dist_col + 13, $row)->getNumberFormat()->setFormatCode('#,##0');
 
 		if($total_dist[$month_so] == 0 or $total_dist_old == 0)
 		{
@@ -40875,9 +42064,11 @@ class Report extends Controller {
 		for($i = 1; $i <= 12; $i++)
 		{
 			$sheet->setCellValueByColumnAndRow($ao_col + $i, $row, $total_ao[$i]);
+			$sheet->getStyleByColumnAndRow($ao_col + $i, $row)->getNumberFormat()->setFormatCode('#,##0');
 		}
 
 		$sheet->setCellValueByColumnAndRow($ao_col + 13, $row, $total_ao_old);
+		$sheet->getStyleByColumnAndRow($ao_col + 13, $row)->getNumberFormat()->setFormatCode('#,##0');
 
 		if($total_ao[$month_so] == 0 or $total_ao_old == 0)
 		{
@@ -40887,114 +42078,6 @@ class Report extends Controller {
 		{
 			$sheet->setCellValueByColumnAndRow($ao_col + 14, $row, number_format(($total_ao[$month_so]/$total_ao_old-1)*100, 0) . " %");
 		}
-
-		$sheet->getStyle('D' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('T' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('U' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('V' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('W' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('X' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('Y' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('Z' . $row)->getNumberFormat()->setFormatCode('#,##0');
-
-		$sheet->getStyle('AA' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AB' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AC' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AD' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AE' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AF' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AG' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AH' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AI' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AJ' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AK' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AL' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AM' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AN' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AO' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AP' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AQ' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AR' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AS' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AT' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AU' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AV' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AW' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AX' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AY' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AZ' . $row)->getNumberFormat()->setFormatCode('#,##0');
-
-		$sheet->getStyle('BA' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BB' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BC' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BD' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BE' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BF' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BG' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BH' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BI' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BJ' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BK' . $row)->getNumberFormat()->setFormatCode('#,##0');
-
-		$sheet->getStyle('BM' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BN' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BO' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BP' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BQ' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BR' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BS' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BT' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BU' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BV' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BW' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BX' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BY' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BZ' . $row)->getNumberFormat()->setFormatCode('#,##0');
-
-		$sheet->getStyle('CB' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('CC' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('CD' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('CE' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('CF' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('CG' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('CH' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('CI' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('CJ' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('CK' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('CL' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('CM' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('CN' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('CO' . $row)->getNumberFormat()->setFormatCode('#,##0');
-
-		$sheet->getStyle('CQ' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('CR' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('CS' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('CT' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('CU' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('CV' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('CW' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('CX' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('CY' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('CZ' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('DA' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('DB' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('DC' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('DD' . $row)->getNumberFormat()->setFormatCode('#,##0');
 
 		$sheet->getStyle('A' . $row)->applyFromArray($style_row);
 		$sheet->getStyle('B' . $row)->applyFromArray($style_row);
@@ -43031,22 +44114,29 @@ class Report extends Controller {
 				$sheet->setCellValueByColumnAndRow($data_col, $data_row, '');
 				$sheet->setCellValueByColumnAndRow($data_col + 1, $data_row, $channel);
 				$sheet->setCellValueByColumnAndRow($data_col + 2, $data_row, 'TOTAL');
-				$sheet->setCellValueByColumnAndRow($data_col + 3, $data_row, number_format($sub_RO, 0));
+				$sheet->setCellValueByColumnAndRow($data_col + 3, $data_row, $sub_RO);
+				$sheet->getStyleByColumnAndRow($data_col + 3, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 				$a=1;
 				$baris=4;
 				foreach($data['sku_code'] as $sku):
-					$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($sub_qty[$a], 0));
+					$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $sub_qty[$a]);
+					$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 					$baris = $baris + 1;
-					$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($sub_qty_p[$a], 2));
+					$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $sub_qty_p[$a]);
+					$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0.00');
 					$baris = $baris + 1;
-					$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($sub_val[$a], 0));
+					$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $sub_val[$a]);
+					$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 					$baris = $baris + 1;
-					$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($sub_val_p[$a], 2));
+					$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $sub_val_p[$a]);
+					$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0.00');
 					$a++;
 					$baris++;
 				endforeach;
-				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($sub_total_qty, 0));
-				$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, number_format($sub_total_val, 0));
+				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $sub_total_qty);
+				$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, $sub_total_val);
+				$sheet->getStyleByColumnAndRow($data_col + $baris + 1, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 
 				$sheet->getStyleByColumnAndRow(1, $data_row, $last_col + 2, $data_row)->applyFromArray($style_range);
 				$sheet->getStyleByColumnAndRow(1, $data_row, $last_col + 2, $data_row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFE4B5');
@@ -43071,23 +44161,30 @@ class Report extends Controller {
 			$sheet->setCellValueByColumnAndRow($data_col, $data_row, $no);
 			$sheet->setCellValueByColumnAndRow($data_col + 1, $data_row, $rows['desc_type']);
 			$sheet->setCellValueByColumnAndRow($data_col + 2, $data_row, $rows['outlet_type']);
-			$sheet->setCellValueByColumnAndRow($data_col + 3, $data_row, number_format($rows['RO'], 0));
+			$sheet->setCellValueByColumnAndRow($data_col + 3, $data_row, $rows['RO']);
+			$sheet->getStyleByColumnAndRow($data_col + 3, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 			$a=1;
 			$baris=4;
 			foreach($data['sku_code'] as $sku):
-				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($rows['qty'.$a], 0));
+				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $rows['qty'.$a]);
+				$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 				$baris = $baris + 1;
-				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($rows['%qty'.$a], 2));
+				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $rows['%qty'.$a]);
+				$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0.00');
 				$baris = $baris + 1;
-				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($rows['val'.$a], 0));
+				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $rows['val'.$a]);
+				$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 				$baris = $baris + 1;
-				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($rows['%val'.$a], 2));
+				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $rows['%val'.$a]);
+				$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0.00');
 				$a++;
 				$baris++;
 			endforeach;
 			
-			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($rows['total_qty'], 0));
-			$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, number_format($rows['total_val'], 0));
+			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $rows['total_qty']);
+			$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, $rows['total_val']);
+			$sheet->getStyleByColumnAndRow($data_col + $baris + 1, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 
 
 			$channel = $rows['channel'];
@@ -43121,6 +44218,7 @@ class Report extends Controller {
 			$sheet->getStyleByColumnAndRow(3, $data_row, null, $data_row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
 			$sheet->getStyleByColumnAndRow(4, 10, $last_col + 2, $data_row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
+
 			$no++; // Tambah 1 setiap kali looping
     		$row++; // Tambah 1 setiap kali looping
 			$data_row++;
@@ -43129,23 +44227,31 @@ class Report extends Controller {
 		$sheet->setCellValueByColumnAndRow($data_col, $data_row, '');
 		$sheet->setCellValueByColumnAndRow($data_col + 1, $data_row, $channel);
 		$sheet->setCellValueByColumnAndRow($data_col + 2, $data_row, 'TOTAL');
-		$sheet->setCellValueByColumnAndRow($data_col + 3, $data_row, number_format($sub_RO, 0));
+		$sheet->setCellValueByColumnAndRow($data_col + 3, $data_row, $sub_RO);
+		$sheet->getStyleByColumnAndRow($data_col + 3, $data_row)->getNumberFormat()->setFormatCode('#,##0');
+		
 		$a=1;
 		$baris=4;
 		foreach($data['sku_code'] as $sku):
-			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($sub_qty[$a], 0));
+			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $sub_qty[$a]);
+			$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 			$baris = $baris + 1;
-			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($sub_qty_p[$a], 2));
+			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $sub_qty_p[$a]);
+			$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0.00');
 			$baris = $baris + 1;
-			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($sub_val[$a], 0));
+			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $sub_val[$a]);
+			$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 			$baris = $baris + 1;
-			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($sub_val_p[$a], 2));
+			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $sub_val_p[$a]);
+			$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0.00');
 			$a++;
 			$baris++;
 		endforeach;
 		
-		$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($sub_total_qty, 0));
-		$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, number_format($sub_total_val, 0));
+		$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $sub_total_qty);
+		$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, $sub_total_val);
+		$sheet->getStyleByColumnAndRow($data_col + $baris + 1, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 
 		$sheet->getStyleByColumnAndRow(1, $data_row, $last_col + 2, $data_row)->applyFromArray($style_range);
 		$sheet->getStyleByColumnAndRow(1, $data_row, $last_col + 2, $data_row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFE4B5');
@@ -43155,23 +44261,30 @@ class Report extends Controller {
 		$sheet->setCellValueByColumnAndRow($data_col, $data_row, '');
 		$sheet->setCellValueByColumnAndRow($data_col + 1, $data_row, 'TOTAL');
 		$sheet->setCellValueByColumnAndRow($data_col + 2, $data_row, '');
-		$sheet->setCellValueByColumnAndRow($data_col + 3, $data_row, number_format($total_RO, 0));
+		$sheet->setCellValueByColumnAndRow($data_col + 3, $data_row, $total_RO);
+		$sheet->getStyleByColumnAndRow($data_col + 3, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 		$a=1;
 		$baris=4;
 		foreach($data['sku_code'] as $sku):
-			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($total_qty[$a], 0));
+			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $total_qty[$a]);
+			$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 			$baris = $baris + 1;
-			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($total_qty_p[$a], 2));
+			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $total_qty_p[$a]);
+			$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0.00');
 			$baris = $baris + 1;
-			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($total_val[$a], 0));
+			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $total_val[$a]);
+			$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 			$baris = $baris + 1;
-			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($total_val_p[$a], 2));
+			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $total_val_p[$a]);
+			$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0.00');
 			$a++;
 			$baris++;
 		endforeach;
 		
-		$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($total_total_qty, 0));
-		$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, number_format($total_total_val, 0));
+		$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $total_total_qty);
+		$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, $total_total_val);
+		$sheet->getStyleByColumnAndRow($data_col + $baris + 1, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 
 		$sheet->getStyleByColumnAndRow(1, $data_row, $last_col + 2, $data_row)->applyFromArray($style_range);
 		$sheet->getStyleByColumnAndRow(1, $data_row, $last_col + 2, $data_row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');
@@ -43441,22 +44554,29 @@ class Report extends Controller {
 				$sheet->setCellValueByColumnAndRow($data_col, $data_row, '');
 				$sheet->setCellValueByColumnAndRow($data_col + 1, $data_row, $channel);
 				$sheet->setCellValueByColumnAndRow($data_col + 2, $data_row, 'TOTAL');
-				$sheet->setCellValueByColumnAndRow($data_col + 3, $data_row, number_format($sub_RO, 0));
+				$sheet->setCellValueByColumnAndRow($data_col + 3, $data_row, $sub_RO);
+				$sheet->getStyleByColumnAndRow($data_col + 3, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 				$a=1;
 				$baris=4;
 				foreach($data['sku_code'] as $sku):
-					$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($sub_qty[$a], 0));
+					$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $sub_qty[$a]);
+					$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 					$baris = $baris + 1;
-					$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($sub_qty_p[$a], 2));
+					$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $sub_qty_p[$a]);
+					$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0.00');
 					$baris = $baris + 1;
-					$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($sub_val[$a], 0));
+					$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $sub_val[$a]);
+					$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 					$baris = $baris + 1;
-					$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($sub_val_p[$a], 2));
+					$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $sub_val_p[$a]);
+					$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0.00');
 					$a++;
 					$baris++;
 				endforeach;
-				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($sub_total_qty, 0));
-				$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, number_format($sub_total_val, 0));
+				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $sub_total_qty);
+				$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, $sub_total_val);
+				$sheet->getStyleByColumnAndRow($data_col + $baris + 1, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 
 				$sheet->getStyleByColumnAndRow(1, $data_row, $last_col + 2, $data_row)->applyFromArray($style_range);
 				$sheet->getStyleByColumnAndRow(1, $data_row, $last_col + 2, $data_row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFE4B5');
@@ -43481,23 +44601,30 @@ class Report extends Controller {
 			$sheet->setCellValueByColumnAndRow($data_col, $data_row, $no);
 			$sheet->setCellValueByColumnAndRow($data_col + 1, $data_row, $rows['desc_type']);
 			$sheet->setCellValueByColumnAndRow($data_col + 2, $data_row, $rows['outlet_type']);
-			$sheet->setCellValueByColumnAndRow($data_col + 3, $data_row, number_format($rows['RO'], 0));
+			$sheet->setCellValueByColumnAndRow($data_col + 3, $data_row, $rows['RO']);
+			$sheet->getStyleByColumnAndRow($data_col + 3, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 			$a=1;
 			$baris=4;
 			foreach($data['sku_code'] as $sku):
-				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($rows['qty'.$a], 0));
+				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $rows['qty'.$a]);
+				$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 				$baris = $baris + 1;
-				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($rows['%qty'.$a], 2));
+				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $rows['%qty'.$a]);
+				$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0.00');
 				$baris = $baris + 1;
-				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($rows['val'.$a], 0));
+				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $rows['val'.$a]);
+				$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 				$baris = $baris + 1;
-				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($rows['%val'.$a], 2));
+				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $rows['%val'.$a]);
+				$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0.00');
 				$a++;
 				$baris++;
 			endforeach;
 			
-			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($rows['total_qty'], 0));
-			$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, number_format($rows['total_val'], 0));
+			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $rows['total_qty']);
+			$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, $rows['total_val']);
+			$sheet->getStyleByColumnAndRow($data_col + $baris + 1, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 
 
 			$channel = $rows['channel'];
@@ -43539,23 +44666,30 @@ class Report extends Controller {
 		$sheet->setCellValueByColumnAndRow($data_col, $data_row, '');
 		$sheet->setCellValueByColumnAndRow($data_col + 1, $data_row, $channel);
 		$sheet->setCellValueByColumnAndRow($data_col + 2, $data_row, 'TOTAL');
-		$sheet->setCellValueByColumnAndRow($data_col + 3, $data_row, number_format($sub_RO, 0));
+		$sheet->setCellValueByColumnAndRow($data_col + 3, $data_row, $sub_RO);
+		$sheet->getStyleByColumnAndRow($data_col + 3, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 		$a=1;
 		$baris=4;
 		foreach($data['sku_code'] as $sku):
-			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($sub_qty[$a], 0));
+			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $sub_qty[$a]);
+			$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 			$baris = $baris + 1;
-			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($sub_qty_p[$a], 2));
+			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $sub_qty_p[$a]);
+			$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0.00');
 			$baris = $baris + 1;
-			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($sub_val[$a], 0));
+			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $sub_val[$a]);
+			$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 			$baris = $baris + 1;
-			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($sub_val_p[$a], 2));
+			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $sub_val_p[$a]);
+			$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0.00');
 			$a++;
 			$baris++;
 		endforeach;
 		
-		$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($sub_total_qty, 0));
-		$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, number_format($sub_total_val, 0));
+		$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $sub_total_qty);
+		$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, $sub_total_val);
+		$sheet->getStyleByColumnAndRow($data_col + $baris + 1, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 
 		$sheet->getStyleByColumnAndRow(1, $data_row, $last_col + 2, $data_row)->applyFromArray($style_range);
 		$sheet->getStyleByColumnAndRow(1, $data_row, $last_col + 2, $data_row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFE4B5');
@@ -43565,23 +44699,30 @@ class Report extends Controller {
 		$sheet->setCellValueByColumnAndRow($data_col, $data_row, '');
 		$sheet->setCellValueByColumnAndRow($data_col + 1, $data_row, 'TOTAL');
 		$sheet->setCellValueByColumnAndRow($data_col + 2, $data_row, '');
-		$sheet->setCellValueByColumnAndRow($data_col + 3, $data_row, number_format($total_RO, 0));
+		$sheet->setCellValueByColumnAndRow($data_col + 3, $data_row, $total_RO);
+		$sheet->getStyleByColumnAndRow($data_col + 3, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 		$a=1;
 		$baris=4;
 		foreach($data['sku_code'] as $sku):
-			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($total_qty[$a], 0));
+			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $total_qty[$a]);
+			$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 			$baris = $baris + 1;
-			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($total_qty_p[$a], 2));
+			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $total_qty_p[$a]);
+			$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0.00');
 			$baris = $baris + 1;
-			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($total_val[$a], 0));
+			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $total_val[$a]);
+			$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 			$baris = $baris + 1;
-			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($total_val_p[$a], 2));
+			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $total_val_p[$a]);
+			$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0.00');
 			$a++;
 			$baris++;
 		endforeach;
 		
-		$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($total_total_qty, 0));
-		$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, number_format($total_total_val, 0));
+		$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $total_total_qty);
+		$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, $total_total_val);
+		$sheet->getStyleByColumnAndRow($data_col + $baris + 1, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 
 		$sheet->getStyleByColumnAndRow(1, $data_row, $last_col + 2, $data_row)->applyFromArray($style_range);
 		$sheet->getStyleByColumnAndRow(1, $data_row, $last_col + 2, $data_row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');

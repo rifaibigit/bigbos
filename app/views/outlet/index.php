@@ -16,6 +16,7 @@
       <div class="row">
         <div class="col-sm-12">
           <?php
+            extract($data);
             Flasher::Message();
           ?>
         </div>
@@ -82,6 +83,7 @@
                       <th class="text-center" style="vertical-align: middle;">TOTAL OUTLET</th>
                       <th class="text-center" style="vertical-align: middle;">DIST CODE</th>
                       <th class="text-center" style="vertical-align: middle;">DISTRIBUTOR</th>
+                      <th class="text-center" style="vertical-align: middle;">GROUP ACCOUNT</th>
                       <th class="text-center" style="vertical-align: middle;">Action</th>
                   </tr>
               </thead>
@@ -98,6 +100,7 @@
                       <th class="text-center" style="vertical-align: middle;">TOTAL OUTLET</th>
                       <th class="text-center" style="vertical-align: middle;">DIST CODE</th>
                       <th class="text-center" style="vertical-align: middle;">DISTRIBUTOR</th>
+                      <th class="text-center" style="vertical-align: middle;">GROUP ACCOUNT</th>
                       <th class="text-center" style="vertical-align: middle;">Action</th>
                   </tr>
               </tfoot>
@@ -398,6 +401,7 @@
               { "data": "total_outlet", "sClass": "text-center", "width": "100px",},
               { "data": "dist_code", "sClass": "text-center", "width": "70px",},
               { "data": "distributor", "sClass": "text-center", "width": "300px",},
+              { "data": "group_account", "sClass": "text-center", "width": "100px",},
               {
                 "title": "Action",
                 "data": "id", 

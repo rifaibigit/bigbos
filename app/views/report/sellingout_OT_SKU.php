@@ -32,6 +32,8 @@
 
                                 <?php
 
+                                    extract($data);
+
                                     if(isset($data))
                                     {
                                         $principal = $data['by_principal'];
@@ -105,7 +107,7 @@
                                         <tr>
                                             <th rowspan="3" class="text-center" style="width: 5px; vertical-align: middle;">#</th>
                                             <th rowspan="3" class="text-center" style="width: 70px;vertical-align: middle;">BIG Code</th>
-                                            <th rowspan="3" class="text-center" style="width: 200px; vertical-align: middle;">Outlet Name</th>
+                                            <th rowspan="3" class="text-center" style="width: 300px; vertical-align: middle;">Outlet Name</th>
                                             <th rowspan="3" class="text-center" style="width: 100px;vertical-align: middle;">Outlet Type</th>
                                             <th rowspan="3" class="text-center" style="width: 70px;vertical-align: middle;">Area</th>
                                             <?php foreach ($data['sku_code'] as $row) :?>

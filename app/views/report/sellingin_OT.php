@@ -6,13 +6,6 @@
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1>Report Selling In - By Outlet</h1> 
-                    <!-- <br>
-                    <div class="row">
-                        <h6 style="margin-left : 20px;">Principal : <b><?= $data['by_principal'] ;?></b></h6>
-                        <h6 style="margin-left : 20px;">Channel : <b><?= $data['by_channel'] ;?></b></h6>
-                        <h6 style="margin-left : 20px;">Outlet Type : <b><?= $data['by_outlet_type'] ;?></b></h6>
-                    </div> -->
-                    
                 </div>
             </div>
         </div><!-- /.container-fluid -->
@@ -37,6 +30,8 @@
                             <div class="input-group mb-3">
 
                                 <?php
+
+                                extract($data);
 
                                 if(isset($data))
                                 {
@@ -236,7 +231,7 @@
     <!-- /.content -->
 </div>
 
-<script>  
+<!-- <script>  
  $(document).ready(function(){  
       $('#create_excel').click(function(){  
            var excel_data = $('#employee_table').html();  
@@ -244,7 +239,7 @@
            window.location = page;  
       });  
  });  
- </script>
+ </script> -->
 
 <!-- <script>  
  $(document).ready(function(){  

@@ -6,6 +6,8 @@
         <div class="row mb-2">
           <div class="col-sm-12">
             <?php
+              extract($data);
+
               $dateObj1   = DateTime::createFromFormat('!m', $data['by_month1']);
               $dateObj2   = DateTime::createFromFormat('!m', $data['by_month2']);
               $monthName1 = $dateObj1->format('M');
@@ -133,7 +135,7 @@
 
                         <!-- <div id="hasil_sale_out"></div> -->
                         <div class="table-responsive-sm text-small">
-                          <table id="distr" class="table table-bordered table-sm" align="left" style="font-size:85%; border: 1px solid black;">
+                          <table id="distr" class="table table-bordered table-sm" align="left" style="font-size:85%; border: 1px solid black;table-layout: fixed;">
                           <thead class="table-warning">
 
                             <?php
@@ -144,9 +146,9 @@
 
                               <tr>
                                 <th rowspan="3" class="text-center" style="width: 5px; vertical-align: middle;">#</th>
-                                <th rowspan="3" class="text-center" style="width: 300px; vertical-align: middle;">TYPE OF OUTLET</th>
-                                <th rowspan="3" class="text-center" style="width: 30px; vertical-align: middle;">Code</th>
-                                <th rowspan="3" class="text-center" style="width: 15px; vertical-align: middle;">RO</th>
+                                <th rowspan="3" class="text-center" style="width: 200px; vertical-align: middle;">TYPE OF OUTLET</th>
+                                <th rowspan="3" class="text-center" style="width: 50px; vertical-align: middle;">Code</th>
+                                <th rowspan="3" class="text-center" style="width: 40px; vertical-align: middle;">RO</th>
                                 <?php foreach ($data['sku_group'] as $row) :?>
                                 <th colspan="<?= $row['count_name']*4;?>" class="text-center"><?= $row['item_group'];?></th>
                                 <?php endforeach ?>
@@ -159,13 +161,13 @@
                               </tr>                  
                               <tr style="line-height: 10px; vertical-align: middle;">
                                 <?php for($i=1;$i<=$count;$i++){
-                                    echo '<th class="text-center" style="width: 15px; vertical-align: middle;">Qty</th>';
-                                    echo '<th class="text-center" style="width: 15px">Cont %</th>';
-                                    echo '<th class="text-center" style="width: 20px; vertical-align: middle;">Value</th>';
-                                    echo '<th class="text-center" style="width: 15px">Cont %</th>';
+                                    echo '<th class="text-center" style="width: 60px; vertical-align: middle;">Qty</th>';
+                                    echo '<th class="text-center" style="width: 60px">Cont %</th>';
+                                    echo '<th class="text-center" style="width: 60px; vertical-align: middle;">Value</th>';
+                                    echo '<th class="text-center" style="width: 60px">Cont %</th>';
                                 } 
-                                echo '<th class="text-center" style="width: 30px; background-color: #FF6D6D; vertical-align: middle;">Qty</th>';
-                                echo '<th class="text-center" style="width: 50px; background-color: #FF6D6D; vertical-align: middle;">Value</th>';
+                                echo '<th class="text-center" style="width: 60px; background-color: #FF6D6D; vertical-align: middle;">Qty</th>';
+                                echo '<th class="text-center" style="width: 60px; background-color: #FF6D6D; vertical-align: middle;">Value</th>';
 
                                 ?> 
                               </tr>

@@ -12,7 +12,7 @@ class OutletModel {
 
 	public function getAllOutlet()
 	{
-		$query = "SELECT o.id, o.area, o.big_code, o.outlet_code, o.outlet_name, o.alamat, o.outlet_type, o.total_outlet, o.dist_code, d.distributor, o.register_date";
+		$query = "SELECT o.id, o.area, o.big_code, o.outlet_code, o.outlet_name, o.alamat, o.outlet_type, o.total_outlet, o.dist_code, d.distributor, o.group_account, o.register_date";
 		$query = $query . " FROM " . $this->table . " o";
 		$query = $query . " INNER JOIN distributor d ON o.dist_code = d.cust_code";
 		$query = $query . " WHERE d.is_active = 1";

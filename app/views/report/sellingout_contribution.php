@@ -6,6 +6,9 @@
         <div class="row mb-2">
           <div class="col-sm-6">
             <?php
+
+              extract($data);
+
               $dateObj1   = DateTime::createFromFormat('!m', $data['by_month1']);
               $dateObj2   = DateTime::createFromFormat('!m', $data['by_month2']);
               $monthName1 = $dateObj1->format('M');

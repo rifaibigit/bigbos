@@ -31,6 +31,8 @@
 
                         <?php
 
+                        extract($data);
+
                         if(isset($data))
                         {
                             $region = $data['by_region'];
@@ -123,11 +125,11 @@
 
                         <!-- <div id="hasil_sale_out"></div> -->
                         <div class="table-responsive-sm text-small">
-                          <table id="sale_out_salesman2" class="table table-bordered table-sm" align="left" style="font-size:85%; border: 1px solid black;">
+                          <table id="sale_out_salesman2" class="table table-bordered table-sm" align="left" style="font-size:85%; border: 1px solid black;table-layout: fixed;">
                           <thead class="table-warning">
                               <tr>
                                 <th rowspan="3" class="text-center" style="width: 5px; vertical-align: middle;">#</th>
-                                <th rowspan="3" class="text-center" style="width: 300px; vertical-align: middle;">Salesman</th>
+                                <th rowspan="3" class="text-center" style="width: 200px; vertical-align: middle;">Salesman</th>
                                 <th colspan="6" class="text-center">January</th>
                                 <th colspan="6" class="text-center">February</th>
                                 <th colspan="6" class="text-center">March</th>
@@ -184,84 +186,84 @@
                                 <th colspan="2" class="text-center" style="background-color: #FF6D6D">Index(%)</th>
                               </tr>                 
                               <tr>
-                                <th class="text-center" style="width: 10px">Qty</th>
-                                <th class="text-center" style="width: 30px">Value</th>
-                                <th class="text-center" style="width: 10px">Qty</th>
-                                <th class="text-center" style="width: 30px">Value</th>
-                                <th class="text-center" style="width: 10px">Qty</th>
-                                <th class="text-center" style="width: 30px">Value</th>
-                                <th class="text-center" style="width: 10px">Qty</th>
-                                <th class="text-center" style="width: 30px">Value</th>
-                                <th class="text-center" style="width: 10px">Qty</th>
-                                <th class="text-center" style="width: 30px">Value</th>
-                                <th class="text-center" style="width: 10px">Qty</th>
-                                <th class="text-center" style="width: 30px">Value</th>
-                                <th class="text-center" style="width: 10px">Qty</th>
-                                <th class="text-center" style="width: 30px">Value</th>
-                                <th class="text-center" style="width: 10px">Qty</th>
-                                <th class="text-center" style="width: 30px">Value</th>
-                                <th class="text-center" style="width: 10px">Qty</th>
-                                <th class="text-center" style="width: 30px">Value</th>
-                                <th class="text-center" style="width: 10px">Qty</th>
-                                <th class="text-center" style="width: 30px">Value</th>
-                                <th class="text-center" style="width: 10px">Qty</th>
-                                <th class="text-center" style="width: 30px">Value</th>
-                                <th class="text-center" style="width: 10px">Qty</th>
-                                <th class="text-center" style="width: 30px">Value</th>
-                                <th class="text-center" style="width: 10px">Qty</th>
-                                <th class="text-center" style="width: 30px">Value</th>
-                                <th class="text-center" style="width: 10px">Qty</th>
-                                <th class="text-center" style="width: 30px">Value</th>
-                                <th class="text-center" style="width: 10px">Qty</th>
-                                <th class="text-center" style="width: 30px">Value</th>
-                                <th class="text-center" style="width: 10px">Qty</th>
-                                <th class="text-center" style="width: 30px">Value</th>
-                                <th class="text-center" style="width: 10px">Qty</th>
-                                <th class="text-center" style="width: 30px">Value</th>
-                                <th class="text-center" style="width: 10px">Qty</th>
-                                <th class="text-center" style="width: 30px">Value</th>
-                                <th class="text-center" style="width: 10px">Qty</th>
-                                <th class="text-center" style="width: 30px">Value</th>
-                                <th class="text-center" style="width: 10px">Qty</th>
-                                <th class="text-center" style="width: 30px">Value</th>
-                                <th class="text-center" style="width: 10px">Qty</th>
-                                <th class="text-center" style="width: 30px">Value</th>
-                                <th class="text-center" style="width: 10px">Qty</th>
-                                <th class="text-center" style="width: 30px">Value</th>
-                                <th class="text-center" style="width: 10px">Qty</th>
-                                <th class="text-center" style="width: 30px">Value</th>
-                                <th class="text-center" style="width: 10px">Qty</th>
-                                <th class="text-center" style="width: 30px">Value</th>
-                                <th class="text-center" style="width: 10px">Qty</th>
-                                <th class="text-center" style="width: 30px">Value</th>
-                                <th class="text-center" style="width: 10px">Qty</th>
-                                <th class="text-center" style="width: 30px">Value</th>
-                                <th class="text-center" style="width: 10px">Qty</th>
-                                <th class="text-center" style="width: 30px">Value</th>
-                                <th class="text-center" style="width: 10px">Qty</th>
-                                <th class="text-center" style="width: 30px">Value</th>
-                                <th class="text-center" style="width: 10px">Qty</th>
-                                <th class="text-center" style="width: 30px">Value</th>
-                                <th class="text-center" style="width: 10px">Qty</th>
-                                <th class="text-center" style="width: 30px">Value</th>
-                                <th class="text-center" style="width: 10px">Qty</th>
-                                <th class="text-center" style="width: 30px">Value</th>
-                                <th class="text-center" style="width: 10px">Qty</th>
-                                <th class="text-center" style="width: 30px">Value</th>
-                                <th class="text-center" style="width: 10px">Qty</th>
-                                <th class="text-center" style="width: 30px">Value</th>
-                                <th class="text-center" style="width: 10px">Qty</th>
-                                <th class="text-center" style="width: 30px">Value</th>
-                                <th class="text-center" style="width: 10px">Qty</th>
-                                <th class="text-center" style="width: 30px">Value</th>
-                                <th class="text-center" style="width: 10px">Qty</th>
-                                <th class="text-center" style="width: 30px">Value</th>
-                                <th class="text-center" style="width: 10px;background-color: #FF6D6D">Qty</th>
-                                <th class="text-center" style="width: 30px;background-color: #FF6D6D">Value</th>
-                                <th class="text-center" style="width: 10px;background-color: #FF6D6D">Qty</th>
-                                <th class="text-center" style="width: 30px;background-color: #FF6D6D">Value</th>
-                                <th class="text-center" style="width: 10px;background-color: #FF6D6D">Qty</th>
-                                <th class="text-center" style="width: 30px;background-color: #FF6D6D">Value</th>
+                                <th class="text-center" style="width: 70px">Qty</th>
+                                <th class="text-center" style="width: 70px">Value</th>
+                                <th class="text-center" style="width: 70px">Qty</th>
+                                <th class="text-center" style="width: 70px">Value</th>
+                                <th class="text-center" style="width: 70px">Qty</th>
+                                <th class="text-center" style="width: 70px">Value</th>
+                                <th class="text-center" style="width: 70px">Qty</th>
+                                <th class="text-center" style="width: 70px">Value</th>
+                                <th class="text-center" style="width: 70px">Qty</th>
+                                <th class="text-center" style="width: 70px">Value</th>
+                                <th class="text-center" style="width: 70px">Qty</th>
+                                <th class="text-center" style="width: 70px">Value</th>
+                                <th class="text-center" style="width: 70px">Qty</th>
+                                <th class="text-center" style="width: 70px">Value</th>
+                                <th class="text-center" style="width: 70px">Qty</th>
+                                <th class="text-center" style="width: 70px">Value</th>
+                                <th class="text-center" style="width: 70px">Qty</th>
+                                <th class="text-center" style="width: 70px">Value</th>
+                                <th class="text-center" style="width: 70px">Qty</th>
+                                <th class="text-center" style="width: 70px">Value</th>
+                                <th class="text-center" style="width: 70px">Qty</th>
+                                <th class="text-center" style="width: 70px">Value</th>
+                                <th class="text-center" style="width: 70px">Qty</th>
+                                <th class="text-center" style="width: 70px">Value</th>
+                                <th class="text-center" style="width: 70px">Qty</th>
+                                <th class="text-center" style="width: 70px">Value</th>
+                                <th class="text-center" style="width: 70px">Qty</th>
+                                <th class="text-center" style="width: 70px">Value</th>
+                                <th class="text-center" style="width: 70px">Qty</th>
+                                <th class="text-center" style="width: 70px">Value</th>
+                                <th class="text-center" style="width: 70px">Qty</th>
+                                <th class="text-center" style="width: 70px">Value</th>
+                                <th class="text-center" style="width: 70px">Qty</th>
+                                <th class="text-center" style="width: 70px">Value</th>
+                                <th class="text-center" style="width: 70px">Qty</th>
+                                <th class="text-center" style="width: 70px">Value</th>
+                                <th class="text-center" style="width: 70px">Qty</th>
+                                <th class="text-center" style="width: 70px">Value</th>
+                                <th class="text-center" style="width: 70px">Qty</th>
+                                <th class="text-center" style="width: 70px">Value</th>
+                                <th class="text-center" style="width: 70px">Qty</th>
+                                <th class="text-center" style="width: 70px">Value</th>
+                                <th class="text-center" style="width: 70px">Qty</th>
+                                <th class="text-center" style="width: 70px">Value</th>
+                                <th class="text-center" style="width: 70px">Qty</th>
+                                <th class="text-center" style="width: 70px">Value</th>
+                                <th class="text-center" style="width: 70px">Qty</th>
+                                <th class="text-center" style="width: 70px">Value</th>
+                                <th class="text-center" style="width: 70px">Qty</th>
+                                <th class="text-center" style="width: 70px">Value</th>
+                                <th class="text-center" style="width: 70px">Qty</th>
+                                <th class="text-center" style="width: 70px">Value</th>
+                                <th class="text-center" style="width: 70px">Qty</th>
+                                <th class="text-center" style="width: 70px">Value</th>
+                                <th class="text-center" style="width: 70px">Qty</th>
+                                <th class="text-center" style="width: 70px">Value</th>
+                                <th class="text-center" style="width: 70px">Qty</th>
+                                <th class="text-center" style="width: 70px">Value</th>
+                                <th class="text-center" style="width: 70px">Qty</th>
+                                <th class="text-center" style="width: 70px">Value</th>
+                                <th class="text-center" style="width: 70px">Qty</th>
+                                <th class="text-center" style="width: 70px">Value</th>
+                                <th class="text-center" style="width: 70px">Qty</th>
+                                <th class="text-center" style="width: 70px">Value</th>
+                                <th class="text-center" style="width: 70px">Qty</th>
+                                <th class="text-center" style="width: 70px">Value</th>
+                                <th class="text-center" style="width: 70px">Qty</th>
+                                <th class="text-center" style="width: 70px">Value</th>
+                                <th class="text-center" style="width: 70px">Qty</th>
+                                <th class="text-center" style="width: 70px">Value</th>
+                                <th class="text-center" style="width: 70px">Qty</th>
+                                <th class="text-center" style="width: 70px">Value</th>
+                                <th class="text-center" style="width: 70px;background-color: #FF6D6D">Qty</th>
+                                <th class="text-center" style="width: 70px;background-color: #FF6D6D">Value</th>
+                                <th class="text-center" style="width: 70px;background-color: #FF6D6D">Qty</th>
+                                <th class="text-center" style="width: 70px;background-color: #FF6D6D">Value</th>
+                                <th class="text-center" style="width: 70px;background-color: #FF6D6D">Qty</th>
+                                <th class="text-center" style="width: 70px;background-color: #FF6D6D">Value</th>
                               </tr>
                             </thead>
                             <tbody>

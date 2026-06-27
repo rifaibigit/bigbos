@@ -46,6 +46,8 @@
                 <form action="<?= base_url; ?>/Report/sellingin_summary" method="post">
                   <?php
 
+                    extract($data);
+
                     if(isset($data))
                     {
                       $principal = $data['by_principal'];
@@ -313,8 +315,14 @@
                     <section class="col-sm-4 connectedSortable">
                       <div class="card-deck" style="margin-left:5px;margin-right:5px;">
                         <div class="col" style="margin-top: 0px;margin-left: 5px;">
-                            <canvas id="myChart1" style="width: 200px;height: 200px; margin-bottom: 0px;"></canvas>
-                            <canvas id="myChart2" style="width: 200px;height: 200px; margin-bottom: 0px;"></canvas>
+                            <!-- <canvas id="myChart1" style="width: 200px;height: 200px; margin-bottom: 0px;"></canvas> -->
+                            <div style="height:450px;">
+                                <canvas id="myChart1"></canvas>
+                            </div>
+                            <!-- <canvas id="myChart2" style="width: 200px;height: 200px; margin-bottom: 0px;"></canvas> -->
+                            <div style="height:450px;">
+                                <canvas id="myChart2"></canvas>
+                            </div>
                         </div>
                       </div>
                     </section>
@@ -604,8 +612,14 @@
                     <section class="col-sm-4 connectedSortable">
                       <div class="clearfix" style="margin-left: 10px; ">
                         <div class="col" style="margin-top: 0px;margin-left: 10px;">
-                            <canvas id="myChart3" style="width: 200px;height: 200px; margin-bottom: 0px;"></canvas>
-                            <canvas id="myChart4" style="width: 200px;height: 200px; margin-bottom: 0px;"></canvas>
+                            <!-- <canvas id="myChart3" style="width: 200px;height: 200px; margin-bottom: 0px;"></canvas>
+                            <canvas id="myChart4" style="width: 200px;height: 200px; margin-bottom: 0px;"></canvas> -->
+                            <div style="height:450px;">
+                                <canvas id="myChart3"></canvas>
+                            </div>
+                            <div style="height:450px;">
+                                <canvas id="myChart4"></canvas>
+                            </div>
                         </div>
                       </div>
                     </section>
@@ -670,24 +684,32 @@
       data: {
           labels: channel_arr,
           datasets: [{
-                  
                   data: qty_arr,
                   backgroundColor: [
-                      'rgba(0, 15, 255, 0.5)',
-                      'rgba(47, 244, 79, 0.6)',
-                      'rgba(255, 248, 0, 0.6)',
-                      'rgba(190, 144, 212, 0.6)',
-                      'rgba(210, 38, 30, 0.6)'
+                      'rgba(54, 99, 255, 0.8)',     // Blue
+                      'rgba(75, 192, 92, 0.8)',     // Green
+                      'rgba(255, 206, 86, 0.8)',    // Yellow
+                      'rgba(153, 102, 255, 0.8)',   // Purple
+                      'rgba(255, 99, 132, 0.8)',    // Red
+                      'rgba(201, 203, 207, 0.8)',   // Gray
+                      'rgba(255, 159, 64, 0.8)',    // Orange
+                      'rgba(0, 204, 204, 0.8)',     // Cyan
+                      'rgba(102, 51, 153, 0.8)',    // Indigo
+                      'rgba(255, 102, 255, 0.8)',   // Pink
+                      'rgba(102, 204, 0, 0.8)',     // Lime
+                      'rgba(128, 128, 0, 0.8)'      // Olive
                   ],
               }]
       },
       options: {
+        responsive: true,
+        maintainAspectRatio: false,
         layout: {
           padding: {
-                  left: 20,
-                  right: 20,
-                  top: 50,
-                  bottom: 50
+                  left: 100,
+                  right: 100,
+                  top: 100,
+                  bottom: 100
           }
         },
         legend: {
@@ -701,10 +723,10 @@
         },
         plugins: {
           outlabels: {
-              zoomOutPercentage: 35,
+              zoomOutPercentage: 20,
               text: '%p',
               color: 'black',
-              stretch: 20,
+              stretch: 10,
               font: {
                   resizable: true,
                   minSize: 14,
@@ -735,21 +757,30 @@
           datasets: [{
                   data: qty_arr,
                   backgroundColor: [
-                      'rgba(0, 15, 255, 0.5)',
-                      'rgba(47, 244, 79, 0.6)',
-                      'rgba(255, 248, 0, 0.6)',
-                      'rgba(190, 144, 212, 0.6)',
-                      'rgba(210, 38, 30, 0.6)'
+                      'rgba(54, 99, 255, 0.8)',     // Blue
+                      'rgba(75, 192, 92, 0.8)',     // Green
+                      'rgba(255, 206, 86, 0.8)',    // Yellow
+                      'rgba(153, 102, 255, 0.8)',   // Purple
+                      'rgba(255, 99, 132, 0.8)',    // Red
+                      'rgba(201, 203, 207, 0.8)',   // Gray
+                      'rgba(255, 159, 64, 0.8)',    // Orange
+                      'rgba(0, 204, 204, 0.8)',     // Cyan
+                      'rgba(102, 51, 153, 0.8)',    // Indigo
+                      'rgba(255, 102, 255, 0.8)',   // Pink
+                      'rgba(102, 204, 0, 0.8)',     // Lime
+                      'rgba(128, 128, 0, 0.8)'      // Olive
                   ],
               }]
       },
       options: {
+        responsive: true,
+        maintainAspectRatio: false,
         layout: {
           padding: {
-                  left: 20,
-                  right: 20,
-                  top: 50,
-                  bottom: 50
+                  left: 100,
+                  right: 100,
+                  top: 100,
+                  bottom: 100
           }
         },
         legend: {
@@ -766,16 +797,19 @@
         },
         plugins: {
           outlabels: {
-              zoomOutPercentage: 35,
+              zoomOutPercentage: 20,
               text: '%v',
               color: 'black',
-              stretch: 20,
+              stretch: 10,
               font: {
                   resizable: false,
                   minSize: 14,
                   maxSize: 18,
                   family: 'Helvetica',
                   style: 'bold',
+              },
+              formatter: function(value, ctx) {
+                  return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
               }
           },
           labels: false
@@ -800,11 +834,18 @@
           datasets: [{
                   data: val_arr,
                   backgroundColor: [
-                      'rgba(0, 15, 255, 0.5)',
-                      'rgba(47, 244, 79, 0.6)',
-                      'rgba(255, 248, 0, 0.6)',
-                      'rgba(190, 144, 212, 0.6)',
-                      'rgba(210, 38, 30, 0.6)'
+                      'rgba(54, 99, 255, 0.8)',     // Blue
+                      'rgba(75, 192, 92, 0.8)',     // Green
+                      'rgba(255, 206, 86, 0.8)',    // Yellow
+                      'rgba(153, 102, 255, 0.8)',   // Purple
+                      'rgba(255, 99, 132, 0.8)',    // Red
+                      'rgba(201, 203, 207, 0.8)',   // Gray
+                      'rgba(255, 159, 64, 0.8)',    // Orange
+                      'rgba(0, 204, 204, 0.8)',     // Cyan
+                      'rgba(102, 51, 153, 0.8)',    // Indigo
+                      'rgba(255, 102, 255, 0.8)',   // Pink
+                      'rgba(102, 204, 0, 0.8)',     // Lime
+                      'rgba(128, 128, 0, 0.8)'      // Olive
                   ],
               }]
       },
@@ -829,10 +870,10 @@
         plugins: {
           labels: false,
           outlabels: {
-              zoomOutPercentage: 35,
+              zoomOutPercentage: 20,
               text: '%p',
               color: 'black',
-              stretch: 20,
+              stretch: 10,
               font: {
                   resizable: true,
                   minSize: 14,
@@ -872,11 +913,18 @@
           datasets: [{
                   data: val_arr,
                   backgroundColor: [
-                      'rgba(0, 15, 255, 0.5)',
-                      'rgba(47, 244, 79, 0.6)',
-                      'rgba(255, 248, 0, 0.6)',
-                      'rgba(190, 144, 212, 0.6)',
-                      'rgba(210, 38, 30, 0.6)'
+                      'rgba(54, 99, 255, 0.8)',     // Blue
+                      'rgba(75, 192, 92, 0.8)',     // Green
+                      'rgba(255, 206, 86, 0.8)',    // Yellow
+                      'rgba(153, 102, 255, 0.8)',   // Purple
+                      'rgba(255, 99, 132, 0.8)',    // Red
+                      'rgba(201, 203, 207, 0.8)',   // Gray
+                      'rgba(255, 159, 64, 0.8)',    // Orange
+                      'rgba(0, 204, 204, 0.8)',     // Cyan
+                      'rgba(102, 51, 153, 0.8)',    // Indigo
+                      'rgba(255, 102, 255, 0.8)',   // Pink
+                      'rgba(102, 204, 0, 0.8)',     // Lime
+                      'rgba(128, 128, 0, 0.8)'      // Olive
                   ],
               }]
       },
@@ -904,10 +952,10 @@
         plugins: {
           labels: false,
           outlabels: {
-              zoomOutPercentage: 35,
+              zoomOutPercentage: 20,
               text: '%v',
               color: 'black',
-              stretch: 20,
+              stretch: 10,
               Precision: 2,
               font: {
                   resizable: false,

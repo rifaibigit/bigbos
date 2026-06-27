@@ -17,6 +17,8 @@
         <div class="col-sm-12">
           <?php
             Flasher::Message();
+
+            extract($data);
           ?>
         </div>
       </div>

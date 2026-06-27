@@ -31,6 +31,8 @@
 
                                 <?php
 
+                                    extract($data);
+
                                     $total_from = 0;
                                     $total_to = 0;
                                     $total_exist = 0;

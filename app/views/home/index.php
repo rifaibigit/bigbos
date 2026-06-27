@@ -1,5 +1,7 @@
 <?php
 
+  extract($data);
+
   $qty_si_ld = [];
   $target_si_ld = [];
   $qty_si_jd = [];
@@ -412,32 +414,8 @@
                             label: '#  LORD',
                             data: qty_si_ld,
                             type: 'horizontalBar',
-                            backgroundColor: [
-                                'rgba(0, 56, 255, 1.0)', //darkblue
-                                'rgba(0, 56, 255, 1.0)',
-                                'rgba(0, 56, 255, 1.0)',
-                                'rgba(0, 56, 255, 1.0)',
-                                'rgba(0, 56, 255, 1.0)',
-                                'rgba(0, 56, 255, 1.0)',
-                                'rgba(0, 56, 255, 1.0)',
-                                'rgba(0, 56, 255, 1.0)',
-                                'rgba(0, 56, 255, 1.0)',
-                                'rgba(0, 56, 255, 1.0)',
-                                'rgba(0, 56, 255, 1.0)',
-                            ],
-                            borderColor: [
-                                'rgba(0, 56, 255, 1.0)', //darkblue
-                                'rgba(0, 56, 255, 1.0)',
-                                'rgba(0, 56, 255, 1.0)',
-                                'rgba(0, 56, 255, 1.0)',
-                                'rgba(0, 56, 255, 1.0)',
-                                'rgba(0, 56, 255, 1.0)',
-                                'rgba(0, 56, 255, 1.0)',
-                                'rgba(0, 56, 255, 1.0)',
-                                'rgba(0, 56, 255, 1.0)',
-                                'rgba(0, 56, 255, 1.0)',
-                                'rgba(0, 56, 255, 1.0)',
-                            ],
+                            backgroundColor: 'rgba(0,56,255,1)',
+                            borderColor: 'rgba(0,56,255,1)',
                             borderWidth: 1,
                             // stack: 'Stack 0',
                         },
@@ -445,34 +423,8 @@
                             label: '#  TARGET LORD',
                             data: target_si_ld,
                             type: 'horizontalBar',
-                            backgroundColor: [
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)', //grey
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                            ],
-                            borderColor: [
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)', //grey
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                            ],
+                            backgroundColor: 'rgba(107, 107, 107, 0.3)',
+                            borderColor: 'rgba(107, 107, 107, 0.3)',
                             borderWidth: 1,
                             // stack: 'Stack 0',
                         },
@@ -480,34 +432,8 @@
                             label: '#  JORDAN',
                             data: qty_si_jd,
                             type: 'horizontalBar',
-                            backgroundColor: [
-                                'rgba(79, 176, 255, 1)', //lightblue
-                                'rgba(79, 176, 255, 1)',
-                                'rgba(79, 176, 255, 1)',
-                                'rgba(79, 176, 255, 1)',
-                                'rgba(79, 176, 255, 1)',
-                                'rgba(79, 176, 255, 1)',
-                                'rgba(79, 176, 255, 1)',
-                                'rgba(79, 176, 255, 1)',
-                                'rgba(79, 176, 255, 1)',
-                                'rgba(79, 176, 255, 1)',
-                                'rgba(79, 176, 255, 1)',
-                                'rgba(79, 176, 255, 1)',
-                            ],
-                            borderColor: [
-                                'rgba(79, 176, 255, 1)', //lightblue
-                                'rgba(79, 176, 255, 1)',
-                                'rgba(79, 176, 255, 1)',
-                                'rgba(79, 176, 255, 1)',
-                                'rgba(79, 176, 255, 1)',
-                                'rgba(79, 176, 255, 1)',
-                                'rgba(79, 176, 255, 1)',
-                                'rgba(79, 176, 255, 1)',
-                                'rgba(79, 176, 255, 1)',
-                                'rgba(79, 176, 255, 1)',
-                                'rgba(79, 176, 255, 1)',
-                                'rgba(79, 176, 255, 1)',
-                            ],
+                            backgroundColor: 'rgba(79, 176, 255, 1)',
+                            borderColor: 'rgba(79, 176, 255, 1)',
                             borderWidth: 1,
                             // stack: 'Stack 1',
                         },
@@ -515,34 +441,8 @@
                             label: '#  TARGET JORDAN',
                             data: target_si_jd,
                             type: 'horizontalBar',
-                            backgroundColor: [
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)', //grey
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                            ],
-                            borderColor: [
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)', //grey
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                            ],
+                            backgroundColor: 'rgba(107, 107, 107, 0.3)',
+                            borderColor: 'rgba(107, 107, 107, 0.3)',
                             borderWidth: 1,
                             // stack: 'Stack 1',
                         },
@@ -550,34 +450,8 @@
                             label: '#  TOTAL',
                             data: qty_si_ttl,
                             type: 'horizontalBar',
-                            backgroundColor: [
-                                'rgba(201, 0, 0, 1)', //red
-                                'rgba(201, 0, 0, 1)',
-                                'rgba(201, 0, 0, 1)',
-                                'rgba(201, 0, 0, 1)',
-                                'rgba(201, 0, 0, 1)',
-                                'rgba(201, 0, 0, 1)',
-                                'rgba(201, 0, 0, 1)',
-                                'rgba(201, 0, 0, 1)',
-                                'rgba(201, 0, 0, 1)',
-                                'rgba(201, 0, 0, 1)',
-                                'rgba(201, 0, 0, 1)',
-                                'rgba(201, 0, 0, 1)',
-                            ],
-                            borderColor: [
-                                'rgba(201, 0, 0, 1)', //red
-                                'rgba(201, 0, 0, 1)',
-                                'rgba(201, 0, 0, 1)',
-                                'rgba(201, 0, 0, 1)',
-                                'rgba(201, 0, 0, 1)',
-                                'rgba(201, 0, 0, 1)',
-                                'rgba(201, 0, 0, 1)',
-                                'rgba(201, 0, 0, 1)',
-                                'rgba(201, 0, 0, 1)',
-                                'rgba(201, 0, 0, 1)',
-                                'rgba(201, 0, 0, 1)',
-                                'rgba(201, 0, 0, 1)',
-                            ],
+                            backgroundColor: 'rgba(201, 0, 0, 1)',
+                            borderColor: 'rgba(201, 0, 0, 1)',
                             borderWidth: 1,
                             // stack: 'Stack 2',
                         },
@@ -585,34 +459,8 @@
                             label: '#  TARGET TOTAL',
                             data: target_si_ttl,
                             type: 'horizontalBar',
-                            backgroundColor: [
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)', //grey
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                            ],
-                            borderColor: [
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)', //grey
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                            ],
+                            backgroundColor: 'rgba(107, 107, 107, 0.3)',
+                            borderColor: 'rgba(107, 107, 107, 0.3)',
                             borderWidth: 1,
                             // stack: 'Stack 2',
                         },
@@ -645,9 +493,9 @@
                   scales: {
                       xAxes: [{
                           stacked: false,
-                          ticks: {
-                            max: 7000000,
-                          }
+                          // ticks: {
+                          //   max: 25000000,
+                          // }
                         }
                       ]
                   },
@@ -672,7 +520,28 @@
                     },
                   },
                   tooltips: {
-                    enabled: true,
+                    backgroundColor: '#1f2937',
+                    titleFontColor: '#ffffff',
+                    bodyFontColor: '#ffffff',
+                    borderColor: '#374151',
+                    borderWidth: 1,
+                    cornerRadius: 8,
+                    xPadding: 12,
+                    yPadding: 10,
+                    displayColors: true,
+                    callbacks: {
+                        label: function(tooltipItem, data) {
+
+                            var dataset =
+                                data.datasets[tooltipItem.datasetIndex];
+
+                            var value = Number(tooltipItem.xLabel)
+                                .toFixed(0)
+                                .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+                            return dataset.label + ' : ' + value;
+                        }
+                    }
                   }, 
               
                 },
@@ -728,32 +597,8 @@
                             label: '#  LORD',
                             data: qty_so_ld,
                             type: 'horizontalBar',
-                            backgroundColor: [
-                                'rgba(0, 56, 255, 1.0)', //darkblue
-                                'rgba(0, 56, 255, 1.0)',
-                                'rgba(0, 56, 255, 1.0)',
-                                'rgba(0, 56, 255, 1.0)',
-                                'rgba(0, 56, 255, 1.0)',
-                                'rgba(0, 56, 255, 1.0)',
-                                'rgba(0, 56, 255, 1.0)',
-                                'rgba(0, 56, 255, 1.0)',
-                                'rgba(0, 56, 255, 1.0)',
-                                'rgba(0, 56, 255, 1.0)',
-                                'rgba(0, 56, 255, 1.0)',
-                            ],
-                            borderColor: [
-                                'rgba(0, 56, 255, 1.0)', //darkblue
-                                'rgba(0, 56, 255, 1.0)',
-                                'rgba(0, 56, 255, 1.0)',
-                                'rgba(0, 56, 255, 1.0)',
-                                'rgba(0, 56, 255, 1.0)',
-                                'rgba(0, 56, 255, 1.0)',
-                                'rgba(0, 56, 255, 1.0)',
-                                'rgba(0, 56, 255, 1.0)',
-                                'rgba(0, 56, 255, 1.0)',
-                                'rgba(0, 56, 255, 1.0)',
-                                'rgba(0, 56, 255, 1.0)',
-                            ],
+                            backgroundColor: 'rgba(0, 56, 255, 1.0)',
+                            borderColor: 'rgba(0, 56, 255, 1.0)',
                             borderWidth: 1,
                             // stack: 'Stack 0',
                         },
@@ -761,34 +606,8 @@
                             label: '#  TARGET LORD',
                             data: target_so_ld,
                             type: 'horizontalBar',
-                            backgroundColor: [
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)', //grey
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                            ],
-                            borderColor: [
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)', //grey
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                            ],
+                            backgroundColor: 'rgba(107, 107, 107, 0.3)',
+                            borderColor: 'rgba(107, 107, 107, 0.3)',
                             borderWidth: 1,
                             // stack: 'Stack 0',
                         },
@@ -796,34 +615,8 @@
                             label: '#  JORDAN',
                             data: qty_so_jd,
                             type: 'horizontalBar',
-                            backgroundColor: [
-                                'rgba(79, 176, 255, 1)', //lightblue
-                                'rgba(79, 176, 255, 1)',
-                                'rgba(79, 176, 255, 1)',
-                                'rgba(79, 176, 255, 1)',
-                                'rgba(79, 176, 255, 1)',
-                                'rgba(79, 176, 255, 1)',
-                                'rgba(79, 176, 255, 1)',
-                                'rgba(79, 176, 255, 1)',
-                                'rgba(79, 176, 255, 1)',
-                                'rgba(79, 176, 255, 1)',
-                                'rgba(79, 176, 255, 1)',
-                                'rgba(79, 176, 255, 1)',
-                            ],
-                            borderColor: [
-                                'rgba(79, 176, 255, 1)', //lightblue
-                                'rgba(79, 176, 255, 1)',
-                                'rgba(79, 176, 255, 1)',
-                                'rgba(79, 176, 255, 1)',
-                                'rgba(79, 176, 255, 1)',
-                                'rgba(79, 176, 255, 1)',
-                                'rgba(79, 176, 255, 1)',
-                                'rgba(79, 176, 255, 1)',
-                                'rgba(79, 176, 255, 1)',
-                                'rgba(79, 176, 255, 1)',
-                                'rgba(79, 176, 255, 1)',
-                                'rgba(79, 176, 255, 1)',
-                            ],
+                            backgroundColor: 'rgba(79, 176, 255, 1)',
+                            borderColor: 'rgba(79, 176, 255, 1)',
                             borderWidth: 1,
                             // stack: 'Stack 1',
                         },
@@ -831,34 +624,8 @@
                             label: '#  TARGET JORDAN',
                             data: target_so_jd,
                             type: 'horizontalBar',
-                            backgroundColor: [
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)', //grey
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                            ],
-                            borderColor: [
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)', //grey
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                            ],
+                            backgroundColor: 'rgba(107, 107, 107, 0.3)',
+                            borderColor: 'rgba(107, 107, 107, 0.3)',
                             borderWidth: 1,
                             // stack: 'Stack 1',
                         },
@@ -866,34 +633,8 @@
                             label: '#  TOTAL',
                             data: qty_so_ttl,
                             type: 'horizontalBar',
-                            backgroundColor: [
-                                'rgba(201, 0, 0, 1)', //red
-                                'rgba(201, 0, 0, 1)',
-                                'rgba(201, 0, 0, 1)',
-                                'rgba(201, 0, 0, 1)',
-                                'rgba(201, 0, 0, 1)',
-                                'rgba(201, 0, 0, 1)',
-                                'rgba(201, 0, 0, 1)',
-                                'rgba(201, 0, 0, 1)',
-                                'rgba(201, 0, 0, 1)',
-                                'rgba(201, 0, 0, 1)',
-                                'rgba(201, 0, 0, 1)',
-                                'rgba(201, 0, 0, 1)',
-                            ],
-                            borderColor: [
-                                'rgba(201, 0, 0, 1)', //red
-                                'rgba(201, 0, 0, 1)',
-                                'rgba(201, 0, 0, 1)',
-                                'rgba(201, 0, 0, 1)',
-                                'rgba(201, 0, 0, 1)',
-                                'rgba(201, 0, 0, 1)',
-                                'rgba(201, 0, 0, 1)',
-                                'rgba(201, 0, 0, 1)',
-                                'rgba(201, 0, 0, 1)',
-                                'rgba(201, 0, 0, 1)',
-                                'rgba(201, 0, 0, 1)',
-                                'rgba(201, 0, 0, 1)',
-                            ],
+                            backgroundColor: 'rgba(201, 0, 0, 1)',
+                            borderColor: 'rgba(201, 0, 0, 1)',
                             borderWidth: 1,
                             // stack: 'Stack 2',
                         },
@@ -901,34 +642,8 @@
                             label: '#  TARGET TOTAL',
                             data: target_so_ttl,
                             type: 'horizontalBar',
-                            backgroundColor: [
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)', //grey
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                            ],
-                            borderColor: [
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)', //grey
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                                'rgba(107, 107, 107, 0.3)',
-                            ],
+                            backgroundColor: 'rgba(107, 107, 107, 0.3)',
+                            borderColor: 'rgba(107, 107, 107, 0.3)',
                             borderWidth: 1,
                             // stack: 'Stack 2',
                         },
@@ -961,9 +676,9 @@
                   scales: {
                       xAxes: [{
                           stacked: false,
-                          ticks: {
-                            max: 8000000,
-                          }
+                          // ticks: {
+                          //   max: 8000000,
+                          // }
                         }
                       ]
                   },
@@ -988,7 +703,28 @@
                     },
                   },
                   tooltips: {
-                    enabled: true,
+                    backgroundColor: '#1f2937',
+                    titleFontColor: '#ffffff',
+                    bodyFontColor: '#ffffff',
+                    borderColor: '#374151',
+                    borderWidth: 1,
+                    cornerRadius: 8,
+                    xPadding: 12,
+                    yPadding: 10,
+                    displayColors: true,
+                    callbacks: {
+                        label: function(tooltipItem, data) {
+
+                            var dataset =
+                                data.datasets[tooltipItem.datasetIndex];
+
+                            var value = Number(tooltipItem.xLabel)
+                                .toFixed(0)
+                                .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+                            return dataset.label + ' : ' + value;
+                        }
+                    }
                   }, 
               
                 },

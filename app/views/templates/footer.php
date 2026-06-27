@@ -108,30 +108,6 @@
   });
 </script>
 
-<!-- <script>
-  $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-    $("select.select2").select2({
-        tags: true
-    })
-  })
-</script> -->
-
-<!-- <script>
-  function setYearPicker(input){
-    $(input).datetimepicker({
-        format: "YYYY",
-        useCurrent: false,
-        viewMode: "years"
-    })
-  }
-</script>
-
-<script>
-    $(document).ready(function(){
-        setYearPicker("#yearpicker")
-    })
-</script> -->
-
 <script>
   //var table, save_method;
   $(document).ready(function() {

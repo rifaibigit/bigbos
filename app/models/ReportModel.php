@@ -671,7 +671,6 @@ class ReportModel {
 		$str_sql = $str_sql . " left join ";
 		$str_sql = $str_sql . " (select aa.tanggal, aa.invoice, aa.outlet_type, aa.item_code, sum(aa.qty) as qty, sum(aa.value_exc) as value_exc";
 		$str_sql = $str_sql . " from selling_out aa";
-		//$str_sql = $str_sql . " inner join pricelist bb on aa.item_code = bb.item_code and bb.valid_from <= aa.tanggal";
 		$str_sql = $str_sql . " inner join sku cc on aa.item_code = cc.item_code";
 		$str_sql = $str_sql . " inner join area dd on aa.area = dd.area";
 		$str_sql = $str_sql . " where (month(aa.tanggal) between '" . $month1 . "' and '" . $month2 . "') and year(aa.tanggal) = '" . $year . "'";
@@ -25253,14 +25252,16 @@ class ReportModel {
 			$year = $_POST['by_year'];
 		}else
 		{
-			$year = date('Y');
+			$get['period_si'] = $this->getMonth_SO();
+			$year = $get['period_si']['year'];
 		}
 		if (isset($_POST['by_month']))
 		{
 			$month = $_POST['by_month'];
 		}else
 		{
-			$month = date('m');
+			$get['period_si'] = $this->getMonth_SO();
+			$month = $get['period_si']['to_month'];
 		}
 
 		if((int)$month > 1)
@@ -25498,6 +25499,7 @@ class ReportModel {
 
 		// Flasher::setMessage('Berhasil',$str_sql,'success');
 		// Flasher::setMessage('Berhasil', $last_year . ' - ' . $last_month ,'success');
+		// Flasher::setMessage('Berhasil', $year . ' - ' . $month ,'success');
 
 		$this->db->opendb();
 		$this->db->query($str_sql);
@@ -30964,15 +30966,14 @@ class ReportModel {
 			$month = $_POST['by_month'];
 		}else
 		{
-			$get['period_si'] = $this->getMonth_SO2($_POST['by_year']);
-			$month = $get['period_si']['to_month'];
+			$month = $data['by_month'];
 		}
 		if(isset($_POST['by_year']))
 		{
 			$year = $_POST['by_year'];
 		}else
 		{
-			$year = date('Y');
+			$year = $data['by_year'];
 		}
 
 		$fromdate = '-' .$month. '-1';
@@ -31461,14 +31462,14 @@ class ReportModel {
 			$month = $_POST['by_month'];
 		}else
 		{
-			$month = date('m');
+			$month = $data['by_month'];
 		}
 		if(isset($_POST['by_year']))
 		{
 			$year = $_POST['by_year'];
 		}else
 		{
-			$year = date('Y');
+			$year = $data['by_year'];
 		}
 
 		$fromdate = '-' .$month. '-1';
@@ -31983,7 +31984,7 @@ class ReportModel {
 			$str_sql = $str_sql . " order by a.id";
 		}
 
-		////Flasher::setMessage('Berhasil',$str_sql,'success');
+		Flasher::setMessage('Berhasil',$str_sql,'success');
 
 		$this->db->opendb();
 		$this->db->query($str_sql);
@@ -33233,642 +33234,813 @@ class ReportModel {
 		return $this->db->resultSet();
 	}
 
+	// public function getCont_lord_ALL($data)
+	// {
+
+	// 	if (isset($_POST['by_region']))
+	// 	{
+	// 		$region = $_POST['by_region'];
+	// 	}
+	// 	if (isset($_POST['by_area']))
+	// 	{
+	// 		$area = implode(',', $_POST['by_area']);
+	// 		$area = str_replace(",", "','", $area);;
+	// 	}
+	// 	elseif ($_SESSION['area'] != 'ALL')
+	// 	{
+	// 		$session_area = str_replace(", ", "','", $_SESSION['area']); 
+	// 		$area = $session_area;
+	// 	}
+	// 	if (isset($_POST['by_island']))
+	// 	{
+	// 		$island = $_POST['by_island'];
+	// 	}
+		
+	// 	if(isset($_POST['by_month1']))
+	// 	{
+	// 		$month1 = $_POST['by_month1'];
+	// 	}else
+	// 	{
+	// 		$get['period_so'] = $this->getMonth_SO();
+	// 		$month1 = $get['period_so']['to_month'];
+	// 	}
+
+	// 	if(isset($_POST['by_month2']))
+	// 	{
+	// 		$month2 = $_POST['by_month2'];
+	// 	}else
+	// 	{
+	// 		$get['period_so'] = $this->getMonth_SO();
+	// 		$month2 = $get['period_so']['to_month'];
+	// 	}
+
+	// 	if(isset($_POST['by_year']))
+	// 	{
+	// 		$year = $_POST['by_year'];
+	// 	}else
+	// 	{
+	// 		$year = date('Y');
+	// 	}
+
+	// 	$fromdate = '-' .$month1. '-1';
+	// 	$todate = '-' .$month2. '-1';
+		
+	// 	$str_sql = " SELECT distinct a.id, a.channel, a.desc_type, a.outlet_type, b.ro as RO,";
+
+	// 	if (isset($island) and isset($area) and isset($region) and $island != '' and $area != '' and $region != '')
+	// 	{
+	// 		$a=1;
+	// 		foreach($data['sku_code'] as $sku):
+	// 			$str_sql = $str_sql . " c.qty" .$a. ",";
+	// 			$str_sql = $str_sql . " (c.qty" .$a. "/(select sum(qty) as total_qty from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and y.island = '" . $island . "' and x.area in ('" . $area . "') and y.region = '" . $region . "'  and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%qty".$a."',";
+	// 			$str_sql = $str_sql . " (c.val" .$a. ") as val" .$a. ",";
+	// 			$str_sql = $str_sql . " (c.val" .$a. "/(select sum(value_exc) as total_val from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and y.island = '" . $island . "' and x.area in ('" . $area . "') and y.region = '" . $region . "'  and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%val".$a."',";
+	// 			$a++;
+	// 		endforeach;
+	
+	// 		$str_sql = $str_sql . " d.total_qty, (d.total_val) as total_val";
+	// 		$str_sql = $str_sql . " FROM channel a";
+
+	// 		$str_sql = $str_sql . " LEFT JOIN (select ro.outlet_type, sum(ro.ro) as ro
+	// 											from (
+	// 													select a.id, a.big_code, a.outlet_code, a.outlet_name, a.area, c.outlet_type, a.dist_code, b.distributor, a2.total_outlet as ro
+	// 													from outlet a 
+	// 													inner join ( 
+	// 																select big_code, outlet_code, area, dist_code, max(total_outlet) total_outlet, max(register_date) as register_date
+	// 																from outlet
+	// 																group by big_code, area
+	// 																) a2 on a.big_code = a2.big_code and a.area = a2.area and a.register_date = a2.register_date
+	// 													inner join distributor b on a.dist_code = b.cust_code and a.area = b.area
+	// 													inner join channel c on a.outlet_type = c.outlet_type
+	// 													inner join area d on a.area = d.area
+	// 													where d.island = '" . $island . "' and d.region = '" . $region . "' and a.area in ('" . $area . "')
+	// 													and a.register_date <= last_day(concat('".$year."', '".$todate."'))
+	// 													group by a.outlet_type, a.big_code, a.area
+	// 													order by a.big_code) ro
+	// 											group by ro.outlet_type
+	// 								) b on a.outlet_type = b.outlet_type";
+
+	// 		$i = 1;
+
+	// 		$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type,";
+	// 				foreach($data['sku_code'] as $sku):
+	// 					$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', qty, 0)) AS qty".$i.",";
+	// 					$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', value_exc, 0)) AS val".$i.",";
+	// 					$i++;
+	// 				endforeach;
+	// 				$str_sql = substr($str_sql, 0, -1);
+
+	// 					$str_sql = $str_sql . " from selling_out x 
+	// 											left join area y on x.area = y.area 
+	// 											right join channel z on x.outlet_type = z.outlet_type 
+	// 											where y.island = '" . $island . "' and y.region = '" . $region . "' and x.area in ('" . $area . "')
+	// 											and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
+	// 											and year(x.tanggal) = '" . $year . "' 
+	// 											group by x.outlet_type
+	// 								) c on a.outlet_type = c.outlet_type";
+
+	// 		$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type, sum(qty) as total_qty, sum(value_exc) as total_val 
+	// 											from selling_out x 
+	// 											left join area y on x.area = y.area right 
+	// 											join channel z on x.outlet_type = z.outlet_type 
+	// 											where x.principal = 'LORD' 
+	// 											and y.island = '" . $island . "' and y.region = '" . $region . "' and x.area in ('" . $area . "')  
+	// 											and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
+	// 											and year(x.tanggal) = '" . $year . "' 
+	// 											group by x.outlet_type
+	// 								) d on a.outlet_type = d.outlet_type";
+			
+	// 	}
+	// 	else if (isset($island) and isset($region) and $island != '' and $region != '')
+	// 	{
+	// 		$a=1;
+	// 		foreach($data['sku_code'] as $sku):
+	// 			$str_sql = $str_sql . " c.qty" .$a. ",";
+	// 			$str_sql = $str_sql . " (c.qty" .$a. "/(select sum(qty) as total_qty from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and y.island = '" . $island . "' and y.region = '" . $region . "'  and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%qty".$a."',";
+	// 			$str_sql = $str_sql . " (c.val" .$a. ") as val" .$a. ",";
+	// 			$str_sql = $str_sql . " (c.val" .$a. "/(select sum(value_exc) as total_val from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and y.island = '" . $island . "' and y.region = '" . $region . "'  and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%val".$a."',";
+	// 			$a++;
+	// 		endforeach;
+	
+	// 		$str_sql = $str_sql . " d.total_qty, (d.total_val) as total_val";
+	// 		$str_sql = $str_sql . " FROM channel a";
+
+	// 		$str_sql = $str_sql . " LEFT JOIN (select ro.outlet_type, sum(ro.ro) as ro
+	// 											from (
+	// 													select a.id, a.big_code, a.outlet_code, a.outlet_name, a.area, c.outlet_type, a.dist_code, b.distributor, a2.total_outlet as ro
+	// 													from outlet a 
+	// 													inner join ( 
+	// 																select big_code, outlet_code, area, dist_code, max(total_outlet) total_outlet, max(register_date) as register_date
+	// 																from outlet
+	// 																group by big_code, area
+	// 																) a2 on a.big_code = a2.big_code and a.area = a2.area and a.register_date = a2.register_date
+	// 													inner join distributor b on a.dist_code = b.cust_code and a.area = b.area
+	// 													inner join channel c on a.outlet_type = c.outlet_type
+	// 													inner join area d on a.area = d.area
+	// 													where d.island = '" . $island . "' and d.region = '" . $region . "'
+	// 													and a.register_date <= last_day(concat('".$year."', '".$todate."'))
+	// 													group by a.outlet_type, a.big_code, a.area
+	// 													order by a.big_code) ro
+	// 											group by ro.outlet_type
+	// 								) b on a.outlet_type = b.outlet_type";
+
+	// 		$i = 1;
+
+	// 		$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type,";
+	// 				foreach($data['sku_code'] as $sku):
+	// 					$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', qty, 0)) AS qty".$i.",";
+	// 					$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', value_exc, 0)) AS val".$i.",";
+	// 					$i++;
+	// 				endforeach;
+	// 				$str_sql = substr($str_sql, 0, -1);
+
+	// 					$str_sql = $str_sql . " from selling_out x 
+	// 											left join area y on x.area = y.area 
+	// 											right join channel z on x.outlet_type = z.outlet_type 
+	// 											where y.island = '" . $island . "' and y.region = '" . $region . "' 
+	// 											and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
+	// 											and year(x.tanggal) = '" . $year . "' 
+	// 											group by x.outlet_type
+	// 								) c on a.outlet_type = c.outlet_type";
+						
+	// 		$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type, sum(qty) as total_qty, sum(value_exc) as total_val 
+	// 											from selling_out x 
+	// 											left join area y on x.area = y.area 
+	// 											right join channel z on x.outlet_type = z.outlet_type 
+	// 											where x.principal = 'LORD' 
+	// 											and y.island = '" . $island . "' and y.region = '" . $region . "' 
+	// 											and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
+	// 											and year(x.tanggal) = '" . $year . "' 
+	// 											group by x.outlet_type
+	// 								) d on a.outlet_type = d.outlet_type";
+
+	// 	}
+	// 	else if (isset($island) and isset($area) and $island != '' and $area != '')
+	// 	{
+	// 		$a=1;
+	// 		foreach($data['sku_code'] as $sku):
+	// 			$str_sql = $str_sql . " c.qty" .$a. ",";
+	// 			$str_sql = $str_sql . " (c.qty" .$a. "/(select sum(qty) as total_qty from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and y.island = '" . $island . "' and x.area in ('" . $area . "') and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%qty".$a."',";
+	// 			$str_sql = $str_sql . " (c.val" .$a. ") as val" .$a. ",";
+	// 			$str_sql = $str_sql . " (c.val" .$a. "/(select sum(value_exc) as total_val from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and y.island = '" . $island . "' and x.area in ('" . $area . "') and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%val".$a."',";
+	// 			$a++;
+	// 		endforeach;
+	
+	// 		$str_sql = $str_sql . " d.total_qty, (d.total_val) as total_val";
+	// 		$str_sql = $str_sql . " FROM channel a";
+
+	// 		$str_sql = $str_sql . " LEFT JOIN (select ro.outlet_type, sum(ro.ro) as ro
+	// 											from (
+	// 													select a.id, a.big_code, a.outlet_code, a.outlet_name, a.area, c.outlet_type, a.dist_code, b.distributor, a2.total_outlet as ro
+	// 													from outlet a 
+	// 													inner join ( 
+	// 																select big_code, outlet_code, area, dist_code, max(total_outlet) total_outlet, max(register_date) as register_date
+	// 																from outlet
+	// 																group by big_code, area
+	// 																) a2 on a.big_code = a2.big_code and a.area = a2.area and a.register_date = a2.register_date
+	// 													inner join distributor b on a.dist_code = b.cust_code and a.area = b.area
+	// 													inner join channel c on a.outlet_type = c.outlet_type
+	// 													inner join area d on a.area = d.area
+	// 													where d.island = '" . $island . "' and a.area in ('" . $area . "')
+	// 													and a.register_date <= last_day(concat('".$year."', '".$todate."'))
+	// 													group by a.outlet_type, a.big_code, a.area
+	// 													order by a.big_code) ro
+	// 											group by ro.outlet_type
+	// 								) b on a.outlet_type = b.outlet_type";
+									 
+	// 		$i = 1;
+
+	// 		$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type,";
+	// 				foreach($data['sku_code'] as $sku):
+	// 					$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', qty, 0)) AS qty".$i.",";
+	// 					$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', value_exc, 0)) AS val".$i.",";
+	// 					$i++;
+	// 				endforeach;
+	// 				$str_sql = substr($str_sql, 0, -1);
+
+	// 					$str_sql = $str_sql . " from selling_out x 
+	// 											left join area y on x.area = y.area 
+	// 											right join channel z on x.outlet_type = z.outlet_type 
+	// 											where y.island = '" . $island . "' and x.area in ('" . $area . "') 
+	// 											and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
+	// 											and year(x.tanggal) = '" . $year . "' 
+	// 											group by x.outlet_type
+	// 								) c on a.outlet_type = c.outlet_type";
+						
+	// 		$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type, sum(qty) as total_qty, sum(value_exc) as total_val 
+	// 											from selling_out x 
+	// 											left join area y on x.area = y.area 
+	// 											right join channel z on x.outlet_type = z.outlet_type 
+	// 											where x.principal = 'LORD' 
+	// 											and y.island = '" . $island . "' and x.area in ('" . $area . "') 
+	// 											and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
+	// 											and year(x.tanggal) = '" . $year . "' 
+	// 											group by x.outlet_type
+	// 								) d on a.outlet_type = d.outlet_type";
+
+	// 	}
+	// 	else if (isset($area) and isset($region) and $area != '' and $region != '')
+	// 	{
+	// 		$a=1;
+	// 		foreach($data['sku_code'] as $sku):
+	// 			$str_sql = $str_sql . " c.qty" .$a. ",";
+	// 			$str_sql = $str_sql . " (c.qty" .$a. "/(select sum(qty) as total_qty from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and x.area in ('" . $area . "') and y.region = '" . $region . "'  and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%qty".$a."',";
+	// 			$str_sql = $str_sql . " (c.val" .$a. ") as val" .$a. ",";
+	// 			$str_sql = $str_sql . " (c.val" .$a. "/(select sum(value_exc) as total_val from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and x.area in ('" . $area . "') and y.region = '" . $region . "'  and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%val".$a."',";
+	// 			$a++;
+	// 		endforeach;
+	
+	// 		$str_sql = $str_sql . " d.total_qty, (d.total_val) as total_val";
+	// 		$str_sql = $str_sql . " FROM channel a";
+
+	// 		$str_sql = $str_sql . " LEFT JOIN (select ro.outlet_type, sum(ro.ro) as ro
+	// 											from (
+	// 													select a.id, a.big_code, a.outlet_code, a.outlet_name, a.area, c.outlet_type, a.dist_code, b.distributor, a2.total_outlet as ro
+	// 													from outlet a 
+	// 													inner join ( 
+	// 																select big_code, outlet_code, area, dist_code, max(total_outlet) total_outlet, max(register_date) as register_date
+	// 																from outlet
+	// 																group by big_code, area
+	// 																) a2 on a.big_code = a2.big_code and a.area = a2.area and a.register_date = a2.register_date
+	// 													inner join distributor b on a.dist_code = b.cust_code and a.area = b.area
+	// 													inner join channel c on a.outlet_type = c.outlet_type
+	// 													inner join area d on a.area = d.area
+	// 													where a.area in ('" . $area . "') and d.region = '" . $region . "'
+	// 													and a.register_date <= last_day(concat('".$year."', '".$todate."'))
+	// 													group by a.outlet_type, a.big_code, a.area
+	// 													order by a.big_code) ro
+	// 											group by ro.outlet_type
+	// 								) b on a.outlet_type = b.outlet_type";
+
+	// 		$i = 1;
+			
+	// 		$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type,";
+	// 				foreach($data['sku_code'] as $sku):
+	// 					$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', qty, 0)) AS qty".$i.",";
+	// 					$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', value_exc, 0)) AS val".$i.",";
+	// 					$i++;
+	// 				endforeach;
+	// 				$str_sql = substr($str_sql, 0, -1);
+
+	// 					$str_sql = $str_sql . " from selling_out x 
+	// 											left join area y on x.area = y.area 
+	// 											right join channel z on x.outlet_type = z.outlet_type 
+	// 											where x.area in ('" . $area . "') and y.region = '" . $region . "' 
+	// 											and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
+	// 											and year(x.tanggal) = '" . $year . "' 
+	// 											group by x.outlet_type
+	// 								) c on a.outlet_type = c.outlet_type";
+
+	// 		$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type, sum(qty) as total_qty, sum(value_exc) as total_val 
+	// 											from selling_out x 
+	// 											left join area y on x.area = y.area 
+	// 											right join channel z on x.outlet_type = z.outlet_type 
+	// 											where x.principal = 'LORD' 
+	// 											and x.area in ('" . $area . "') and y.region = '" . $region . "' 
+	// 											and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "')
+	// 											and year(x.tanggal) = '" . $year . "' 
+	// 											group by x.outlet_type
+	// 								) d on a.outlet_type = d.outlet_type";
+
+	// 	}
+	// 	else if (isset($island) and $island != '')
+	// 	{
+	// 		$a=1;
+	// 		foreach($data['sku_code'] as $sku):
+	// 			$str_sql = $str_sql . " c.qty" .$a. ",";
+	// 			$str_sql = $str_sql . " (c.qty" .$a. "/(select sum(qty) as total_qty from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and y.island = '" . $island . "' and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%qty".$a."',";
+	// 			$str_sql = $str_sql . " (c.val" .$a. ") as val" .$a. ",";
+	// 			$str_sql = $str_sql . " (c.val" .$a. "/(select sum(value_exc) as total_val from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and y.island = '" . $island . "' and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%val".$a."',";
+	// 			$a++;
+	// 		endforeach;
+	
+	// 		$str_sql = $str_sql . " d.total_qty, (d.total_val) as total_val";
+	// 		$str_sql = $str_sql . " FROM channel a";
+
+	// 		$str_sql = $str_sql . " LEFT JOIN (select ro.outlet_type, sum(ro.ro) as ro
+	// 											from (
+	// 													select a.id, a.big_code, a.outlet_code, a.outlet_name, a.area, c.outlet_type, a.dist_code, b.distributor, a2.total_outlet as ro
+	// 													from outlet a 
+	// 													inner join ( 
+	// 																select big_code, outlet_code, area, dist_code, max(total_outlet) total_outlet, max(register_date) as register_date
+	// 																from outlet
+	// 																group by big_code, area
+	// 																) a2 on a.big_code = a2.big_code and a.area = a2.area and a.register_date = a2.register_date
+	// 													inner join distributor b on a.dist_code = b.cust_code and a.area = b.area
+	// 													inner join channel c on a.outlet_type = c.outlet_type
+	// 													inner join area d on a.area = d.area
+	// 													where d.island in ('" . $island . "') 
+	// 													and a.register_date <= last_day(concat('".$year."', '".$todate."'))
+	// 													group by a.outlet_type, a.big_code, a.area
+	// 													order by a.big_code) ro
+	// 											group by ro.outlet_type
+	// 								) b on a.outlet_type = b.outlet_type";
+
+	// 		$i = 1;
+			
+	// 		$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type,";
+	// 				foreach($data['sku_code'] as $sku):
+	// 					$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', qty, 0)) AS qty".$i.",";
+	// 					$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', value_exc, 0)) AS val".$i.",";
+	// 					$i++;
+	// 				endforeach;
+	// 				$str_sql = substr($str_sql, 0, -1);
+
+	// 					$str_sql = $str_sql . " from selling_out x 
+	// 											left join area y on x.area = y.area 
+	// 											right join channel z on x.outlet_type = z.outlet_type 
+	// 											where y.island = '" . $island . "' 
+	// 											and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
+	// 											and year(x.tanggal) = '" . $year . "' 
+	// 											group by x.outlet_type
+	// 								) c on a.outlet_type = c.outlet_type";
+
+	// 		$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type, sum(qty) as total_qty, sum(value_exc) as total_val 
+	// 											from selling_out x 
+	// 											left join area y on x.area = y.area 
+	// 											right join channel z on x.outlet_type = z.outlet_type 
+	// 											where x.principal = 'LORD' 
+	// 											and y.island = '" . $island . "' 
+	// 											and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
+	// 											and year(x.tanggal) = '" . $year . "' 
+	// 											group by x.outlet_type
+	// 								) d on a.outlet_type = d.outlet_type";
+
+	// 	}
+	// 	else if (isset($area) and $area != '')
+	// 	{
+	// 		$a=1;
+	// 		foreach($data['sku_code'] as $sku):
+	// 			$str_sql = $str_sql . " c.qty" .$a. ",";
+	// 			$str_sql = $str_sql . " (c.qty" .$a. "/(select sum(qty) as total_qty from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and x.area in ('" . $area . "') and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%qty".$a."',";
+	// 			$str_sql = $str_sql . " (c.val" .$a. ") as val" .$a. ",";
+	// 			$str_sql = $str_sql . " (c.val" .$a. "/(select sum(value_exc) as total_val from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and x.area in ('" . $area . "') and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%val".$a."',";
+	// 			$a++;
+	// 		endforeach;
+	
+	// 		$str_sql = $str_sql . " d.total_qty, (d.total_val) as total_val";
+	// 		$str_sql = $str_sql . " FROM channel a";
+
+	// 		$str_sql = $str_sql . " LEFT JOIN (select ro.outlet_type, sum(ro.ro) as ro
+	// 											from (
+	// 													select a.id, a.big_code, a.outlet_code, a.outlet_name, a.area, c.outlet_type, a.dist_code, b.distributor, a2.total_outlet as ro
+	// 													from outlet a 
+	// 													inner join ( 
+	// 																select big_code, outlet_code, area, dist_code, max(total_outlet) total_outlet, max(register_date) as register_date
+	// 																from outlet
+	// 																group by big_code, area
+	// 																) a2 on a.big_code = a2.big_code and a.area = a2.area and a.register_date = a2.register_date
+	// 													inner join distributor b on a.dist_code = b.cust_code and a.area = b.area
+	// 													inner join channel c on a.outlet_type = c.outlet_type
+	// 													inner join area d on a.area = d.area
+	// 													where a.area in ('" . $area . "') 
+	// 													and a.register_date <= last_day(concat('".$year."', '".$todate."'))
+	// 													group by a.outlet_type, a.big_code, a.area
+	// 													order by a.big_code) ro
+	// 											group by ro.outlet_type
+	// 								) b on a.outlet_type = b.outlet_type";
+	// 		$i = 1;
+			
+	// 		$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type,";
+	// 				foreach($data['sku_code'] as $sku):
+	// 					$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', qty, 0)) AS qty".$i.",";
+	// 					$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', value_exc, 0)) AS val".$i.",";
+	// 					$i++;
+	// 				endforeach;
+	// 				$str_sql = substr($str_sql, 0, -1);
+
+	// 					$str_sql = $str_sql . " from selling_out x 
+	// 											left join area y on x.area = y.area 
+	// 											right join channel z on x.outlet_type = z.outlet_type 
+	// 											where x.area in ('" . $area . "') 
+	// 											and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
+	// 											and year(x.tanggal) = '" . $year . "' 
+	// 											group by x.outlet_type
+	// 								) c on a.outlet_type = c.outlet_type";
+
+	// 		$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type, sum(qty) as total_qty, sum(value_exc) as total_val 
+	// 											from selling_out x 
+	// 											left join area y on x.area = y.area 
+	// 											right join channel z on x.outlet_type = z.outlet_type 
+	// 											where x.principal = 'LORD' 
+	// 											and x.area in ('" . $area . "') 
+	// 											and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
+	// 											and year(x.tanggal) = '" . $year . "' 
+	// 											group by x.outlet_type
+	// 								) d on a.outlet_type = d.outlet_type";
+
+	// 	}
+	// 	else if (isset($region) and $region != '')
+	// 	{
+	// 		$a=1;
+	// 		foreach($data['sku_code'] as $sku):
+	// 			$str_sql = $str_sql . " c.qty" .$a. ",";
+	// 			$str_sql = $str_sql . " (c.qty" .$a. "/(select sum(qty) as total_qty from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and y.region = '" . $region . "'  and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%qty".$a."',";
+	// 			$str_sql = $str_sql . " (c.val" .$a. ") as val" .$a. ",";
+	// 			$str_sql = $str_sql . " (c.val" .$a. "/(select sum(value_exc) as total_val from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and y.region = '" . $region . "'  and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%val".$a."',";
+	// 			$a++;
+	// 		endforeach;
+	
+	// 		$str_sql = $str_sql . " d.total_qty, (d.total_val) as total_val";
+	// 		$str_sql = $str_sql . " FROM channel a";
+
+	// 		$str_sql = $str_sql . " LEFT JOIN (select ro.outlet_type, sum(ro.ro) as ro
+	// 											from (
+	// 													select a.id, a.big_code, a.outlet_code, a.outlet_name, a.area, c.outlet_type, a.dist_code, b.distributor, a2.total_outlet as ro
+	// 													from outlet a 
+	// 													inner join ( 
+	// 																select big_code, outlet_code, area, dist_code, max(total_outlet) total_outlet, max(register_date) as register_date
+	// 																from outlet
+	// 																group by big_code, area
+	// 																) a2 on a.big_code = a2.big_code and a.area = a2.area and a.register_date = a2.register_date
+	// 													inner join distributor b on a.dist_code = b.cust_code and a.area = b.area
+	// 													inner join channel c on a.outlet_type = c.outlet_type
+	// 													inner join area d on a.area = d.area
+	// 													where d.region in ('" . $region . "') 
+	// 													and a.register_date <= last_day(concat('".$year."', '".$todate."'))
+	// 													group by a.outlet_type, a.big_code, a.area
+	// 													order by a.big_code) ro
+	// 											group by ro.outlet_type
+	// 								) b on a.outlet_type = b.outlet_type";
+	// 		$i = 1;
+			
+	// 		$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type,";
+	// 				foreach($data['sku_code'] as $sku):
+	// 					$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', qty, 0)) AS qty".$i.",";
+	// 					$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', value_exc, 0)) AS val".$i.",";
+	// 					$i++;
+	// 				endforeach;
+	// 				$str_sql = substr($str_sql, 0, -1);
+
+	// 					$str_sql = $str_sql . " from selling_out x 
+	// 											left join area y on x.area = y.area 
+	// 											right join channel z on x.outlet_type = z.outlet_type 
+	// 											where y.region = '" . $region . "' 
+	// 											and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
+	// 											and year(x.tanggal) = '" . $year . "' 
+	// 											group by x.outlet_type
+	// 								) c on a.outlet_type = c.outlet_type";
+
+	// 		$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type, sum(qty) as total_qty, sum(value_exc) as total_val 
+	// 											from selling_out x 
+	// 											left join area y on x.area = y.area 
+	// 											right join channel z on x.outlet_type = z.outlet_type 
+	// 											where x.principal = 'LORD' 
+	// 											and y.region = '" . $region . "' 
+	// 											and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
+	// 											and year(x.tanggal) = '" . $year . "' 
+	// 											group by x.outlet_type
+	// 								) d on a.outlet_type = d.outlet_type";
+
+	// 	}
+	// 	else
+	// 	{	
+	// 		if ($_SESSION['area'] != 'ALL')
+	// 		{
+	// 			$session_area = str_replace(",", "','", $_SESSION['area']);
+	// 			$session_area = str_replace(" ", "", $session_area);
+
+	// 			$a=1;
+	// 			foreach($data['sku_code'] as $sku):
+	// 				$str_sql = $str_sql . " c.qty" .$a. ",";
+	// 				$str_sql = $str_sql . " (c.qty" .$a. "/(select sum(qty) as total_qty from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and x.area in ('" . $session_area . "') and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%qty".$a."',";
+	// 				$str_sql = $str_sql . " (c.val" .$a. ") as val" .$a. ",";
+	// 				$str_sql = $str_sql . " (c.val" .$a. "/(select sum(value_exc) as total_val from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and x.area in ('" . $session_area . "') and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%val".$a."',";
+	// 				$a++;
+	// 			endforeach;
+		
+	// 			$str_sql = $str_sql . " d.total_qty, (d.total_val) as total_val";
+	// 			$str_sql = $str_sql . " FROM channel a";
+
+	// 			$str_sql = $str_sql . " LEFT JOIN (select ro.outlet_type, sum(ro.ro) as ro
+	// 												from (
+	// 														select a.id, a.big_code, a.outlet_code, a.outlet_name, a.area, c.outlet_type, a.dist_code, b.distributor, a2.total_outlet as ro
+	// 														from outlet a 
+	// 														inner join ( 
+	// 																	select big_code, outlet_code, area, dist_code, max(total_outlet) total_outlet, max(register_date) as register_date
+	// 																	from outlet
+	// 																	group by big_code, area
+	// 																	) a2 on a.big_code = a2.big_code and a.area = a2.area and a.register_date = a2.register_date
+	// 														inner join distributor b on a.dist_code = b.cust_code and a.area = b.area
+	// 														inner join channel c on a.outlet_type = c.outlet_type
+	// 														inner join area d on a.area = d.area
+	// 														where a.area in ('" . $session_area . "') 
+	// 														and a.register_date <= last_day(concat('".$year."', '".$todate."'))
+	// 														group by a.outlet_type, a.big_code, a.area
+	// 														order by a.big_code) ro
+	// 												group by ro.outlet_type
+	// 									) b on a.outlet_type = b.outlet_type";
+
+	// 			$i = 1;
+				
+	// 			$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type,";
+	// 					foreach($data['sku_code'] as $sku):
+	// 						$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', qty, 0)) AS qty".$i.",";
+	// 						$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', value_exc, 0)) AS val".$i.",";
+	// 						$i++;
+	// 					endforeach;
+	// 					$str_sql = substr($str_sql, 0, -1);
+
+	// 						$str_sql = $str_sql . " from selling_out x 
+	// 												left join area y on x.area = y.area 
+	// 												right join channel z on x.outlet_type = z.outlet_type 
+	// 												where x.area in ('" . $session_area . "') 
+	// 												and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
+	// 												and year(x.tanggal) = '" . $year . "' group by x.outlet_type
+	// 									) c on a.outlet_type = c.outlet_type";
+
+	// 			$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type, sum(qty) as total_qty, sum(value_exc) as total_val 
+	// 												from selling_out x 
+	// 												left join area y on x.area = y.area 
+	// 												right join channel z on x.outlet_type = z.outlet_type 
+	// 												where x.principal = 'LORD' 
+	// 												and x.area in ('" . $session_area . "') 
+	// 												and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
+	// 												and year(x.tanggal) = '" . $year . "' 
+	// 												group by x.outlet_type
+	// 									) d on a.outlet_type = d.outlet_type";
+	// 		}
+	// 		else
+	// 		{
+	// 			$a=1;
+	// 			foreach($data['sku_code'] as $sku):
+	// 				$str_sql = $str_sql . " c.qty" .$a. ",";
+	// 				$str_sql = $str_sql . " (c.qty" .$a. "/(select sum(qty) as total_qty from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%qty".$a."',";
+	// 				$str_sql = $str_sql . " (c.val" .$a. ") as val" .$a. ",";
+	// 				$str_sql = $str_sql . " (c.val" .$a. "/(select sum(value_exc) as total_val from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%val".$a."',";
+	// 				$a++;
+	// 			endforeach;
+		
+	// 			$str_sql = $str_sql . " d.total_qty, (d.total_val) as total_val";
+	// 			$str_sql = $str_sql . " FROM channel a";
+
+	// 			$str_sql = $str_sql . " LEFT JOIN (select ro.outlet_type, sum(ro.ro) as ro
+	// 												from (
+	// 														select a.id, a.big_code, a.outlet_code, a.outlet_name, a.area, c.outlet_type, a.dist_code, b.distributor, a2.total_outlet as ro
+	// 														from outlet a 
+	// 														inner join ( 
+	// 																	select big_code, outlet_code, area, dist_code, max(total_outlet) total_outlet, max(register_date) as register_date
+	// 																	from outlet
+	// 																	group by big_code, area
+	// 																	) a2 on a.big_code = a2.big_code and a.area = a2.area and a.register_date = a2.register_date
+	// 														inner join distributor b on a.dist_code = b.cust_code and a.area = b.area
+	// 														inner join channel c on a.outlet_type = c.outlet_type
+	// 														inner join area d on a.area = d.area
+	// 														where a.register_date <= last_day(concat('".$year."', '".$todate."'))
+	// 														group by a.outlet_type, a.big_code, a.area
+	// 														order by a.big_code) ro
+	// 												group by ro.outlet_type
+	// 									) b on a.outlet_type = b.outlet_type";
+				
+	// 			$i = 1;
+				
+	// 			$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type,";
+	// 					foreach($data['sku_code'] as $sku):
+	// 						$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', qty, 0)) AS qty".$i.",";
+	// 						$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', value_exc, 0)) AS val".$i.",";
+	// 						$i++;
+	// 					endforeach;
+	// 					$str_sql = substr($str_sql, 0, -1);
+	
+	// 						$str_sql = $str_sql . " from selling_out x 
+	// 												left join area y on x.area = y.area 
+	// 												right join channel z on x.outlet_type = z.outlet_type 
+	// 												where (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
+	// 												and year(x.tanggal) = '" . $year . "' 
+	// 												group by x.outlet_type
+	// 									) c on a.outlet_type = c.outlet_type";
+						
+	// 			$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type, sum(qty) as total_qty, sum(value_exc) as total_val 
+	// 												from selling_out x 
+	// 												left join area y on x.area = y.area 
+	// 												right join channel z on x.outlet_type = z.outlet_type 
+	// 												where x.principal = 'LORD' 
+	// 												and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
+	// 												and year(x.tanggal) = '" . $year . "' 
+	// 												group by x.outlet_type
+	// 									) d on a.outlet_type = d.outlet_type";
+	// 		}
+
+	// 	}
+
+	// 	$str_sql = $str_sql . " ORDER BY a.id";
+
+	// 	////Flasher::setMessage('Berhasil',$str_sql,'success');
+
+	// 	$this->db->opendb();
+	// 	$this->db->query($str_sql);
+	// 	return $this->db->resultSet();
+	// }
+
 	public function getCont_lord_ALL($data)
 	{
-
-		if (isset($_POST['by_region']))
-		{
-			$region = $_POST['by_region'];
-		}
-		if (isset($_POST['by_area']))
-		{
-			$area = implode(',', $_POST['by_area']);
-			$area = str_replace(",", "','", $area);;
-		}
-		elseif ($_SESSION['area'] != 'ALL')
-		{
+		// --- Ambil parameter filter dengan default values ---
+		$region = isset($_POST['by_region']) ? $_POST['by_region'] : '';
+		$area = isset($_POST['by_area']) ? $_POST['by_area'] : '';
+		$island = isset($_POST['by_island']) ? $_POST['by_island'] : '';
+		
+		// Proses area
+		if (is_array($area)) {
+			$area = implode(',', $area);
+			$area = str_replace(",", "','", $area);
+		} elseif ($_SESSION['area'] != 'ALL' && empty($area)) {
 			$session_area = str_replace(", ", "','", $_SESSION['area']); 
 			$area = $session_area;
 		}
-		if (isset($_POST['by_island']))
-		{
-			$island = $_POST['by_island'];
-		}
 		
-		if(isset($_POST['by_month1']))
-		{
+		// Month & Year
+		if(isset($_POST['by_month1'])) {
 			$month1 = $_POST['by_month1'];
-		}else
-		{
+		} else {
 			$get['period_so'] = $this->getMonth_SO();
 			$month1 = $get['period_so']['to_month'];
 		}
 
-		if(isset($_POST['by_month2']))
-		{
+		if(isset($_POST['by_month2'])) {
 			$month2 = $_POST['by_month2'];
-		}else
-		{
+		} else {
 			$get['period_so'] = $this->getMonth_SO();
 			$month2 = $get['period_so']['to_month'];
 		}
 
-		if(isset($_POST['by_year']))
-		{
+		if(isset($_POST['by_year'])) {
 			$year = $_POST['by_year'];
-		}else
-		{
+		} else {
 			$year = date('Y');
 		}
 
-		$fromdate = '-' .$month1. '-1';
-		$todate = '-' .$month2. '-1';
+		$fromdate = '-' . $month1 . '-1';
+		$todate = '-' . $month2 . '-1';
 		
-		$str_sql = " SELECT distinct a.id, a.channel, a.desc_type, a.outlet_type, b.ro as RO,";
-
-		if (isset($island) and isset($area) and isset($region) and $island != '' and $area != '' and $region != '')
-		{
-			$a=1;
-			foreach($data['sku_code'] as $sku):
-				$str_sql = $str_sql . " c.qty" .$a. ",";
-				$str_sql = $str_sql . " (c.qty" .$a. "/(select sum(qty) as total_qty from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and y.island = '" . $island . "' and x.area in ('" . $area . "') and y.region = '" . $region . "'  and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%qty".$a."',";
-				$str_sql = $str_sql . " (c.val" .$a. ") as val" .$a. ",";
-				$str_sql = $str_sql . " (c.val" .$a. "/(select sum(value_exc) as total_val from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and y.island = '" . $island . "' and x.area in ('" . $area . "') and y.region = '" . $region . "'  and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%val".$a."',";
-				$a++;
-			endforeach;
-	
-			$str_sql = $str_sql . " d.total_qty, (d.total_val) as total_val";
-			$str_sql = $str_sql . " FROM channel a";
-
-			$str_sql = $str_sql . " LEFT JOIN (select ro.outlet_type, sum(ro.ro) as ro
-												from (
-														select a.id, a.big_code, a.outlet_code, a.outlet_name, a.area, c.outlet_type, a.dist_code, b.distributor, a2.total_outlet as ro
-														from outlet a 
-														inner join ( 
-																	select big_code, outlet_code, area, dist_code, max(total_outlet) total_outlet, max(register_date) as register_date
-																	from outlet
-																	group by big_code, area
-																	) a2 on a.big_code = a2.big_code and a.area = a2.area and a.register_date = a2.register_date
-														inner join distributor b on a.dist_code = b.cust_code and a.area = b.area
-														inner join channel c on a.outlet_type = c.outlet_type
-														inner join area d on a.area = d.area
-														where d.island = '" . $island . "' and d.region = '" . $region . "' and a.area in ('" . $area . "')
-														and a.register_date <= last_day(concat('".$year."', '".$todate."'))
-														group by a.outlet_type, a.big_code, a.area
-														order by a.big_code) ro
-												group by ro.outlet_type
-									) b on a.outlet_type = b.outlet_type";
-
-			$i = 1;
-
-			$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type,";
-					foreach($data['sku_code'] as $sku):
-						$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', qty, 0)) AS qty".$i.",";
-						$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', value_exc, 0)) AS val".$i.",";
-						$i++;
-					endforeach;
-					$str_sql = substr($str_sql, 0, -1);
-
-						$str_sql = $str_sql . " from selling_out x 
-												left join area y on x.area = y.area 
-												right join channel z on x.outlet_type = z.outlet_type 
-												where y.island = '" . $island . "' and y.region = '" . $region . "' and x.area in ('" . $area . "')
-												and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
-												and year(x.tanggal) = '" . $year . "' 
-												group by x.outlet_type
-									) c on a.outlet_type = c.outlet_type";
-
-			$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type, sum(qty) as total_qty, sum(value_exc) as total_val 
-												from selling_out x 
-												left join area y on x.area = y.area right 
-												join channel z on x.outlet_type = z.outlet_type 
-												where x.principal = 'LORD' 
-												and y.island = '" . $island . "' and y.region = '" . $region . "' and x.area in ('" . $area . "')  
-												and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
-												and year(x.tanggal) = '" . $year . "' 
-												group by x.outlet_type
-									) d on a.outlet_type = d.outlet_type";
-			
+		// --- Cek apakah ada SKU ---
+		if (empty($data['sku_code'])) {
+			return [];
 		}
-		else if (isset($island) and isset($region) and $island != '' and $region != '')
-		{
-			$a=1;
-			foreach($data['sku_code'] as $sku):
-				$str_sql = $str_sql . " c.qty" .$a. ",";
-				$str_sql = $str_sql . " (c.qty" .$a. "/(select sum(qty) as total_qty from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and y.island = '" . $island . "' and y.region = '" . $region . "'  and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%qty".$a."',";
-				$str_sql = $str_sql . " (c.val" .$a. ") as val" .$a. ",";
-				$str_sql = $str_sql . " (c.val" .$a. "/(select sum(value_exc) as total_val from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and y.island = '" . $island . "' and y.region = '" . $region . "'  and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%val".$a."',";
-				$a++;
-			endforeach;
-	
-			$str_sql = $str_sql . " d.total_qty, (d.total_val) as total_val";
-			$str_sql = $str_sql . " FROM channel a";
-
-			$str_sql = $str_sql . " LEFT JOIN (select ro.outlet_type, sum(ro.ro) as ro
-												from (
-														select a.id, a.big_code, a.outlet_code, a.outlet_name, a.area, c.outlet_type, a.dist_code, b.distributor, a2.total_outlet as ro
-														from outlet a 
-														inner join ( 
-																	select big_code, outlet_code, area, dist_code, max(total_outlet) total_outlet, max(register_date) as register_date
-																	from outlet
-																	group by big_code, area
-																	) a2 on a.big_code = a2.big_code and a.area = a2.area and a.register_date = a2.register_date
-														inner join distributor b on a.dist_code = b.cust_code and a.area = b.area
-														inner join channel c on a.outlet_type = c.outlet_type
-														inner join area d on a.area = d.area
-														where d.island = '" . $island . "' and d.region = '" . $region . "'
-														and a.register_date <= last_day(concat('".$year."', '".$todate."'))
-														group by a.outlet_type, a.big_code, a.area
-														order by a.big_code) ro
-												group by ro.outlet_type
-									) b on a.outlet_type = b.outlet_type";
-
-			$i = 1;
-
-			$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type,";
-					foreach($data['sku_code'] as $sku):
-						$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', qty, 0)) AS qty".$i.",";
-						$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', value_exc, 0)) AS val".$i.",";
-						$i++;
-					endforeach;
-					$str_sql = substr($str_sql, 0, -1);
-
-						$str_sql = $str_sql . " from selling_out x 
-												left join area y on x.area = y.area 
-												right join channel z on x.outlet_type = z.outlet_type 
-												where y.island = '" . $island . "' and y.region = '" . $region . "' 
-												and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
-												and year(x.tanggal) = '" . $year . "' 
-												group by x.outlet_type
-									) c on a.outlet_type = c.outlet_type";
-						
-			$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type, sum(qty) as total_qty, sum(value_exc) as total_val 
-												from selling_out x 
-												left join area y on x.area = y.area 
-												right join channel z on x.outlet_type = z.outlet_type 
-												where x.principal = 'LORD' 
-												and y.island = '" . $island . "' and y.region = '" . $region . "' 
-												and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
-												and year(x.tanggal) = '" . $year . "' 
-												group by x.outlet_type
-									) d on a.outlet_type = d.outlet_type";
-
-		}
-		else if (isset($island) and isset($area) and $island != '' and $area != '')
-		{
-			$a=1;
-			foreach($data['sku_code'] as $sku):
-				$str_sql = $str_sql . " c.qty" .$a. ",";
-				$str_sql = $str_sql . " (c.qty" .$a. "/(select sum(qty) as total_qty from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and y.island = '" . $island . "' and x.area in ('" . $area . "') and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%qty".$a."',";
-				$str_sql = $str_sql . " (c.val" .$a. ") as val" .$a. ",";
-				$str_sql = $str_sql . " (c.val" .$a. "/(select sum(value_exc) as total_val from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and y.island = '" . $island . "' and x.area in ('" . $area . "') and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%val".$a."',";
-				$a++;
-			endforeach;
-	
-			$str_sql = $str_sql . " d.total_qty, (d.total_val) as total_val";
-			$str_sql = $str_sql . " FROM channel a";
-
-			$str_sql = $str_sql . " LEFT JOIN (select ro.outlet_type, sum(ro.ro) as ro
-												from (
-														select a.id, a.big_code, a.outlet_code, a.outlet_name, a.area, c.outlet_type, a.dist_code, b.distributor, a2.total_outlet as ro
-														from outlet a 
-														inner join ( 
-																	select big_code, outlet_code, area, dist_code, max(total_outlet) total_outlet, max(register_date) as register_date
-																	from outlet
-																	group by big_code, area
-																	) a2 on a.big_code = a2.big_code and a.area = a2.area and a.register_date = a2.register_date
-														inner join distributor b on a.dist_code = b.cust_code and a.area = b.area
-														inner join channel c on a.outlet_type = c.outlet_type
-														inner join area d on a.area = d.area
-														where d.island = '" . $island . "' and a.area in ('" . $area . "')
-														and a.register_date <= last_day(concat('".$year."', '".$todate."'))
-														group by a.outlet_type, a.big_code, a.area
-														order by a.big_code) ro
-												group by ro.outlet_type
-									) b on a.outlet_type = b.outlet_type";
-									 
-			$i = 1;
-
-			$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type,";
-					foreach($data['sku_code'] as $sku):
-						$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', qty, 0)) AS qty".$i.",";
-						$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', value_exc, 0)) AS val".$i.",";
-						$i++;
-					endforeach;
-					$str_sql = substr($str_sql, 0, -1);
-
-						$str_sql = $str_sql . " from selling_out x 
-												left join area y on x.area = y.area 
-												right join channel z on x.outlet_type = z.outlet_type 
-												where y.island = '" . $island . "' and x.area in ('" . $area . "') 
-												and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
-												and year(x.tanggal) = '" . $year . "' 
-												group by x.outlet_type
-									) c on a.outlet_type = c.outlet_type";
-						
-			$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type, sum(qty) as total_qty, sum(value_exc) as total_val 
-												from selling_out x 
-												left join area y on x.area = y.area 
-												right join channel z on x.outlet_type = z.outlet_type 
-												where x.principal = 'LORD' 
-												and y.island = '" . $island . "' and x.area in ('" . $area . "') 
-												and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
-												and year(x.tanggal) = '" . $year . "' 
-												group by x.outlet_type
-									) d on a.outlet_type = d.outlet_type";
-
-		}
-		else if (isset($area) and isset($region) and $area != '' and $region != '')
-		{
-			$a=1;
-			foreach($data['sku_code'] as $sku):
-				$str_sql = $str_sql . " c.qty" .$a. ",";
-				$str_sql = $str_sql . " (c.qty" .$a. "/(select sum(qty) as total_qty from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and x.area in ('" . $area . "') and y.region = '" . $region . "'  and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%qty".$a."',";
-				$str_sql = $str_sql . " (c.val" .$a. ") as val" .$a. ",";
-				$str_sql = $str_sql . " (c.val" .$a. "/(select sum(value_exc) as total_val from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and x.area in ('" . $area . "') and y.region = '" . $region . "'  and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%val".$a."',";
-				$a++;
-			endforeach;
-	
-			$str_sql = $str_sql . " d.total_qty, (d.total_val) as total_val";
-			$str_sql = $str_sql . " FROM channel a";
-
-			$str_sql = $str_sql . " LEFT JOIN (select ro.outlet_type, sum(ro.ro) as ro
-												from (
-														select a.id, a.big_code, a.outlet_code, a.outlet_name, a.area, c.outlet_type, a.dist_code, b.distributor, a2.total_outlet as ro
-														from outlet a 
-														inner join ( 
-																	select big_code, outlet_code, area, dist_code, max(total_outlet) total_outlet, max(register_date) as register_date
-																	from outlet
-																	group by big_code, area
-																	) a2 on a.big_code = a2.big_code and a.area = a2.area and a.register_date = a2.register_date
-														inner join distributor b on a.dist_code = b.cust_code and a.area = b.area
-														inner join channel c on a.outlet_type = c.outlet_type
-														inner join area d on a.area = d.area
-														where a.area in ('" . $area . "') and d.region = '" . $region . "'
-														and a.register_date <= last_day(concat('".$year."', '".$todate."'))
-														group by a.outlet_type, a.big_code, a.area
-														order by a.big_code) ro
-												group by ro.outlet_type
-									) b on a.outlet_type = b.outlet_type";
-
-			$i = 1;
-			
-			$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type,";
-					foreach($data['sku_code'] as $sku):
-						$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', qty, 0)) AS qty".$i.",";
-						$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', value_exc, 0)) AS val".$i.",";
-						$i++;
-					endforeach;
-					$str_sql = substr($str_sql, 0, -1);
-
-						$str_sql = $str_sql . " from selling_out x 
-												left join area y on x.area = y.area 
-												right join channel z on x.outlet_type = z.outlet_type 
-												where x.area in ('" . $area . "') and y.region = '" . $region . "' 
-												and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
-												and year(x.tanggal) = '" . $year . "' 
-												group by x.outlet_type
-									) c on a.outlet_type = c.outlet_type";
-
-			$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type, sum(qty) as total_qty, sum(value_exc) as total_val 
-												from selling_out x 
-												left join area y on x.area = y.area 
-												right join channel z on x.outlet_type = z.outlet_type 
-												where x.principal = 'LORD' 
-												and x.area in ('" . $area . "') and y.region = '" . $region . "' 
-												and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "')
-												and year(x.tanggal) = '" . $year . "' 
-												group by x.outlet_type
-									) d on a.outlet_type = d.outlet_type";
-
-		}
-		else if (isset($island) and $island != '')
-		{
-			$a=1;
-			foreach($data['sku_code'] as $sku):
-				$str_sql = $str_sql . " c.qty" .$a. ",";
-				$str_sql = $str_sql . " (c.qty" .$a. "/(select sum(qty) as total_qty from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and y.island = '" . $island . "' and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%qty".$a."',";
-				$str_sql = $str_sql . " (c.val" .$a. ") as val" .$a. ",";
-				$str_sql = $str_sql . " (c.val" .$a. "/(select sum(value_exc) as total_val from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and y.island = '" . $island . "' and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%val".$a."',";
-				$a++;
-			endforeach;
-	
-			$str_sql = $str_sql . " d.total_qty, (d.total_val) as total_val";
-			$str_sql = $str_sql . " FROM channel a";
-
-			$str_sql = $str_sql . " LEFT JOIN (select ro.outlet_type, sum(ro.ro) as ro
-												from (
-														select a.id, a.big_code, a.outlet_code, a.outlet_name, a.area, c.outlet_type, a.dist_code, b.distributor, a2.total_outlet as ro
-														from outlet a 
-														inner join ( 
-																	select big_code, outlet_code, area, dist_code, max(total_outlet) total_outlet, max(register_date) as register_date
-																	from outlet
-																	group by big_code, area
-																	) a2 on a.big_code = a2.big_code and a.area = a2.area and a.register_date = a2.register_date
-														inner join distributor b on a.dist_code = b.cust_code and a.area = b.area
-														inner join channel c on a.outlet_type = c.outlet_type
-														inner join area d on a.area = d.area
-														where d.island in ('" . $island . "') 
-														and a.register_date <= last_day(concat('".$year."', '".$todate."'))
-														group by a.outlet_type, a.big_code, a.area
-														order by a.big_code) ro
-												group by ro.outlet_type
-									) b on a.outlet_type = b.outlet_type";
-
-			$i = 1;
-			
-			$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type,";
-					foreach($data['sku_code'] as $sku):
-						$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', qty, 0)) AS qty".$i.",";
-						$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', value_exc, 0)) AS val".$i.",";
-						$i++;
-					endforeach;
-					$str_sql = substr($str_sql, 0, -1);
-
-						$str_sql = $str_sql . " from selling_out x 
-												left join area y on x.area = y.area 
-												right join channel z on x.outlet_type = z.outlet_type 
-												where y.island = '" . $island . "' 
-												and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
-												and year(x.tanggal) = '" . $year . "' 
-												group by x.outlet_type
-									) c on a.outlet_type = c.outlet_type";
-
-			$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type, sum(qty) as total_qty, sum(value_exc) as total_val 
-												from selling_out x 
-												left join area y on x.area = y.area 
-												right join channel z on x.outlet_type = z.outlet_type 
-												where x.principal = 'LORD' 
-												and y.island = '" . $island . "' 
-												and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
-												and year(x.tanggal) = '" . $year . "' 
-												group by x.outlet_type
-									) d on a.outlet_type = d.outlet_type";
-
-		}
-		else if (isset($area) and $area != '')
-		{
-			$a=1;
-			foreach($data['sku_code'] as $sku):
-				$str_sql = $str_sql . " c.qty" .$a. ",";
-				$str_sql = $str_sql . " (c.qty" .$a. "/(select sum(qty) as total_qty from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and x.area in ('" . $area . "') and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%qty".$a."',";
-				$str_sql = $str_sql . " (c.val" .$a. ") as val" .$a. ",";
-				$str_sql = $str_sql . " (c.val" .$a. "/(select sum(value_exc) as total_val from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and x.area in ('" . $area . "') and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%val".$a."',";
-				$a++;
-			endforeach;
-	
-			$str_sql = $str_sql . " d.total_qty, (d.total_val) as total_val";
-			$str_sql = $str_sql . " FROM channel a";
-
-			$str_sql = $str_sql . " LEFT JOIN (select ro.outlet_type, sum(ro.ro) as ro
-												from (
-														select a.id, a.big_code, a.outlet_code, a.outlet_name, a.area, c.outlet_type, a.dist_code, b.distributor, a2.total_outlet as ro
-														from outlet a 
-														inner join ( 
-																	select big_code, outlet_code, area, dist_code, max(total_outlet) total_outlet, max(register_date) as register_date
-																	from outlet
-																	group by big_code, area
-																	) a2 on a.big_code = a2.big_code and a.area = a2.area and a.register_date = a2.register_date
-														inner join distributor b on a.dist_code = b.cust_code and a.area = b.area
-														inner join channel c on a.outlet_type = c.outlet_type
-														inner join area d on a.area = d.area
-														where a.area in ('" . $area . "') 
-														and a.register_date <= last_day(concat('".$year."', '".$todate."'))
-														group by a.outlet_type, a.big_code, a.area
-														order by a.big_code) ro
-												group by ro.outlet_type
-									) b on a.outlet_type = b.outlet_type";
-			$i = 1;
-			
-			$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type,";
-					foreach($data['sku_code'] as $sku):
-						$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', qty, 0)) AS qty".$i.",";
-						$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', value_exc, 0)) AS val".$i.",";
-						$i++;
-					endforeach;
-					$str_sql = substr($str_sql, 0, -1);
-
-						$str_sql = $str_sql . " from selling_out x 
-												left join area y on x.area = y.area 
-												right join channel z on x.outlet_type = z.outlet_type 
-												where x.area in ('" . $area . "') 
-												and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
-												and year(x.tanggal) = '" . $year . "' 
-												group by x.outlet_type
-									) c on a.outlet_type = c.outlet_type";
-
-			$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type, sum(qty) as total_qty, sum(value_exc) as total_val 
-												from selling_out x 
-												left join area y on x.area = y.area 
-												right join channel z on x.outlet_type = z.outlet_type 
-												where x.principal = 'LORD' 
-												and x.area in ('" . $area . "') 
-												and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
-												and year(x.tanggal) = '" . $year . "' 
-												group by x.outlet_type
-									) d on a.outlet_type = d.outlet_type";
-
-		}
-		else if (isset($region) and $region != '')
-		{
-			$a=1;
-			foreach($data['sku_code'] as $sku):
-				$str_sql = $str_sql . " c.qty" .$a. ",";
-				$str_sql = $str_sql . " (c.qty" .$a. "/(select sum(qty) as total_qty from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and y.region = '" . $region . "'  and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%qty".$a."',";
-				$str_sql = $str_sql . " (c.val" .$a. ") as val" .$a. ",";
-				$str_sql = $str_sql . " (c.val" .$a. "/(select sum(value_exc) as total_val from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and y.region = '" . $region . "'  and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%val".$a."',";
-				$a++;
-			endforeach;
-	
-			$str_sql = $str_sql . " d.total_qty, (d.total_val) as total_val";
-			$str_sql = $str_sql . " FROM channel a";
-
-			$str_sql = $str_sql . " LEFT JOIN (select ro.outlet_type, sum(ro.ro) as ro
-												from (
-														select a.id, a.big_code, a.outlet_code, a.outlet_name, a.area, c.outlet_type, a.dist_code, b.distributor, a2.total_outlet as ro
-														from outlet a 
-														inner join ( 
-																	select big_code, outlet_code, area, dist_code, max(total_outlet) total_outlet, max(register_date) as register_date
-																	from outlet
-																	group by big_code, area
-																	) a2 on a.big_code = a2.big_code and a.area = a2.area and a.register_date = a2.register_date
-														inner join distributor b on a.dist_code = b.cust_code and a.area = b.area
-														inner join channel c on a.outlet_type = c.outlet_type
-														inner join area d on a.area = d.area
-														where d.region in ('" . $region . "') 
-														and a.register_date <= last_day(concat('".$year."', '".$todate."'))
-														group by a.outlet_type, a.big_code, a.area
-														order by a.big_code) ro
-												group by ro.outlet_type
-									) b on a.outlet_type = b.outlet_type";
-			$i = 1;
-			
-			$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type,";
-					foreach($data['sku_code'] as $sku):
-						$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', qty, 0)) AS qty".$i.",";
-						$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', value_exc, 0)) AS val".$i.",";
-						$i++;
-					endforeach;
-					$str_sql = substr($str_sql, 0, -1);
-
-						$str_sql = $str_sql . " from selling_out x 
-												left join area y on x.area = y.area 
-												right join channel z on x.outlet_type = z.outlet_type 
-												where y.region = '" . $region . "' 
-												and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
-												and year(x.tanggal) = '" . $year . "' 
-												group by x.outlet_type
-									) c on a.outlet_type = c.outlet_type";
-
-			$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type, sum(qty) as total_qty, sum(value_exc) as total_val 
-												from selling_out x 
-												left join area y on x.area = y.area 
-												right join channel z on x.outlet_type = z.outlet_type 
-												where x.principal = 'LORD' 
-												and y.region = '" . $region . "' 
-												and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
-												and year(x.tanggal) = '" . $year . "' 
-												group by x.outlet_type
-									) d on a.outlet_type = d.outlet_type";
-
-		}
-		else
-		{	
-			if ($_SESSION['area'] != 'ALL')
-			{
-				$session_area = str_replace(",", "','", $_SESSION['area']);
-				$session_area = str_replace(" ", "", $session_area);
-
-				$a=1;
-				foreach($data['sku_code'] as $sku):
-					$str_sql = $str_sql . " c.qty" .$a. ",";
-					$str_sql = $str_sql . " (c.qty" .$a. "/(select sum(qty) as total_qty from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and x.area in ('" . $session_area . "') and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%qty".$a."',";
-					$str_sql = $str_sql . " (c.val" .$a. ") as val" .$a. ",";
-					$str_sql = $str_sql . " (c.val" .$a. "/(select sum(value_exc) as total_val from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and x.area in ('" . $session_area . "') and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%val".$a."',";
-					$a++;
-				endforeach;
 		
-				$str_sql = $str_sql . " d.total_qty, (d.total_val) as total_val";
-				$str_sql = $str_sql . " FROM channel a";
-
-				$str_sql = $str_sql . " LEFT JOIN (select ro.outlet_type, sum(ro.ro) as ro
-													from (
-															select a.id, a.big_code, a.outlet_code, a.outlet_name, a.area, c.outlet_type, a.dist_code, b.distributor, a2.total_outlet as ro
-															from outlet a 
-															inner join ( 
-																		select big_code, outlet_code, area, dist_code, max(total_outlet) total_outlet, max(register_date) as register_date
-																		from outlet
-																		group by big_code, area
-																		) a2 on a.big_code = a2.big_code and a.area = a2.area and a.register_date = a2.register_date
-															inner join distributor b on a.dist_code = b.cust_code and a.area = b.area
-															inner join channel c on a.outlet_type = c.outlet_type
-															inner join area d on a.area = d.area
-															where a.area in ('" . $session_area . "') 
-															and a.register_date <= last_day(concat('".$year."', '".$todate."'))
-															group by a.outlet_type, a.big_code, a.area
-															order by a.big_code) ro
-													group by ro.outlet_type
-										) b on a.outlet_type = b.outlet_type";
-
-				$i = 1;
-				
-				$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type,";
-						foreach($data['sku_code'] as $sku):
-							$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', qty, 0)) AS qty".$i.",";
-							$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', value_exc, 0)) AS val".$i.",";
-							$i++;
-						endforeach;
-						$str_sql = substr($str_sql, 0, -1);
-
-							$str_sql = $str_sql . " from selling_out x 
-													left join area y on x.area = y.area 
-													right join channel z on x.outlet_type = z.outlet_type 
-													where x.area in ('" . $session_area . "') 
-													and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
-													and year(x.tanggal) = '" . $year . "' group by x.outlet_type
-										) c on a.outlet_type = c.outlet_type";
-
-				$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type, sum(qty) as total_qty, sum(value_exc) as total_val 
-													from selling_out x 
-													left join area y on x.area = y.area 
-													right join channel z on x.outlet_type = z.outlet_type 
-													where x.principal = 'LORD' 
-													and x.area in ('" . $session_area . "') 
-													and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
-													and year(x.tanggal) = '" . $year . "' 
-													group by x.outlet_type
-										) d on a.outlet_type = d.outlet_type";
-			}
-			else
-			{
-				$a=1;
-				foreach($data['sku_code'] as $sku):
-					$str_sql = $str_sql . " c.qty" .$a. ",";
-					$str_sql = $str_sql . " (c.qty" .$a. "/(select sum(qty) as total_qty from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%qty".$a."',";
-					$str_sql = $str_sql . " (c.val" .$a. ") as val" .$a. ",";
-					$str_sql = $str_sql . " (c.val" .$a. "/(select sum(value_exc) as total_val from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%val".$a."',";
-					$a++;
-				endforeach;
+		// --- Get item codes (pastikan kolom yang benar) ---
+		$item_codes = array_column($data['sku_code'], 'item_code');
+		$item_list = "'" . implode("','", $item_codes) . "'";
 		
-				$str_sql = $str_sql . " d.total_qty, (d.total_val) as total_val";
-				$str_sql = $str_sql . " FROM channel a";
-
-				$str_sql = $str_sql . " LEFT JOIN (select ro.outlet_type, sum(ro.ro) as ro
-													from (
-															select a.id, a.big_code, a.outlet_code, a.outlet_name, a.area, c.outlet_type, a.dist_code, b.distributor, a2.total_outlet as ro
-															from outlet a 
-															inner join ( 
-																		select big_code, outlet_code, area, dist_code, max(total_outlet) total_outlet, max(register_date) as register_date
-																		from outlet
-																		group by big_code, area
-																		) a2 on a.big_code = a2.big_code and a.area = a2.area and a.register_date = a2.register_date
-															inner join distributor b on a.dist_code = b.cust_code and a.area = b.area
-															inner join channel c on a.outlet_type = c.outlet_type
-															inner join area d on a.area = d.area
-															where a.register_date <= last_day(concat('".$year."', '".$todate."'))
-															group by a.outlet_type, a.big_code, a.area
-															order by a.big_code) ro
-													group by ro.outlet_type
-										) b on a.outlet_type = b.outlet_type";
-				
-				$i = 1;
-				
-				$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type,";
-						foreach($data['sku_code'] as $sku):
-							$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', qty, 0)) AS qty".$i.",";
-							$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', value_exc, 0)) AS val".$i.",";
-							$i++;
-						endforeach;
-						$str_sql = substr($str_sql, 0, -1);
-	
-							$str_sql = $str_sql . " from selling_out x 
-													left join area y on x.area = y.area 
-													right join channel z on x.outlet_type = z.outlet_type 
-													where (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
-													and year(x.tanggal) = '" . $year . "' 
-													group by x.outlet_type
-										) c on a.outlet_type = c.outlet_type";
-						
-				$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type, sum(qty) as total_qty, sum(value_exc) as total_val 
-													from selling_out x 
-													left join area y on x.area = y.area 
-													right join channel z on x.outlet_type = z.outlet_type 
-													where x.principal = 'LORD' 
-													and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
-													and year(x.tanggal) = '" . $year . "' 
-													group by x.outlet_type
-										) d on a.outlet_type = d.outlet_type";
-			}
-
+		// --- Build WHERE clause untuk selling_out ---
+		$where_clause = $this->buildWhereClause($island, $area, $region, $month1, $month2, $year);
+		$where_clause_ro = $this->buildWhereClauseRO($island, $area, $region, $year, $todate);
+		
+		// --- Cek struktur tabel selling_out (sesuaikan dengan kolom yang ada) ---
+		// Jika kolom item_code tidak ada, coba cek kolom apa yang digunakan
+		// Kemungkinan: item_code, sku_code, product_code, dll
+		// Saya asumsikan kolomnya adalah 'item_code' sesuai query asli Anda
+		
+		// --- STEP 1: Get totals per item (1 query) ---
+		$sql_totals = "SELECT item_code, SUM(qty) as total_qty, SUM(value_exc) as total_val 
+					FROM selling_out x 
+					LEFT JOIN area y ON x.area = y.area 
+					WHERE x.item_code IN ($item_list) $where_clause
+					GROUP BY item_code";
+		
+		$this->db->opendb();
+		$this->db->query($sql_totals);
+		$totals = $this->db->resultSet();
+		
+		// Convert to lookup array
+		$total_lookup = [];
+		foreach ($totals as $t) {
+			$total_lookup[$t['item_code']] = $t;
 		}
+		
+		// --- STEP 2: Build pivot columns ---
+		$i = 1;
+		$pivot_columns = [];
+		foreach($data['sku_code'] as $sku) {
+			$pivot_columns[] = "SUM(IF(x.item_code = '{$sku['item_code']}', qty, 0)) AS qty$i";
+			$pivot_columns[] = "SUM(IF(x.item_code = '{$sku['item_code']}', value_exc, 0)) AS val$i";
+			$i++;
+		}
+		
+		$pivot_str = implode(", ", $pivot_columns);
 
-		$str_sql = $str_sql . " ORDER BY a.id";
+		// --- STEP 3: Build column list untuk SELECT utama ---
+		$select_columns = [];
+		$select_columns[] = "a.id";
+		$select_columns[] = "a.channel";
+		$select_columns[] = "a.desc_type";
+		$select_columns[] = "a.outlet_type";
+		$select_columns[] = "b.ro AS RO";
+		
+		// Tambahkan kolom dari subquery c (qty1, val1, qty2, val2, ...)
+		for ($j = 1; $j <= count($data['sku_code']); $j++) {
+			$select_columns[] = "c.qty$j";
+			$select_columns[] = "c.val$j";
+		}
+		
+		$select_columns[] = "d.total_qty";
+		$select_columns[] = "d.total_val";
+		
+		$select_str = implode(", ", $select_columns);
+		
+		// --- STEP 4: Build main query ---
+		$str_sql = "SELECT $select_str
+					FROM channel a";
+		
+		// RO Subquery
+		$str_sql .= " LEFT JOIN (
+						SELECT outlet_type, SUM(ro) as ro
+						FROM (
+							SELECT a.outlet_type, MAX(a.total_outlet) as ro
+							FROM outlet a
+							INNER JOIN area d ON a.area = d.area
+							WHERE a.register_date <= LAST_DAY('$year-$todate')
+							$where_clause_ro
+							GROUP BY a.outlet_type, a.big_code, a.area
+						) ro
+						GROUP BY outlet_type
+					) b ON a.outlet_type = b.outlet_type";
+		
+		// Pivot data selling
+		$str_sql .= " LEFT JOIN (
+						SELECT x.outlet_type, $pivot_str
+						FROM selling_out x
+						LEFT JOIN area y ON x.area = y.area
+						WHERE 1=1 $where_clause
+						GROUP BY x.outlet_type
+					) c ON a.outlet_type = c.outlet_type";
+		
+		// Total per outlet
+		$str_sql .= " LEFT JOIN (
+						SELECT outlet_type, SUM(qty) as total_qty, SUM(value_exc) as total_val
+						FROM selling_out x
+						LEFT JOIN area y ON x.area = y.area
+						WHERE x.principal = 'LORD' $where_clause
+						GROUP BY outlet_type
+					) d ON a.outlet_type = d.outlet_type";
+		
+		$str_sql .= " ORDER BY a.id";
 
-		////Flasher::setMessage('Berhasil',$str_sql,'success');
-
+		// error_log("SQL Query: " . $str_sql);
+		// Flasher::setMessage('Berhasil',$str_sql,'success');
+		
+		// --- STEP 5: Execute query ---
 		$this->db->opendb();
 		$this->db->query($str_sql);
-		return $this->db->resultSet();
+		$results = $this->db->resultSet();
+		
+		// --- STEP 6: Calculate percentages in PHP ---
+		foreach ($results as &$row) {
+			$i = 1;
+			foreach($data['sku_code'] as $sku) {
+				$item_code = $sku['item_code'];
+				$total_qty = isset($total_lookup[$item_code]['total_qty']) ? $total_lookup[$item_code]['total_qty'] : 0;
+				$total_val = isset($total_lookup[$item_code]['total_val']) ? $total_lookup[$item_code]['total_val'] : 0;
+				
+				$qty_key = "qty$i";
+				$val_key = "val$i";
+				
+				$row["%qty$i"] = ($total_qty > 0) ? ($row[$qty_key] / $total_qty * 100) : 0;
+				$row["%val$i"] = ($total_val > 0) ? ($row[$val_key] / $total_val * 100) : 0;
+				$i++;
+			}
+		}
+		
+		return $results;
 	}
 
 	public function getCont_lord_export($data)
@@ -34217,7 +34389,7 @@ class ReportModel {
 	public function getSOContribution()
 	{
 		$this->db->opendb();
-		$this->db->query("call so_contribution()");
+		$this->db->query("select * from temp_so_contribution");
 		return $this->db->resultSet();
 	}
 
@@ -38260,27 +38432,25 @@ class ReportModel {
 			$month1 = $_POST['by_month1'];
 		}else
 		{
-			$month1 = date('m');
+			$month1 = $data['by_month1'];
 		}
 		if(isset($_POST['by_month2']))
 		{
 			$month2 = $_POST['by_month2'];
 		}else
 		{
-			$month2 = date('m');
+			$month2 = $data['by_month1'];
 		}
 		if(isset($_POST['by_year']))
 		{
 			$year = $_POST['by_year'];
 		}else
 		{
-			$year = date('Y');
+			$year = $data['by_year'];
 		}
 
 		// $fromdate = '-' .$month. '-1';
 		// //$todate = '-' .$month. '-31';
-		
-		$str_sql = " SELECT distinct a.id as id, a.channel as channel, a.desc_type as desc_type, a.outlet_type as outlet_type, b.RO as RO,";
 
 		$str_sql = " SELECT DISTINCT a.id as id, a.channel as channel, a.desc_type as desc_type, a.outlet_type as outlet_type, b.RO as RO,";
 
@@ -39013,15 +39183,14 @@ class ReportModel {
 			$month = $_POST['by_month'];
 		}else
 		{
-			$get['period_si'] = $this->getMonth_SO2($_POST['by_year']);
-			$month = $get['period_si']['to_month'];
+			$month = $data['by_month'];
 		}
 		if(isset($_POST['by_year']))
 		{
 			$year = $_POST['by_year'];
 		}else
 		{
-			$year = date('Y');
+			$year = $data['by_year'];
 		}
 
 		$fromdate = '-' .$month. '-1';
@@ -39717,15 +39886,14 @@ class ReportModel {
 			$month = $_POST['by_month'];
 		}else
 		{
-			$get['period_si'] = $this->getMonth_SO2($_POST['by_year']);
-			$month = $get['period_si']['to_month'];
+			$month = $data['by_month'];
 		}
 		if(isset($_POST['by_year']))
 		{
 			$year = $_POST['by_year'];
 		}else
 		{
-			$year = date('Y');
+			$year = $data['by_year'];
 		}
 
 		$fromdate = '-' .$month. '-1';
@@ -42176,642 +42344,859 @@ class ReportModel {
 		return $this->db->resultSet();
 	}
 
+	// public function getCont_jordan_ALL($data)
+	// {
+
+	// 	if (isset($_POST['by_region']))
+	// 	{
+	// 		$region = $_POST['by_region'];
+	// 	}
+	// 	if (isset($_POST['by_area']))
+	// 	{
+	// 		$area = implode(',', $_POST['by_area']);
+	// 		$area = str_replace(",", "','", $area);;
+	// 	}
+	// 	elseif ($_SESSION['area'] != 'ALL')
+	// 	{
+	// 		$session_area = str_replace(", ", "','", $_SESSION['area']); 
+	// 		$area = $session_area;
+	// 	}
+	// 	if (isset($_POST['by_island']))
+	// 	{
+	// 		$island = $_POST['by_island'];
+	// 	}
+		
+	// 	if(isset($_POST['by_month1']))
+	// 	{
+	// 		$month1 = $_POST['by_month1'];
+	// 	}else
+	// 	{
+	// 		$get['period_so'] = $this->getMonth_SO();
+	// 		$month1 = $get['period_so']['to_month'];
+	// 	}
+
+	// 	if(isset($_POST['by_month2']))
+	// 	{
+	// 		$month2 = $_POST['by_month2'];
+	// 	}else
+	// 	{
+	// 		$get['period_so'] = $this->getMonth_SO();
+	// 		$month2 = $get['period_so']['to_month'];
+	// 	}
+
+	// 	if(isset($_POST['by_year']))
+	// 	{
+	// 		$year = $_POST['by_year'];
+	// 	}else
+	// 	{
+	// 		$year = date('Y');
+	// 	}
+
+	// 	$fromdate = '-' .$month1. '-1';
+	// 	$todate = '-' .$month2. '-1';
+		
+	// 	$str_sql = " SELECT distinct a.id, a.channel, a.desc_type, a.outlet_type, b.ro as RO,";
+
+	// 	if (isset($island) and isset($area) and isset($region) and $island != '' and $area != '' and $region != '')
+	// 	{
+	// 		$a=1;
+	// 		foreach($data['sku_code'] as $sku):
+	// 			$str_sql = $str_sql . " c.qty" .$a. ",";
+	// 			$str_sql = $str_sql . " (c.qty" .$a. "/(select sum(qty) as total_qty from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and y.island = '" . $island . "' and x.area in ('" . $area . "') and y.region = '" . $region . "'  and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%qty".$a."',";
+	// 			$str_sql = $str_sql . " (c.val" .$a. ") as val" .$a. ",";
+	// 			$str_sql = $str_sql . " (c.val" .$a. "/(select sum(value_exc) as total_val from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and y.island = '" . $island . "' and x.area in ('" . $area . "') and y.region = '" . $region . "'  and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%val".$a."',";
+	// 			$a++;
+	// 		endforeach;
+	
+	// 		$str_sql = $str_sql . " d.total_qty, (d.total_val) as total_val";
+	// 		$str_sql = $str_sql . " FROM channel a";
+
+	// 		$str_sql = $str_sql . " LEFT JOIN (select ro.outlet_type, sum(ro.ro) as ro
+	// 											from (
+	// 													select a.id, a.big_code, a.outlet_code, a.outlet_name, a.area, c.outlet_type, a.dist_code, b.distributor, a2.total_outlet as ro
+	// 													from outlet a 
+	// 													inner join ( 
+	// 																select big_code, outlet_code, area, dist_code, max(total_outlet) total_outlet, max(register_date) as register_date
+	// 																from outlet
+	// 																group by big_code, area
+	// 																) a2 on a.big_code = a2.big_code and a.area = a2.area and a.register_date = a2.register_date
+	// 													inner join distributor b on a.dist_code = b.cust_code and a.area = b.area
+	// 													inner join channel c on a.outlet_type = c.outlet_type
+	// 													inner join area d on a.area = d.area
+	// 													where d.island = '" . $island . "' and d.region = '" . $region . "' and a.area in ('" . $area . "')
+	// 													and a.register_date <= last_day(concat('".$year."', '".$todate."'))
+	// 													group by a.outlet_type, a.big_code, a.area
+	// 													order by a.big_code) ro
+	// 											group by ro.outlet_type
+	// 								) b on a.outlet_type = b.outlet_type";
+
+	// 		$i = 1;
+
+	// 		$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type,";
+	// 				foreach($data['sku_code'] as $sku):
+	// 					$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', qty, 0)) AS qty".$i.",";
+	// 					$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', value_exc, 0)) AS val".$i.",";
+	// 					$i++;
+	// 				endforeach;
+	// 				$str_sql = substr($str_sql, 0, -1);
+
+	// 					$str_sql = $str_sql . " from selling_out x 
+	// 											left join area y on x.area = y.area 
+	// 											right join channel z on x.outlet_type = z.outlet_type 
+	// 											where y.island = '" . $island . "' and y.region = '" . $region . "' and x.area in ('" . $area . "')
+	// 											and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
+	// 											and year(x.tanggal) = '" . $year . "' 
+	// 											group by x.outlet_type
+	// 								) c on a.outlet_type = c.outlet_type";
+
+	// 		$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type, sum(qty) as total_qty, sum(value_exc) as total_val 
+	// 											from selling_out x 
+	// 											left join area y on x.area = y.area right 
+	// 											join channel z on x.outlet_type = z.outlet_type 
+	// 											where x.principal = 'JORDAN' 
+	// 											and y.island = '" . $island . "' and y.region = '" . $region . "' and x.area in ('" . $area . "')  
+	// 											and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
+	// 											and year(x.tanggal) = '" . $year . "' 
+	// 											group by x.outlet_type
+	// 								) d on a.outlet_type = d.outlet_type";
+			
+	// 	}
+	// 	else if (isset($island) and isset($region) and $island != '' and $region != '')
+	// 	{
+	// 		$a=1;
+	// 		foreach($data['sku_code'] as $sku):
+	// 			$str_sql = $str_sql . " c.qty" .$a. ",";
+	// 			$str_sql = $str_sql . " (c.qty" .$a. "/(select sum(qty) as total_qty from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and y.island = '" . $island . "' and y.region = '" . $region . "'  and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%qty".$a."',";
+	// 			$str_sql = $str_sql . " (c.val" .$a. ") as val" .$a. ",";
+	// 			$str_sql = $str_sql . " (c.val" .$a. "/(select sum(value_exc) as total_val from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and y.island = '" . $island . "' and y.region = '" . $region . "'  and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%val".$a."',";
+	// 			$a++;
+	// 		endforeach;
+	
+	// 		$str_sql = $str_sql . " d.total_qty, (d.total_val) as total_val";
+	// 		$str_sql = $str_sql . " FROM channel a";
+
+	// 		$str_sql = $str_sql . " LEFT JOIN (select ro.outlet_type, sum(ro.ro) as ro
+	// 											from (
+	// 													select a.id, a.big_code, a.outlet_code, a.outlet_name, a.area, c.outlet_type, a.dist_code, b.distributor, a2.total_outlet as ro
+	// 													from outlet a 
+	// 													inner join ( 
+	// 																select big_code, outlet_code, area, dist_code, max(total_outlet) total_outlet, max(register_date) as register_date
+	// 																from outlet
+	// 																group by big_code, area
+	// 																) a2 on a.big_code = a2.big_code and a.area = a2.area and a.register_date = a2.register_date
+	// 													inner join distributor b on a.dist_code = b.cust_code and a.area = b.area
+	// 													inner join channel c on a.outlet_type = c.outlet_type
+	// 													inner join area d on a.area = d.area
+	// 													where d.island = '" . $island . "' and d.region = '" . $region . "'
+	// 													and a.register_date <= last_day(concat('".$year."', '".$todate."'))
+	// 													group by a.outlet_type, a.big_code, a.area
+	// 													order by a.big_code) ro
+	// 											group by ro.outlet_type
+	// 								) b on a.outlet_type = b.outlet_type";
+
+	// 		$i = 1;
+
+	// 		$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type,";
+	// 				foreach($data['sku_code'] as $sku):
+	// 					$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', qty, 0)) AS qty".$i.",";
+	// 					$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', value_exc, 0)) AS val".$i.",";
+	// 					$i++;
+	// 				endforeach;
+	// 				$str_sql = substr($str_sql, 0, -1);
+
+	// 					$str_sql = $str_sql . " from selling_out x 
+	// 											left join area y on x.area = y.area 
+	// 											right join channel z on x.outlet_type = z.outlet_type 
+	// 											where y.island = '" . $island . "' and y.region = '" . $region . "' 
+	// 											and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
+	// 											and year(x.tanggal) = '" . $year . "' 
+	// 											group by x.outlet_type
+	// 								) c on a.outlet_type = c.outlet_type";
+						
+	// 		$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type, sum(qty) as total_qty, sum(value_exc) as total_val 
+	// 											from selling_out x 
+	// 											left join area y on x.area = y.area 
+	// 											right join channel z on x.outlet_type = z.outlet_type 
+	// 											where x.principal = 'JORDAN' 
+	// 											and y.island = '" . $island . "' and y.region = '" . $region . "' 
+	// 											and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
+	// 											and year(x.tanggal) = '" . $year . "' 
+	// 											group by x.outlet_type
+	// 								) d on a.outlet_type = d.outlet_type";
+
+	// 	}
+	// 	else if (isset($island) and isset($area) and $island != '' and $area != '')
+	// 	{
+	// 		$a=1;
+	// 		foreach($data['sku_code'] as $sku):
+	// 			$str_sql = $str_sql . " c.qty" .$a. ",";
+	// 			$str_sql = $str_sql . " (c.qty" .$a. "/(select sum(qty) as total_qty from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and y.island = '" . $island . "' and x.area in ('" . $area . "') and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%qty".$a."',";
+	// 			$str_sql = $str_sql . " (c.val" .$a. ") as val" .$a. ",";
+	// 			$str_sql = $str_sql . " (c.val" .$a. "/(select sum(value_exc) as total_val from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and y.island = '" . $island . "' and x.area in ('" . $area . "') and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%val".$a."',";
+	// 			$a++;
+	// 		endforeach;
+	
+	// 		$str_sql = $str_sql . " d.total_qty, (d.total_val) as total_val";
+	// 		$str_sql = $str_sql . " FROM channel a";
+
+	// 		$str_sql = $str_sql . " LEFT JOIN (select ro.outlet_type, sum(ro.ro) as ro
+	// 											from (
+	// 													select a.id, a.big_code, a.outlet_code, a.outlet_name, a.area, c.outlet_type, a.dist_code, b.distributor, a2.total_outlet as ro
+	// 													from outlet a 
+	// 													inner join ( 
+	// 																select big_code, outlet_code, area, dist_code, max(total_outlet) total_outlet, max(register_date) as register_date
+	// 																from outlet
+	// 																group by big_code, area
+	// 																) a2 on a.big_code = a2.big_code and a.area = a2.area and a.register_date = a2.register_date
+	// 													inner join distributor b on a.dist_code = b.cust_code and a.area = b.area
+	// 													inner join channel c on a.outlet_type = c.outlet_type
+	// 													inner join area d on a.area = d.area
+	// 													where d.island = '" . $island . "' and a.area in ('" . $area . "')
+	// 													and a.register_date <= last_day(concat('".$year."', '".$todate."'))
+	// 													group by a.outlet_type, a.big_code, a.area
+	// 													order by a.big_code) ro
+	// 											group by ro.outlet_type
+	// 								) b on a.outlet_type = b.outlet_type";
+									 
+	// 		$i = 1;
+
+	// 		$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type,";
+	// 				foreach($data['sku_code'] as $sku):
+	// 					$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', qty, 0)) AS qty".$i.",";
+	// 					$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', value_exc, 0)) AS val".$i.",";
+	// 					$i++;
+	// 				endforeach;
+	// 				$str_sql = substr($str_sql, 0, -1);
+
+	// 					$str_sql = $str_sql . " from selling_out x 
+	// 											left join area y on x.area = y.area 
+	// 											right join channel z on x.outlet_type = z.outlet_type 
+	// 											where y.island = '" . $island . "' and x.area in ('" . $area . "') 
+	// 											and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
+	// 											and year(x.tanggal) = '" . $year . "' 
+	// 											group by x.outlet_type
+	// 								) c on a.outlet_type = c.outlet_type";
+						
+	// 		$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type, sum(qty) as total_qty, sum(value_exc) as total_val 
+	// 											from selling_out x 
+	// 											left join area y on x.area = y.area 
+	// 											right join channel z on x.outlet_type = z.outlet_type 
+	// 											where x.principal = 'JORDAN' 
+	// 											and y.island = '" . $island . "' and x.area in ('" . $area . "') 
+	// 											and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
+	// 											and year(x.tanggal) = '" . $year . "' 
+	// 											group by x.outlet_type
+	// 								) d on a.outlet_type = d.outlet_type";
+
+	// 	}
+	// 	else if (isset($area) and isset($region) and $area != '' and $region != '')
+	// 	{
+	// 		$a=1;
+	// 		foreach($data['sku_code'] as $sku):
+	// 			$str_sql = $str_sql . " c.qty" .$a. ",";
+	// 			$str_sql = $str_sql . " (c.qty" .$a. "/(select sum(qty) as total_qty from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and x.area in ('" . $area . "') and y.region = '" . $region . "'  and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%qty".$a."',";
+	// 			$str_sql = $str_sql . " (c.val" .$a. ") as val" .$a. ",";
+	// 			$str_sql = $str_sql . " (c.val" .$a. "/(select sum(value_exc) as total_val from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and x.area in ('" . $area . "') and y.region = '" . $region . "'  and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%val".$a."',";
+	// 			$a++;
+	// 		endforeach;
+	
+	// 		$str_sql = $str_sql . " d.total_qty, (d.total_val) as total_val";
+	// 		$str_sql = $str_sql . " FROM channel a";
+
+	// 		$str_sql = $str_sql . " LEFT JOIN (select ro.outlet_type, sum(ro.ro) as ro
+	// 											from (
+	// 													select a.id, a.big_code, a.outlet_code, a.outlet_name, a.area, c.outlet_type, a.dist_code, b.distributor, a2.total_outlet as ro
+	// 													from outlet a 
+	// 													inner join ( 
+	// 																select big_code, outlet_code, area, dist_code, max(total_outlet) total_outlet, max(register_date) as register_date
+	// 																from outlet
+	// 																group by big_code, area
+	// 																) a2 on a.big_code = a2.big_code and a.area = a2.area and a.register_date = a2.register_date
+	// 													inner join distributor b on a.dist_code = b.cust_code and a.area = b.area
+	// 													inner join channel c on a.outlet_type = c.outlet_type
+	// 													inner join area d on a.area = d.area
+	// 													where a.area in ('" . $area . "') and d.region = '" . $region . "'
+	// 													and a.register_date <= last_day(concat('".$year."', '".$todate."'))
+	// 													group by a.outlet_type, a.big_code, a.area
+	// 													order by a.big_code) ro
+	// 											group by ro.outlet_type
+	// 								) b on a.outlet_type = b.outlet_type";
+
+	// 		$i = 1;
+			
+	// 		$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type,";
+	// 				foreach($data['sku_code'] as $sku):
+	// 					$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', qty, 0)) AS qty".$i.",";
+	// 					$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', value_exc, 0)) AS val".$i.",";
+	// 					$i++;
+	// 				endforeach;
+	// 				$str_sql = substr($str_sql, 0, -1);
+
+	// 					$str_sql = $str_sql . " from selling_out x 
+	// 											left join area y on x.area = y.area 
+	// 											right join channel z on x.outlet_type = z.outlet_type 
+	// 											where x.area in ('" . $area . "') and y.region = '" . $region . "' 
+	// 											and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
+	// 											and year(x.tanggal) = '" . $year . "' 
+	// 											group by x.outlet_type
+	// 								) c on a.outlet_type = c.outlet_type";
+
+	// 		$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type, sum(qty) as total_qty, sum(value_exc) as total_val 
+	// 											from selling_out x 
+	// 											left join area y on x.area = y.area 
+	// 											right join channel z on x.outlet_type = z.outlet_type 
+	// 											where x.principal = 'JORDAN' 
+	// 											and x.area in ('" . $area . "') and y.region = '" . $region . "' 
+	// 											and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "')
+	// 											and year(x.tanggal) = '" . $year . "' 
+	// 											group by x.outlet_type
+	// 								) d on a.outlet_type = d.outlet_type";
+
+	// 	}
+	// 	else if (isset($island) and $island != '')
+	// 	{
+	// 		$a=1;
+	// 		foreach($data['sku_code'] as $sku):
+	// 			$str_sql = $str_sql . " c.qty" .$a. ",";
+	// 			$str_sql = $str_sql . " (c.qty" .$a. "/(select sum(qty) as total_qty from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and y.island = '" . $island . "' and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%qty".$a."',";
+	// 			$str_sql = $str_sql . " (c.val" .$a. ") as val" .$a. ",";
+	// 			$str_sql = $str_sql . " (c.val" .$a. "/(select sum(value_exc) as total_val from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and y.island = '" . $island . "' and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%val".$a."',";
+	// 			$a++;
+	// 		endforeach;
+	
+	// 		$str_sql = $str_sql . " d.total_qty, (d.total_val) as total_val";
+	// 		$str_sql = $str_sql . " FROM channel a";
+
+	// 		$str_sql = $str_sql . " LEFT JOIN (select ro.outlet_type, sum(ro.ro) as ro
+	// 											from (
+	// 													select a.id, a.big_code, a.outlet_code, a.outlet_name, a.area, c.outlet_type, a.dist_code, b.distributor, a2.total_outlet as ro
+	// 													from outlet a 
+	// 													inner join ( 
+	// 																select big_code, outlet_code, area, dist_code, max(total_outlet) total_outlet, max(register_date) as register_date
+	// 																from outlet
+	// 																group by big_code, area
+	// 																) a2 on a.big_code = a2.big_code and a.area = a2.area and a.register_date = a2.register_date
+	// 													inner join distributor b on a.dist_code = b.cust_code and a.area = b.area
+	// 													inner join channel c on a.outlet_type = c.outlet_type
+	// 													inner join area d on a.area = d.area
+	// 													where d.island in ('" . $island . "') 
+	// 													and a.register_date <= last_day(concat('".$year."', '".$todate."'))
+	// 													group by a.outlet_type, a.big_code, a.area
+	// 													order by a.big_code) ro
+	// 											group by ro.outlet_type
+	// 								) b on a.outlet_type = b.outlet_type";
+
+	// 		$i = 1;
+			
+	// 		$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type,";
+	// 				foreach($data['sku_code'] as $sku):
+	// 					$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', qty, 0)) AS qty".$i.",";
+	// 					$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', value_exc, 0)) AS val".$i.",";
+	// 					$i++;
+	// 				endforeach;
+	// 				$str_sql = substr($str_sql, 0, -1);
+
+	// 					$str_sql = $str_sql . " from selling_out x 
+	// 											left join area y on x.area = y.area 
+	// 											right join channel z on x.outlet_type = z.outlet_type 
+	// 											where y.island = '" . $island . "' 
+	// 											and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
+	// 											and year(x.tanggal) = '" . $year . "' 
+	// 											group by x.outlet_type
+	// 								) c on a.outlet_type = c.outlet_type";
+
+	// 		$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type, sum(qty) as total_qty, sum(value_exc) as total_val 
+	// 											from selling_out x 
+	// 											left join area y on x.area = y.area 
+	// 											right join channel z on x.outlet_type = z.outlet_type 
+	// 											where x.principal = 'JORDAN' 
+	// 											and y.island = '" . $island . "' 
+	// 											and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
+	// 											and year(x.tanggal) = '" . $year . "' 
+	// 											group by x.outlet_type
+	// 								) d on a.outlet_type = d.outlet_type";
+
+	// 	}
+	// 	else if (isset($area) and $area != '')
+	// 	{
+	// 		$a=1;
+	// 		foreach($data['sku_code'] as $sku):
+	// 			$str_sql = $str_sql . " c.qty" .$a. ",";
+	// 			$str_sql = $str_sql . " (c.qty" .$a. "/(select sum(qty) as total_qty from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and x.area in ('" . $area . "') and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%qty".$a."',";
+	// 			$str_sql = $str_sql . " (c.val" .$a. ") as val" .$a. ",";
+	// 			$str_sql = $str_sql . " (c.val" .$a. "/(select sum(value_exc) as total_val from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and x.area in ('" . $area . "') and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%val".$a."',";
+	// 			$a++;
+	// 		endforeach;
+	
+	// 		$str_sql = $str_sql . " d.total_qty, (d.total_val) as total_val";
+	// 		$str_sql = $str_sql . " FROM channel a";
+
+	// 		$str_sql = $str_sql . " LEFT JOIN (select ro.outlet_type, sum(ro.ro) as ro
+	// 											from (
+	// 													select a.id, a.big_code, a.outlet_code, a.outlet_name, a.area, c.outlet_type, a.dist_code, b.distributor, a2.total_outlet as ro
+	// 													from outlet a 
+	// 													inner join ( 
+	// 																select big_code, outlet_code, area, dist_code, max(total_outlet) total_outlet, max(register_date) as register_date
+	// 																from outlet
+	// 																group by big_code, area
+	// 																) a2 on a.big_code = a2.big_code and a.area = a2.area and a.register_date = a2.register_date
+	// 													inner join distributor b on a.dist_code = b.cust_code and a.area = b.area
+	// 													inner join channel c on a.outlet_type = c.outlet_type
+	// 													inner join area d on a.area = d.area
+	// 													where a.area in ('" . $area . "') 
+	// 													and a.register_date <= last_day(concat('".$year."', '".$todate."'))
+	// 													group by a.outlet_type, a.big_code, a.area
+	// 													order by a.big_code) ro
+	// 											group by ro.outlet_type
+	// 								) b on a.outlet_type = b.outlet_type";
+	// 		$i = 1;
+			
+	// 		$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type,";
+	// 				foreach($data['sku_code'] as $sku):
+	// 					$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', qty, 0)) AS qty".$i.",";
+	// 					$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', value_exc, 0)) AS val".$i.",";
+	// 					$i++;
+	// 				endforeach;
+	// 				$str_sql = substr($str_sql, 0, -1);
+
+	// 					$str_sql = $str_sql . " from selling_out x 
+	// 											left join area y on x.area = y.area 
+	// 											right join channel z on x.outlet_type = z.outlet_type 
+	// 											where x.area in ('" . $area . "') 
+	// 											and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
+	// 											and year(x.tanggal) = '" . $year . "' 
+	// 											group by x.outlet_type
+	// 								) c on a.outlet_type = c.outlet_type";
+
+	// 		$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type, sum(qty) as total_qty, sum(value_exc) as total_val 
+	// 											from selling_out x 
+	// 											left join area y on x.area = y.area 
+	// 											right join channel z on x.outlet_type = z.outlet_type 
+	// 											where x.principal = 'JORDAN' 
+	// 											and x.area in ('" . $area . "') 
+	// 											and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
+	// 											and year(x.tanggal) = '" . $year . "' 
+	// 											group by x.outlet_type
+	// 								) d on a.outlet_type = d.outlet_type";
+
+	// 	}
+	// 	else if (isset($region) and $region != '')
+	// 	{
+	// 		$a=1;
+	// 		foreach($data['sku_code'] as $sku):
+	// 			$str_sql = $str_sql . " c.qty" .$a. ",";
+	// 			$str_sql = $str_sql . " (c.qty" .$a. "/(select sum(qty) as total_qty from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and y.region = '" . $region . "'  and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%qty".$a."',";
+	// 			$str_sql = $str_sql . " (c.val" .$a. ") as val" .$a. ",";
+	// 			$str_sql = $str_sql . " (c.val" .$a. "/(select sum(value_exc) as total_val from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and y.region = '" . $region . "'  and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%val".$a."',";
+	// 			$a++;
+	// 		endforeach;
+	
+	// 		$str_sql = $str_sql . " d.total_qty, (d.total_val) as total_val";
+	// 		$str_sql = $str_sql . " FROM channel a";
+
+	// 		$str_sql = $str_sql . " LEFT JOIN (select ro.outlet_type, sum(ro.ro) as ro
+	// 											from (
+	// 													select a.id, a.big_code, a.outlet_code, a.outlet_name, a.area, c.outlet_type, a.dist_code, b.distributor, a2.total_outlet as ro
+	// 													from outlet a 
+	// 													inner join ( 
+	// 																select big_code, outlet_code, area, dist_code, max(total_outlet) total_outlet, max(register_date) as register_date
+	// 																from outlet
+	// 																group by big_code, area
+	// 																) a2 on a.big_code = a2.big_code and a.area = a2.area and a.register_date = a2.register_date
+	// 													inner join distributor b on a.dist_code = b.cust_code and a.area = b.area
+	// 													inner join channel c on a.outlet_type = c.outlet_type
+	// 													inner join area d on a.area = d.area
+	// 													where d.region in ('" . $region . "') 
+	// 													and a.register_date <= last_day(concat('".$year."', '".$todate."'))
+	// 													group by a.outlet_type, a.big_code, a.area
+	// 													order by a.big_code) ro
+	// 											group by ro.outlet_type
+	// 								) b on a.outlet_type = b.outlet_type";
+	// 		$i = 1;
+			
+	// 		$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type,";
+	// 				foreach($data['sku_code'] as $sku):
+	// 					$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', qty, 0)) AS qty".$i.",";
+	// 					$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', value_exc, 0)) AS val".$i.",";
+	// 					$i++;
+	// 				endforeach;
+	// 				$str_sql = substr($str_sql, 0, -1);
+
+	// 					$str_sql = $str_sql . " from selling_out x 
+	// 											left join area y on x.area = y.area 
+	// 											right join channel z on x.outlet_type = z.outlet_type 
+	// 											where y.region = '" . $region . "' 
+	// 											and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
+	// 											and year(x.tanggal) = '" . $year . "' 
+	// 											group by x.outlet_type
+	// 								) c on a.outlet_type = c.outlet_type";
+
+	// 		$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type, sum(qty) as total_qty, sum(value_exc) as total_val 
+	// 											from selling_out x 
+	// 											left join area y on x.area = y.area 
+	// 											right join channel z on x.outlet_type = z.outlet_type 
+	// 											where x.principal = 'JORDAN' 
+	// 											and y.region = '" . $region . "' 
+	// 											and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
+	// 											and year(x.tanggal) = '" . $year . "' 
+	// 											group by x.outlet_type
+	// 								) d on a.outlet_type = d.outlet_type";
+
+	// 	}
+	// 	else
+	// 	{	
+	// 		if ($_SESSION['area'] != 'ALL')
+	// 		{
+	// 			$session_area = str_replace(",", "','", $_SESSION['area']);
+	// 			$session_area = str_replace(" ", "", $session_area);
+
+	// 			$a=1;
+	// 			foreach($data['sku_code'] as $sku):
+	// 				$str_sql = $str_sql . " c.qty" .$a. ",";
+	// 				$str_sql = $str_sql . " (c.qty" .$a. "/(select sum(qty) as total_qty from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and x.area in ('" . $session_area . "') and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%qty".$a."',";
+	// 				$str_sql = $str_sql . " (c.val" .$a. ") as val" .$a. ",";
+	// 				$str_sql = $str_sql . " (c.val" .$a. "/(select sum(value_exc) as total_val from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and x.area in ('" . $session_area . "') and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%val".$a."',";
+	// 				$a++;
+	// 			endforeach;
+		
+	// 			$str_sql = $str_sql . " d.total_qty, (d.total_val) as total_val";
+	// 			$str_sql = $str_sql . " FROM channel a";
+
+	// 			$str_sql = $str_sql . " LEFT JOIN (select ro.outlet_type, sum(ro.ro) as ro
+	// 												from (
+	// 														select a.id, a.big_code, a.outlet_code, a.outlet_name, a.area, c.outlet_type, a.dist_code, b.distributor, a2.total_outlet as ro
+	// 														from outlet a 
+	// 														inner join ( 
+	// 																	select big_code, outlet_code, area, dist_code, max(total_outlet) total_outlet, max(register_date) as register_date
+	// 																	from outlet
+	// 																	group by big_code, area
+	// 																	) a2 on a.big_code = a2.big_code and a.area = a2.area and a.register_date = a2.register_date
+	// 														inner join distributor b on a.dist_code = b.cust_code and a.area = b.area
+	// 														inner join channel c on a.outlet_type = c.outlet_type
+	// 														inner join area d on a.area = d.area
+	// 														where a.area in ('" . $session_area . "') 
+	// 														and a.register_date <= last_day(concat('".$year."', '".$todate."'))
+	// 														group by a.outlet_type, a.big_code, a.area
+	// 														order by a.big_code) ro
+	// 												group by ro.outlet_type
+	// 									) b on a.outlet_type = b.outlet_type";
+
+	// 			$i = 1;
+				
+	// 			$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type,";
+	// 					foreach($data['sku_code'] as $sku):
+	// 						$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', qty, 0)) AS qty".$i.",";
+	// 						$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', value_exc, 0)) AS val".$i.",";
+	// 						$i++;
+	// 					endforeach;
+	// 					$str_sql = substr($str_sql, 0, -1);
+
+	// 						$str_sql = $str_sql . " from selling_out x 
+	// 												left join area y on x.area = y.area 
+	// 												right join channel z on x.outlet_type = z.outlet_type 
+	// 												where x.area in ('" . $session_area . "') 
+	// 												and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
+	// 												and year(x.tanggal) = '" . $year . "' group by x.outlet_type
+	// 									) c on a.outlet_type = c.outlet_type";
+
+	// 			$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type, sum(qty) as total_qty, sum(value_exc) as total_val 
+	// 												from selling_out x 
+	// 												left join area y on x.area = y.area 
+	// 												right join channel z on x.outlet_type = z.outlet_type 
+	// 												where x.principal = 'JORDAN' 
+	// 												and x.area in ('" . $session_area . "') 
+	// 												and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
+	// 												and year(x.tanggal) = '" . $year . "' 
+	// 												group by x.outlet_type
+	// 									) d on a.outlet_type = d.outlet_type";
+	// 		}
+	// 		else
+	// 		{
+	// 			$a=1;
+	// 			foreach($data['sku_code'] as $sku):
+	// 				$str_sql = $str_sql . " c.qty" .$a. ",";
+	// 				$str_sql = $str_sql . " (c.qty" .$a. "/(select sum(qty) as total_qty from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%qty".$a."',";
+	// 				$str_sql = $str_sql . " (c.val" .$a. ") as val" .$a. ",";
+	// 				$str_sql = $str_sql . " (c.val" .$a. "/(select sum(value_exc) as total_val from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%val".$a."',";
+	// 				$a++;
+	// 			endforeach;
+		
+	// 			$str_sql = $str_sql . " d.total_qty, (d.total_val) as total_val";
+	// 			$str_sql = $str_sql . " FROM channel a";
+
+	// 			$str_sql = $str_sql . " LEFT JOIN (select ro.outlet_type, sum(ro.ro) as ro
+	// 												from (
+	// 														select a.id, a.big_code, a.outlet_code, a.outlet_name, a.area, c.outlet_type, a.dist_code, b.distributor, a2.total_outlet as ro
+	// 														from outlet a 
+	// 														inner join ( 
+	// 																	select big_code, outlet_code, area, dist_code, max(total_outlet) total_outlet, max(register_date) as register_date
+	// 																	from outlet
+	// 																	group by big_code, area
+	// 																	) a2 on a.big_code = a2.big_code and a.area = a2.area and a.register_date = a2.register_date
+	// 														inner join distributor b on a.dist_code = b.cust_code and a.area = b.area
+	// 														inner join channel c on a.outlet_type = c.outlet_type
+	// 														inner join area d on a.area = d.area
+	// 														where a.register_date <= last_day(concat('".$year."', '".$todate."'))
+	// 														group by a.outlet_type, a.big_code, a.area
+	// 														order by a.big_code) ro
+	// 												group by ro.outlet_type
+	// 									) b on a.outlet_type = b.outlet_type";
+				
+	// 			$i = 1;
+				
+	// 			$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type,";
+	// 					foreach($data['sku_code'] as $sku):
+	// 						$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', qty, 0)) AS qty".$i.",";
+	// 						$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', value_exc, 0)) AS val".$i.",";
+	// 						$i++;
+	// 					endforeach;
+	// 					$str_sql = substr($str_sql, 0, -1);
+	
+	// 						$str_sql = $str_sql . " from selling_out x 
+	// 												left join area y on x.area = y.area 
+	// 												right join channel z on x.outlet_type = z.outlet_type 
+	// 												where (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
+	// 												and year(x.tanggal) = '" . $year . "' 
+	// 												group by x.outlet_type
+	// 									) c on a.outlet_type = c.outlet_type";
+						
+	// 			$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type, sum(qty) as total_qty, sum(value_exc) as total_val 
+	// 												from selling_out x 
+	// 												left join area y on x.area = y.area 
+	// 												right join channel z on x.outlet_type = z.outlet_type 
+	// 												where x.principal = 'JORDAN' 
+	// 												and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
+	// 												and year(x.tanggal) = '" . $year . "' 
+	// 												group by x.outlet_type
+	// 									) d on a.outlet_type = d.outlet_type";
+	// 		}
+
+	// 	}
+
+	// 	$str_sql = $str_sql . " ORDER BY a.id";
+
+	// 	// Flasher::setMessage('Berhasil',$str_sql,'success');
+
+	// 	$this->db->opendb();
+	// 	$this->db->query($str_sql);
+	// 	return $this->db->resultSet();
+	// }
+
 	public function getCont_jordan_ALL($data)
 	{
-
-		if (isset($_POST['by_region']))
-		{
-			$region = $_POST['by_region'];
-		}
-		if (isset($_POST['by_area']))
-		{
-			$area = implode(',', $_POST['by_area']);
-			$area = str_replace(",", "','", $area);;
-		}
-		elseif ($_SESSION['area'] != 'ALL')
-		{
+		// --- Ambil parameter filter dengan default values ---
+		$region = isset($_POST['by_region']) ? $_POST['by_region'] : '';
+		$area = isset($_POST['by_area']) ? $_POST['by_area'] : '';
+		$island = isset($_POST['by_island']) ? $_POST['by_island'] : '';
+		
+		// Proses area
+		if (is_array($area)) {
+			$area = implode(',', $area);
+			$area = str_replace(",", "','", $area);
+		} elseif ($_SESSION['area'] != 'ALL' && empty($area)) {
 			$session_area = str_replace(", ", "','", $_SESSION['area']); 
 			$area = $session_area;
 		}
-		if (isset($_POST['by_island']))
-		{
-			$island = $_POST['by_island'];
-		}
 		
-		if(isset($_POST['by_month1']))
-		{
+		// Month & Year
+		if(isset($_POST['by_month1'])) {
 			$month1 = $_POST['by_month1'];
-		}else
-		{
+		} else {
 			$get['period_so'] = $this->getMonth_SO();
 			$month1 = $get['period_so']['to_month'];
 		}
 
-		if(isset($_POST['by_month2']))
-		{
+		if(isset($_POST['by_month2'])) {
 			$month2 = $_POST['by_month2'];
-		}else
-		{
+		} else {
 			$get['period_so'] = $this->getMonth_SO();
 			$month2 = $get['period_so']['to_month'];
 		}
 
-		if(isset($_POST['by_year']))
-		{
+		if(isset($_POST['by_year'])) {
 			$year = $_POST['by_year'];
-		}else
-		{
+		} else {
 			$year = date('Y');
 		}
 
-		$fromdate = '-' .$month1. '-1';
-		$todate = '-' .$month2. '-1';
+		$fromdate = '-' . $month1 . '-1';
+		$todate = '-' . $month2 . '-1';
 		
-		$str_sql = " SELECT distinct a.id, a.channel, a.desc_type, a.outlet_type, b.ro as RO,";
-
-		if (isset($island) and isset($area) and isset($region) and $island != '' and $area != '' and $region != '')
-		{
-			$a=1;
-			foreach($data['sku_code'] as $sku):
-				$str_sql = $str_sql . " c.qty" .$a. ",";
-				$str_sql = $str_sql . " (c.qty" .$a. "/(select sum(qty) as total_qty from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and y.island = '" . $island . "' and x.area in ('" . $area . "') and y.region = '" . $region . "'  and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%qty".$a."',";
-				$str_sql = $str_sql . " (c.val" .$a. ") as val" .$a. ",";
-				$str_sql = $str_sql . " (c.val" .$a. "/(select sum(value_exc) as total_val from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and y.island = '" . $island . "' and x.area in ('" . $area . "') and y.region = '" . $region . "'  and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%val".$a."',";
-				$a++;
-			endforeach;
-	
-			$str_sql = $str_sql . " d.total_qty, (d.total_val) as total_val";
-			$str_sql = $str_sql . " FROM channel a";
-
-			$str_sql = $str_sql . " LEFT JOIN (select ro.outlet_type, sum(ro.ro) as ro
-												from (
-														select a.id, a.big_code, a.outlet_code, a.outlet_name, a.area, c.outlet_type, a.dist_code, b.distributor, a2.total_outlet as ro
-														from outlet a 
-														inner join ( 
-																	select big_code, outlet_code, area, dist_code, max(total_outlet) total_outlet, max(register_date) as register_date
-																	from outlet
-																	group by big_code, area
-																	) a2 on a.big_code = a2.big_code and a.area = a2.area and a.register_date = a2.register_date
-														inner join distributor b on a.dist_code = b.cust_code and a.area = b.area
-														inner join channel c on a.outlet_type = c.outlet_type
-														inner join area d on a.area = d.area
-														where d.island = '" . $island . "' and d.region = '" . $region . "' and a.area in ('" . $area . "')
-														and a.register_date <= last_day(concat('".$year."', '".$todate."'))
-														group by a.outlet_type, a.big_code, a.area
-														order by a.big_code) ro
-												group by ro.outlet_type
-									) b on a.outlet_type = b.outlet_type";
-
-			$i = 1;
-
-			$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type,";
-					foreach($data['sku_code'] as $sku):
-						$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', qty, 0)) AS qty".$i.",";
-						$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', value_exc, 0)) AS val".$i.",";
-						$i++;
-					endforeach;
-					$str_sql = substr($str_sql, 0, -1);
-
-						$str_sql = $str_sql . " from selling_out x 
-												left join area y on x.area = y.area 
-												right join channel z on x.outlet_type = z.outlet_type 
-												where y.island = '" . $island . "' and y.region = '" . $region . "' and x.area in ('" . $area . "')
-												and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
-												and year(x.tanggal) = '" . $year . "' 
-												group by x.outlet_type
-									) c on a.outlet_type = c.outlet_type";
-
-			$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type, sum(qty) as total_qty, sum(value_exc) as total_val 
-												from selling_out x 
-												left join area y on x.area = y.area right 
-												join channel z on x.outlet_type = z.outlet_type 
-												where x.principal = 'JORDAN' 
-												and y.island = '" . $island . "' and y.region = '" . $region . "' and x.area in ('" . $area . "')  
-												and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
-												and year(x.tanggal) = '" . $year . "' 
-												group by x.outlet_type
-									) d on a.outlet_type = d.outlet_type";
-			
+		// --- Cek apakah ada SKU ---
+		if (empty($data['sku_code'])) {
+			return [];
 		}
-		else if (isset($island) and isset($region) and $island != '' and $region != '')
-		{
-			$a=1;
-			foreach($data['sku_code'] as $sku):
-				$str_sql = $str_sql . " c.qty" .$a. ",";
-				$str_sql = $str_sql . " (c.qty" .$a. "/(select sum(qty) as total_qty from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and y.island = '" . $island . "' and y.region = '" . $region . "'  and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%qty".$a."',";
-				$str_sql = $str_sql . " (c.val" .$a. ") as val" .$a. ",";
-				$str_sql = $str_sql . " (c.val" .$a. "/(select sum(value_exc) as total_val from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and y.island = '" . $island . "' and y.region = '" . $region . "'  and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%val".$a."',";
-				$a++;
-			endforeach;
-	
-			$str_sql = $str_sql . " d.total_qty, (d.total_val) as total_val";
-			$str_sql = $str_sql . " FROM channel a";
-
-			$str_sql = $str_sql . " LEFT JOIN (select ro.outlet_type, sum(ro.ro) as ro
-												from (
-														select a.id, a.big_code, a.outlet_code, a.outlet_name, a.area, c.outlet_type, a.dist_code, b.distributor, a2.total_outlet as ro
-														from outlet a 
-														inner join ( 
-																	select big_code, outlet_code, area, dist_code, max(total_outlet) total_outlet, max(register_date) as register_date
-																	from outlet
-																	group by big_code, area
-																	) a2 on a.big_code = a2.big_code and a.area = a2.area and a.register_date = a2.register_date
-														inner join distributor b on a.dist_code = b.cust_code and a.area = b.area
-														inner join channel c on a.outlet_type = c.outlet_type
-														inner join area d on a.area = d.area
-														where d.island = '" . $island . "' and d.region = '" . $region . "'
-														and a.register_date <= last_day(concat('".$year."', '".$todate."'))
-														group by a.outlet_type, a.big_code, a.area
-														order by a.big_code) ro
-												group by ro.outlet_type
-									) b on a.outlet_type = b.outlet_type";
-
-			$i = 1;
-
-			$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type,";
-					foreach($data['sku_code'] as $sku):
-						$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', qty, 0)) AS qty".$i.",";
-						$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', value_exc, 0)) AS val".$i.",";
-						$i++;
-					endforeach;
-					$str_sql = substr($str_sql, 0, -1);
-
-						$str_sql = $str_sql . " from selling_out x 
-												left join area y on x.area = y.area 
-												right join channel z on x.outlet_type = z.outlet_type 
-												where y.island = '" . $island . "' and y.region = '" . $region . "' 
-												and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
-												and year(x.tanggal) = '" . $year . "' 
-												group by x.outlet_type
-									) c on a.outlet_type = c.outlet_type";
-						
-			$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type, sum(qty) as total_qty, sum(value_exc) as total_val 
-												from selling_out x 
-												left join area y on x.area = y.area 
-												right join channel z on x.outlet_type = z.outlet_type 
-												where x.principal = 'JORDAN' 
-												and y.island = '" . $island . "' and y.region = '" . $region . "' 
-												and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
-												and year(x.tanggal) = '" . $year . "' 
-												group by x.outlet_type
-									) d on a.outlet_type = d.outlet_type";
-
-		}
-		else if (isset($island) and isset($area) and $island != '' and $area != '')
-		{
-			$a=1;
-			foreach($data['sku_code'] as $sku):
-				$str_sql = $str_sql . " c.qty" .$a. ",";
-				$str_sql = $str_sql . " (c.qty" .$a. "/(select sum(qty) as total_qty from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and y.island = '" . $island . "' and x.area in ('" . $area . "') and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%qty".$a."',";
-				$str_sql = $str_sql . " (c.val" .$a. ") as val" .$a. ",";
-				$str_sql = $str_sql . " (c.val" .$a. "/(select sum(value_exc) as total_val from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and y.island = '" . $island . "' and x.area in ('" . $area . "') and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%val".$a."',";
-				$a++;
-			endforeach;
-	
-			$str_sql = $str_sql . " d.total_qty, (d.total_val) as total_val";
-			$str_sql = $str_sql . " FROM channel a";
-
-			$str_sql = $str_sql . " LEFT JOIN (select ro.outlet_type, sum(ro.ro) as ro
-												from (
-														select a.id, a.big_code, a.outlet_code, a.outlet_name, a.area, c.outlet_type, a.dist_code, b.distributor, a2.total_outlet as ro
-														from outlet a 
-														inner join ( 
-																	select big_code, outlet_code, area, dist_code, max(total_outlet) total_outlet, max(register_date) as register_date
-																	from outlet
-																	group by big_code, area
-																	) a2 on a.big_code = a2.big_code and a.area = a2.area and a.register_date = a2.register_date
-														inner join distributor b on a.dist_code = b.cust_code and a.area = b.area
-														inner join channel c on a.outlet_type = c.outlet_type
-														inner join area d on a.area = d.area
-														where d.island = '" . $island . "' and a.area in ('" . $area . "')
-														and a.register_date <= last_day(concat('".$year."', '".$todate."'))
-														group by a.outlet_type, a.big_code, a.area
-														order by a.big_code) ro
-												group by ro.outlet_type
-									) b on a.outlet_type = b.outlet_type";
-									 
-			$i = 1;
-
-			$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type,";
-					foreach($data['sku_code'] as $sku):
-						$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', qty, 0)) AS qty".$i.",";
-						$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', value_exc, 0)) AS val".$i.",";
-						$i++;
-					endforeach;
-					$str_sql = substr($str_sql, 0, -1);
-
-						$str_sql = $str_sql . " from selling_out x 
-												left join area y on x.area = y.area 
-												right join channel z on x.outlet_type = z.outlet_type 
-												where y.island = '" . $island . "' and x.area in ('" . $area . "') 
-												and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
-												and year(x.tanggal) = '" . $year . "' 
-												group by x.outlet_type
-									) c on a.outlet_type = c.outlet_type";
-						
-			$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type, sum(qty) as total_qty, sum(value_exc) as total_val 
-												from selling_out x 
-												left join area y on x.area = y.area 
-												right join channel z on x.outlet_type = z.outlet_type 
-												where x.principal = 'JORDAN' 
-												and y.island = '" . $island . "' and x.area in ('" . $area . "') 
-												and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
-												and year(x.tanggal) = '" . $year . "' 
-												group by x.outlet_type
-									) d on a.outlet_type = d.outlet_type";
-
-		}
-		else if (isset($area) and isset($region) and $area != '' and $region != '')
-		{
-			$a=1;
-			foreach($data['sku_code'] as $sku):
-				$str_sql = $str_sql . " c.qty" .$a. ",";
-				$str_sql = $str_sql . " (c.qty" .$a. "/(select sum(qty) as total_qty from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and x.area in ('" . $area . "') and y.region = '" . $region . "'  and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%qty".$a."',";
-				$str_sql = $str_sql . " (c.val" .$a. ") as val" .$a. ",";
-				$str_sql = $str_sql . " (c.val" .$a. "/(select sum(value_exc) as total_val from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and x.area in ('" . $area . "') and y.region = '" . $region . "'  and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%val".$a."',";
-				$a++;
-			endforeach;
-	
-			$str_sql = $str_sql . " d.total_qty, (d.total_val) as total_val";
-			$str_sql = $str_sql . " FROM channel a";
-
-			$str_sql = $str_sql . " LEFT JOIN (select ro.outlet_type, sum(ro.ro) as ro
-												from (
-														select a.id, a.big_code, a.outlet_code, a.outlet_name, a.area, c.outlet_type, a.dist_code, b.distributor, a2.total_outlet as ro
-														from outlet a 
-														inner join ( 
-																	select big_code, outlet_code, area, dist_code, max(total_outlet) total_outlet, max(register_date) as register_date
-																	from outlet
-																	group by big_code, area
-																	) a2 on a.big_code = a2.big_code and a.area = a2.area and a.register_date = a2.register_date
-														inner join distributor b on a.dist_code = b.cust_code and a.area = b.area
-														inner join channel c on a.outlet_type = c.outlet_type
-														inner join area d on a.area = d.area
-														where a.area in ('" . $area . "') and d.region = '" . $region . "'
-														and a.register_date <= last_day(concat('".$year."', '".$todate."'))
-														group by a.outlet_type, a.big_code, a.area
-														order by a.big_code) ro
-												group by ro.outlet_type
-									) b on a.outlet_type = b.outlet_type";
-
-			$i = 1;
-			
-			$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type,";
-					foreach($data['sku_code'] as $sku):
-						$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', qty, 0)) AS qty".$i.",";
-						$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', value_exc, 0)) AS val".$i.",";
-						$i++;
-					endforeach;
-					$str_sql = substr($str_sql, 0, -1);
-
-						$str_sql = $str_sql . " from selling_out x 
-												left join area y on x.area = y.area 
-												right join channel z on x.outlet_type = z.outlet_type 
-												where x.area in ('" . $area . "') and y.region = '" . $region . "' 
-												and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
-												and year(x.tanggal) = '" . $year . "' 
-												group by x.outlet_type
-									) c on a.outlet_type = c.outlet_type";
-
-			$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type, sum(qty) as total_qty, sum(value_exc) as total_val 
-												from selling_out x 
-												left join area y on x.area = y.area 
-												right join channel z on x.outlet_type = z.outlet_type 
-												where x.principal = 'JORDAN' 
-												and x.area in ('" . $area . "') and y.region = '" . $region . "' 
-												and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "')
-												and year(x.tanggal) = '" . $year . "' 
-												group by x.outlet_type
-									) d on a.outlet_type = d.outlet_type";
-
-		}
-		else if (isset($island) and $island != '')
-		{
-			$a=1;
-			foreach($data['sku_code'] as $sku):
-				$str_sql = $str_sql . " c.qty" .$a. ",";
-				$str_sql = $str_sql . " (c.qty" .$a. "/(select sum(qty) as total_qty from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and y.island = '" . $island . "' and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%qty".$a."',";
-				$str_sql = $str_sql . " (c.val" .$a. ") as val" .$a. ",";
-				$str_sql = $str_sql . " (c.val" .$a. "/(select sum(value_exc) as total_val from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and y.island = '" . $island . "' and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%val".$a."',";
-				$a++;
-			endforeach;
-	
-			$str_sql = $str_sql . " d.total_qty, (d.total_val) as total_val";
-			$str_sql = $str_sql . " FROM channel a";
-
-			$str_sql = $str_sql . " LEFT JOIN (select ro.outlet_type, sum(ro.ro) as ro
-												from (
-														select a.id, a.big_code, a.outlet_code, a.outlet_name, a.area, c.outlet_type, a.dist_code, b.distributor, a2.total_outlet as ro
-														from outlet a 
-														inner join ( 
-																	select big_code, outlet_code, area, dist_code, max(total_outlet) total_outlet, max(register_date) as register_date
-																	from outlet
-																	group by big_code, area
-																	) a2 on a.big_code = a2.big_code and a.area = a2.area and a.register_date = a2.register_date
-														inner join distributor b on a.dist_code = b.cust_code and a.area = b.area
-														inner join channel c on a.outlet_type = c.outlet_type
-														inner join area d on a.area = d.area
-														where d.island in ('" . $island . "') 
-														and a.register_date <= last_day(concat('".$year."', '".$todate."'))
-														group by a.outlet_type, a.big_code, a.area
-														order by a.big_code) ro
-												group by ro.outlet_type
-									) b on a.outlet_type = b.outlet_type";
-
-			$i = 1;
-			
-			$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type,";
-					foreach($data['sku_code'] as $sku):
-						$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', qty, 0)) AS qty".$i.",";
-						$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', value_exc, 0)) AS val".$i.",";
-						$i++;
-					endforeach;
-					$str_sql = substr($str_sql, 0, -1);
-
-						$str_sql = $str_sql . " from selling_out x 
-												left join area y on x.area = y.area 
-												right join channel z on x.outlet_type = z.outlet_type 
-												where y.island = '" . $island . "' 
-												and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
-												and year(x.tanggal) = '" . $year . "' 
-												group by x.outlet_type
-									) c on a.outlet_type = c.outlet_type";
-
-			$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type, sum(qty) as total_qty, sum(value_exc) as total_val 
-												from selling_out x 
-												left join area y on x.area = y.area 
-												right join channel z on x.outlet_type = z.outlet_type 
-												where x.principal = 'JORDAN' 
-												and y.island = '" . $island . "' 
-												and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
-												and year(x.tanggal) = '" . $year . "' 
-												group by x.outlet_type
-									) d on a.outlet_type = d.outlet_type";
-
-		}
-		else if (isset($area) and $area != '')
-		{
-			$a=1;
-			foreach($data['sku_code'] as $sku):
-				$str_sql = $str_sql . " c.qty" .$a. ",";
-				$str_sql = $str_sql . " (c.qty" .$a. "/(select sum(qty) as total_qty from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and x.area in ('" . $area . "') and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%qty".$a."',";
-				$str_sql = $str_sql . " (c.val" .$a. ") as val" .$a. ",";
-				$str_sql = $str_sql . " (c.val" .$a. "/(select sum(value_exc) as total_val from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and x.area in ('" . $area . "') and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%val".$a."',";
-				$a++;
-			endforeach;
-	
-			$str_sql = $str_sql . " d.total_qty, (d.total_val) as total_val";
-			$str_sql = $str_sql . " FROM channel a";
-
-			$str_sql = $str_sql . " LEFT JOIN (select ro.outlet_type, sum(ro.ro) as ro
-												from (
-														select a.id, a.big_code, a.outlet_code, a.outlet_name, a.area, c.outlet_type, a.dist_code, b.distributor, a2.total_outlet as ro
-														from outlet a 
-														inner join ( 
-																	select big_code, outlet_code, area, dist_code, max(total_outlet) total_outlet, max(register_date) as register_date
-																	from outlet
-																	group by big_code, area
-																	) a2 on a.big_code = a2.big_code and a.area = a2.area and a.register_date = a2.register_date
-														inner join distributor b on a.dist_code = b.cust_code and a.area = b.area
-														inner join channel c on a.outlet_type = c.outlet_type
-														inner join area d on a.area = d.area
-														where a.area in ('" . $area . "') 
-														and a.register_date <= last_day(concat('".$year."', '".$todate."'))
-														group by a.outlet_type, a.big_code, a.area
-														order by a.big_code) ro
-												group by ro.outlet_type
-									) b on a.outlet_type = b.outlet_type";
-			$i = 1;
-			
-			$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type,";
-					foreach($data['sku_code'] as $sku):
-						$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', qty, 0)) AS qty".$i.",";
-						$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', value_exc, 0)) AS val".$i.",";
-						$i++;
-					endforeach;
-					$str_sql = substr($str_sql, 0, -1);
-
-						$str_sql = $str_sql . " from selling_out x 
-												left join area y on x.area = y.area 
-												right join channel z on x.outlet_type = z.outlet_type 
-												where x.area in ('" . $area . "') 
-												and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
-												and year(x.tanggal) = '" . $year . "' 
-												group by x.outlet_type
-									) c on a.outlet_type = c.outlet_type";
-
-			$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type, sum(qty) as total_qty, sum(value_exc) as total_val 
-												from selling_out x 
-												left join area y on x.area = y.area 
-												right join channel z on x.outlet_type = z.outlet_type 
-												where x.principal = 'JORDAN' 
-												and x.area in ('" . $area . "') 
-												and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
-												and year(x.tanggal) = '" . $year . "' 
-												group by x.outlet_type
-									) d on a.outlet_type = d.outlet_type";
-
-		}
-		else if (isset($region) and $region != '')
-		{
-			$a=1;
-			foreach($data['sku_code'] as $sku):
-				$str_sql = $str_sql . " c.qty" .$a. ",";
-				$str_sql = $str_sql . " (c.qty" .$a. "/(select sum(qty) as total_qty from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and y.region = '" . $region . "'  and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%qty".$a."',";
-				$str_sql = $str_sql . " (c.val" .$a. ") as val" .$a. ",";
-				$str_sql = $str_sql . " (c.val" .$a. "/(select sum(value_exc) as total_val from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and y.region = '" . $region . "'  and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%val".$a."',";
-				$a++;
-			endforeach;
-	
-			$str_sql = $str_sql . " d.total_qty, (d.total_val) as total_val";
-			$str_sql = $str_sql . " FROM channel a";
-
-			$str_sql = $str_sql . " LEFT JOIN (select ro.outlet_type, sum(ro.ro) as ro
-												from (
-														select a.id, a.big_code, a.outlet_code, a.outlet_name, a.area, c.outlet_type, a.dist_code, b.distributor, a2.total_outlet as ro
-														from outlet a 
-														inner join ( 
-																	select big_code, outlet_code, area, dist_code, max(total_outlet) total_outlet, max(register_date) as register_date
-																	from outlet
-																	group by big_code, area
-																	) a2 on a.big_code = a2.big_code and a.area = a2.area and a.register_date = a2.register_date
-														inner join distributor b on a.dist_code = b.cust_code and a.area = b.area
-														inner join channel c on a.outlet_type = c.outlet_type
-														inner join area d on a.area = d.area
-														where d.region in ('" . $region . "') 
-														and a.register_date <= last_day(concat('".$year."', '".$todate."'))
-														group by a.outlet_type, a.big_code, a.area
-														order by a.big_code) ro
-												group by ro.outlet_type
-									) b on a.outlet_type = b.outlet_type";
-			$i = 1;
-			
-			$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type,";
-					foreach($data['sku_code'] as $sku):
-						$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', qty, 0)) AS qty".$i.",";
-						$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', value_exc, 0)) AS val".$i.",";
-						$i++;
-					endforeach;
-					$str_sql = substr($str_sql, 0, -1);
-
-						$str_sql = $str_sql . " from selling_out x 
-												left join area y on x.area = y.area 
-												right join channel z on x.outlet_type = z.outlet_type 
-												where y.region = '" . $region . "' 
-												and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
-												and year(x.tanggal) = '" . $year . "' 
-												group by x.outlet_type
-									) c on a.outlet_type = c.outlet_type";
-
-			$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type, sum(qty) as total_qty, sum(value_exc) as total_val 
-												from selling_out x 
-												left join area y on x.area = y.area 
-												right join channel z on x.outlet_type = z.outlet_type 
-												where x.principal = 'JORDAN' 
-												and y.region = '" . $region . "' 
-												and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
-												and year(x.tanggal) = '" . $year . "' 
-												group by x.outlet_type
-									) d on a.outlet_type = d.outlet_type";
-
-		}
-		else
-		{	
-			if ($_SESSION['area'] != 'ALL')
-			{
-				$session_area = str_replace(",", "','", $_SESSION['area']);
-				$session_area = str_replace(" ", "", $session_area);
-
-				$a=1;
-				foreach($data['sku_code'] as $sku):
-					$str_sql = $str_sql . " c.qty" .$a. ",";
-					$str_sql = $str_sql . " (c.qty" .$a. "/(select sum(qty) as total_qty from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and x.area in ('" . $session_area . "') and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%qty".$a."',";
-					$str_sql = $str_sql . " (c.val" .$a. ") as val" .$a. ",";
-					$str_sql = $str_sql . " (c.val" .$a. "/(select sum(value_exc) as total_val from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and x.area in ('" . $session_area . "') and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%val".$a."',";
-					$a++;
-				endforeach;
 		
-				$str_sql = $str_sql . " d.total_qty, (d.total_val) as total_val";
-				$str_sql = $str_sql . " FROM channel a";
-
-				$str_sql = $str_sql . " LEFT JOIN (select ro.outlet_type, sum(ro.ro) as ro
-													from (
-															select a.id, a.big_code, a.outlet_code, a.outlet_name, a.area, c.outlet_type, a.dist_code, b.distributor, a2.total_outlet as ro
-															from outlet a 
-															inner join ( 
-																		select big_code, outlet_code, area, dist_code, max(total_outlet) total_outlet, max(register_date) as register_date
-																		from outlet
-																		group by big_code, area
-																		) a2 on a.big_code = a2.big_code and a.area = a2.area and a.register_date = a2.register_date
-															inner join distributor b on a.dist_code = b.cust_code and a.area = b.area
-															inner join channel c on a.outlet_type = c.outlet_type
-															inner join area d on a.area = d.area
-															where a.area in ('" . $session_area . "') 
-															and a.register_date <= last_day(concat('".$year."', '".$todate."'))
-															group by a.outlet_type, a.big_code, a.area
-															order by a.big_code) ro
-													group by ro.outlet_type
-										) b on a.outlet_type = b.outlet_type";
-
-				$i = 1;
-				
-				$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type,";
-						foreach($data['sku_code'] as $sku):
-							$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', qty, 0)) AS qty".$i.",";
-							$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', value_exc, 0)) AS val".$i.",";
-							$i++;
-						endforeach;
-						$str_sql = substr($str_sql, 0, -1);
-
-							$str_sql = $str_sql . " from selling_out x 
-													left join area y on x.area = y.area 
-													right join channel z on x.outlet_type = z.outlet_type 
-													where x.area in ('" . $session_area . "') 
-													and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
-													and year(x.tanggal) = '" . $year . "' group by x.outlet_type
-										) c on a.outlet_type = c.outlet_type";
-
-				$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type, sum(qty) as total_qty, sum(value_exc) as total_val 
-													from selling_out x 
-													left join area y on x.area = y.area 
-													right join channel z on x.outlet_type = z.outlet_type 
-													where x.principal = 'JORDAN' 
-													and x.area in ('" . $session_area . "') 
-													and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
-													and year(x.tanggal) = '" . $year . "' 
-													group by x.outlet_type
-										) d on a.outlet_type = d.outlet_type";
-			}
-			else
-			{
-				$a=1;
-				foreach($data['sku_code'] as $sku):
-					$str_sql = $str_sql . " c.qty" .$a. ",";
-					$str_sql = $str_sql . " (c.qty" .$a. "/(select sum(qty) as total_qty from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%qty".$a."',";
-					$str_sql = $str_sql . " (c.val" .$a. ") as val" .$a. ",";
-					$str_sql = $str_sql . " (c.val" .$a. "/(select sum(value_exc) as total_val from selling_out x left join area y on x.area = y.area right join channel z on x.outlet_type = z.outlet_type where x.item_code = '".$sku['item_code']."' and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') and year(x.tanggal) = '" . $year . "'))*100 as '%val".$a."',";
-					$a++;
-				endforeach;
+		// --- Get item codes (pastikan kolom yang benar) ---
+		$item_codes = array_column($data['sku_code'], 'item_code');
+		$item_list = "'" . implode("','", $item_codes) . "'";
 		
-				$str_sql = $str_sql . " d.total_qty, (d.total_val) as total_val";
-				$str_sql = $str_sql . " FROM channel a";
-
-				$str_sql = $str_sql . " LEFT JOIN (select ro.outlet_type, sum(ro.ro) as ro
-													from (
-															select a.id, a.big_code, a.outlet_code, a.outlet_name, a.area, c.outlet_type, a.dist_code, b.distributor, a2.total_outlet as ro
-															from outlet a 
-															inner join ( 
-																		select big_code, outlet_code, area, dist_code, max(total_outlet) total_outlet, max(register_date) as register_date
-																		from outlet
-																		group by big_code, area
-																		) a2 on a.big_code = a2.big_code and a.area = a2.area and a.register_date = a2.register_date
-															inner join distributor b on a.dist_code = b.cust_code and a.area = b.area
-															inner join channel c on a.outlet_type = c.outlet_type
-															inner join area d on a.area = d.area
-															where a.register_date <= last_day(concat('".$year."', '".$todate."'))
-															group by a.outlet_type, a.big_code, a.area
-															order by a.big_code) ro
-													group by ro.outlet_type
-										) b on a.outlet_type = b.outlet_type";
-				
-				$i = 1;
-				
-				$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type,";
-						foreach($data['sku_code'] as $sku):
-							$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', qty, 0)) AS qty".$i.",";
-							$str_sql = $str_sql . " sum(if(x.item_code = '" .$sku['item_code']. "', value_exc, 0)) AS val".$i.",";
-							$i++;
-						endforeach;
-						$str_sql = substr($str_sql, 0, -1);
-	
-							$str_sql = $str_sql . " from selling_out x 
-													left join area y on x.area = y.area 
-													right join channel z on x.outlet_type = z.outlet_type 
-													where (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
-													and year(x.tanggal) = '" . $year . "' 
-													group by x.outlet_type
-										) c on a.outlet_type = c.outlet_type";
-						
-				$str_sql = $str_sql . " LEFT JOIN (select x.outlet_type, sum(qty) as total_qty, sum(value_exc) as total_val 
-													from selling_out x 
-													left join area y on x.area = y.area 
-													right join channel z on x.outlet_type = z.outlet_type 
-													where x.principal = 'JORDAN' 
-													and (month(x.tanggal) between '" .$month1. "' and '" .$month2. "') 
-													and year(x.tanggal) = '" . $year . "' 
-													group by x.outlet_type
-										) d on a.outlet_type = d.outlet_type";
-			}
-
+		// --- Build WHERE clause untuk selling_out ---
+		$where_clause = $this->buildWhereClause($island, $area, $region, $month1, $month2, $year);
+		$where_clause_ro = $this->buildWhereClauseRO($island, $area, $region, $year, $todate);
+		
+		// --- Cek struktur tabel selling_out (sesuaikan dengan kolom yang ada) ---
+		// Jika kolom item_code tidak ada, coba cek kolom apa yang digunakan
+		// Kemungkinan: item_code, sku_code, product_code, dll
+		// Saya asumsikan kolomnya adalah 'item_code' sesuai query asli Anda
+		
+		// --- STEP 1: Get totals per item (1 query) ---
+		$sql_totals = "SELECT item_code, SUM(qty) as total_qty, SUM(value_exc) as total_val 
+					FROM selling_out x 
+					LEFT JOIN area y ON x.area = y.area 
+					WHERE x.item_code IN ($item_list) $where_clause
+					GROUP BY item_code";
+		
+		$this->db->opendb();
+		$this->db->query($sql_totals);
+		$totals = $this->db->resultSet();
+		
+		// Convert to lookup array
+		$total_lookup = [];
+		foreach ($totals as $t) {
+			$total_lookup[$t['item_code']] = $t;
 		}
+		
+		// --- STEP 2: Build pivot columns ---
+		$i = 1;
+		$pivot_columns = [];
+		foreach($data['sku_code'] as $sku) {
+			$pivot_columns[] = "SUM(IF(x.item_code = '{$sku['item_code']}', qty, 0)) AS qty$i";
+			$pivot_columns[] = "SUM(IF(x.item_code = '{$sku['item_code']}', value_exc, 0)) AS val$i";
+			$i++;
+		}
+		
+		$pivot_str = implode(", ", $pivot_columns);
 
-		$str_sql = $str_sql . " ORDER BY a.id";
+		// --- STEP 3: Build column list untuk SELECT utama ---
+		$select_columns = [];
+		$select_columns[] = "a.id";
+		$select_columns[] = "a.channel";
+		$select_columns[] = "a.desc_type";
+		$select_columns[] = "a.outlet_type";
+		$select_columns[] = "b.ro AS RO";
+		
+		// Tambahkan kolom dari subquery c (qty1, val1, qty2, val2, ...)
+		for ($j = 1; $j <= count($data['sku_code']); $j++) {
+			$select_columns[] = "c.qty$j";
+			$select_columns[] = "c.val$j";
+		}
+		
+		$select_columns[] = "d.total_qty";
+		$select_columns[] = "d.total_val";
+		
+		$select_str = implode(", ", $select_columns);
+		
+		// --- STEP 4: Build main query ---
+		$str_sql = "SELECT $select_str
+					FROM channel a";
+		
+		// RO Subquery
+		$str_sql .= " LEFT JOIN (
+						SELECT outlet_type, SUM(ro) as ro
+						FROM (
+							SELECT a.outlet_type, MAX(a.total_outlet) as ro
+							FROM outlet a
+							INNER JOIN area d ON a.area = d.area
+							WHERE a.register_date <= LAST_DAY('$year-$todate')
+							$where_clause_ro
+							GROUP BY a.outlet_type, a.big_code, a.area
+						) ro
+						GROUP BY outlet_type
+					) b ON a.outlet_type = b.outlet_type";
+		
+		// Pivot data selling
+		$str_sql .= " LEFT JOIN (
+						SELECT x.outlet_type, $pivot_str
+						FROM selling_out x
+						LEFT JOIN area y ON x.area = y.area
+						WHERE 1=1 $where_clause
+						GROUP BY x.outlet_type
+					) c ON a.outlet_type = c.outlet_type";
+		
+		// Total per outlet
+		$str_sql .= " LEFT JOIN (
+						SELECT outlet_type, SUM(qty) as total_qty, SUM(value_exc) as total_val
+						FROM selling_out x
+						LEFT JOIN area y ON x.area = y.area
+						WHERE x.principal = 'JORDAN' $where_clause
+						GROUP BY outlet_type
+					) d ON a.outlet_type = d.outlet_type";
+		
+		$str_sql .= " ORDER BY a.id";
 
+		// error_log("SQL Query: " . $str_sql);
 		// Flasher::setMessage('Berhasil',$str_sql,'success');
-
+		
+		// --- STEP 5: Execute query ---
 		$this->db->opendb();
 		$this->db->query($str_sql);
-		return $this->db->resultSet();
+		$results = $this->db->resultSet();
+		
+		// --- STEP 6: Calculate percentages in PHP ---
+		foreach ($results as &$row) {
+			$i = 1;
+			foreach($data['sku_code'] as $sku) {
+				$item_code = $sku['item_code'];
+				$total_qty = isset($total_lookup[$item_code]['total_qty']) ? $total_lookup[$item_code]['total_qty'] : 0;
+				$total_val = isset($total_lookup[$item_code]['total_val']) ? $total_lookup[$item_code]['total_val'] : 0;
+				
+				$qty_key = "qty$i";
+				$val_key = "val$i";
+				
+				$row["%qty$i"] = ($total_qty > 0) ? ($row[$qty_key] / $total_qty * 100) : 0;
+				$row["%val$i"] = ($total_val > 0) ? ($row[$val_key] / $total_val * 100) : 0;
+				$i++;
+			}
+		}
+		
+		return $results;
+	}
+
+	// --- Helper Functions ---
+
+	private function buildWhereClause($island, $area, $region, $month1, $month2, $year) {
+		$where = "";
+		
+		// Filter tanggal
+		$where .= " AND (x.tanggal BETWEEN '$year-$month1-01' AND LAST_DAY('$year-$month2-01'))";
+		
+		// Filter island
+		if (!empty($island)) {
+			$where .= " AND y.island = '$island'";
+		}
+		
+		// Filter region
+		if (!empty($region)) {
+			$where .= " AND y.region = '$region'";
+		}
+		
+		// Filter area
+		if (!empty($area)) {
+			$areas = explode("','", $area);
+			$area_list = "'" . implode("','", $areas) . "'";
+			$where .= " AND x.area IN ($area_list)";
+		}
+		
+		return $where;
+	}
+
+	private function buildWhereClauseRO($island, $area, $region, $year, $todate) {
+		$where = "";
+		
+		if (!empty($island)) {
+			$where .= " AND d.island = '$island'";
+		}
+		if (!empty($region)) {
+			$where .= " AND d.region = '$region'";
+		}
+		if (!empty($area)) {
+			$areas = explode("','", $area);
+			$area_list = "'" . implode("','", $areas) . "'";
+			$where .= " AND a.area IN ($area_list)";
+		}
+		
+		return $where;
 	}
 
 	public function getCont_jordan_National($data)

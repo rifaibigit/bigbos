@@ -5,6 +5,8 @@
   <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
   <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
   <meta name="google" content="notranslate"/>
+
+  <?php extract($data); ?>
   <title>BIG | <?= $data['title']; ?></title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">

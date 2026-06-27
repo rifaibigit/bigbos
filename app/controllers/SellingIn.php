@@ -375,7 +375,6 @@ class SellingIn extends Controller {
 
 				if ($data1['value_inc'] === "#N/A" or $data1['value_inc'] === "") 
 				{
-					Flasher::setMessage('ERROR','pada data "Value Inc" di baris ke ' .$i. '!!!','danger');
 					header('location: '. base_url . '/SellingIn');
 					exit();
 				}

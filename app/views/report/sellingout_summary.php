@@ -46,6 +46,8 @@
               <form action="<?= base_url; ?>/Report/sellingout_summary" method="post">
                 <?php
 
+                  extract($data);
+
                   if(isset($data))
                   {
                     $principal = $data['by_principal'];

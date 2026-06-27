@@ -31,6 +31,8 @@
 
                         <?php
 
+                        extract($data);
+
                         if(isset($data))
                         {
                             $region = $data['by_region'];
@@ -187,6 +189,7 @@
                                       'principal' => "LORD",
                                       'outlet_type' => str_replace(" ", "__", $row['outlet_type']),
                                       'year' => $year,
+                                      'month' => $month,
                                       'area' => implode(',', $area)
                                     );
                                   ?> 

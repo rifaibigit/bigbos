@@ -44,6 +44,8 @@
 
                         <?php
 
+                        extract($data);
+
                         if(isset($data))
                         {
                           $month1 = $data['by_month1'];

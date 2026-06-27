@@ -31,6 +31,8 @@
 
                                 <?php
 
+                                    extract($data);
+
                                     if(isset($data))
                                     {
                                         $principal = $data['by_principal'];
