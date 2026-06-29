@@ -1084,7 +1084,7 @@ class ReportModel {
 		$str_sql = $str_sql . " right join";
 
 		$str_sql = $str_sql . " (select b.asm, b.area, sum(a.qty) as qty, sum(a.value)/1000 as value";
-		$str_sql = $str_sql . " from sellingout_target a";
+		$str_sql = $str_sql . " from sellingin_target a";
 		$str_sql = $str_sql . " left join distributor b on a.area = b.area";
 		$str_sql = $str_sql . " inner join area d on b.area = d.area and d.area <> 'JKT MT'";
 		$str_sql = $str_sql . " where b.asm <> '' and a.tahun = '" . $year . "' and CONVERT(a.bulan, SIGNED INTEGER) = '" . $month . "'";
@@ -1125,7 +1125,7 @@ class ReportModel {
 		$str_sql = $str_sql . " RIGHT JOIN";
 
 		$str_sql = $str_sql . " (select b.asm, b.distributor, b.area, sum(a.qty) as qty, sum(a.value)/1000 as value";
-		$str_sql = $str_sql . " from sellingout_target a";
+		$str_sql = $str_sql . " from sellingin_target a";
 		$str_sql = $str_sql . " inner join distributor b on a.area = b.area";
 		$str_sql = $str_sql . " inner join area d on b.area = d.area and b.area = 'JKT MT' ";
 		$str_sql = $str_sql . " where a.tahun = '" . $year . "' and CONVERT(a.bulan, SIGNED INTEGER) = '" . $month . "'";
