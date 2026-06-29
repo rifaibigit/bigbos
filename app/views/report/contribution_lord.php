@@ -13,8 +13,8 @@
               $monthName1 = $dateObj1->format('M');
               $monthName2 = $dateObj2->format('M');
             ?>
-            <!-- <h3>Contribution Summary - LORD (<?php echo $monthName1. ' To ' .$monthName2;?>)</h3>  -->
-            <h1><?= $data['title']; ?></h1>
+            <h1>Contribution Summary - LORD (<?php echo $monthName1. ' To ' .$monthName2;?>)</h1> 
+
           </div>
         </div>
       </div><!-- /.container-fluid -->

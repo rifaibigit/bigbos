@@ -383,6 +383,53 @@ class SkuModel {
 		return $this->db->resultSet();
 	}
 
+	public function getItemNameSKUToastBox()
+	{
+		$this->db->opendb();
+		$str_sql = "SELECT DISTINCT a.item_name";
+		$str_sql = $str_sql . " FROM sku a";
+		$str_sql = $str_sql . " LEFT JOIN sku_group b on a.item_group = b.item_group";
+		$str_sql = $str_sql . " WHERE a.principal = 'TOASTBOX'";
+		$str_sql = $str_sql . " ORDER BY b.group_id, a.id";
+
+		$this->db->query($str_sql);
+		return $this->db->resultSet();
+	}
+
+	public function getItemCodeSKUToastBox()
+	{
+		$this->db->opendb();
+		$str_sql = "SELECT DISTINCT a.item_code";
+		$str_sql = $str_sql . " FROM sku a";
+		$str_sql = $str_sql . " LEFT JOIN sku_group b on a.item_group = b.item_group";
+		$str_sql = $str_sql . " WHERE a.principal = 'TOASTBOX'";
+		$str_sql = $str_sql . " ORDER BY b.group_id, a.id";
+
+		$this->db->query($str_sql);
+		return $this->db->resultSet();
+	}
+
+	public function getGroupSKUToastBox()
+	{
+		$this->db->opendb();
+		$str_sql = "SELECT a.item_group, count(distinct a.item_name) as count_name";
+		$str_sql = $str_sql . " FROM sku a";
+		$str_sql = $str_sql . " LEFT JOIN sku_group b on a.item_group = b.item_group";
+		$str_sql = $str_sql . " WHERE a.principal = 'TOASTBOX'";
+		$str_sql = $str_sql . " GROUP BY a.item_group";
+		$str_sql = $str_sql . " ORDER BY b.group_id, a.id";
+
+		$this->db->query($str_sql);
+		return $this->db->resultSet();
+	}
+
+	public function getCountSKUToastBox()
+	{
+		$this->db->opendb();
+		$this->db->query("SELECT count(item_name) as item_row FROM " . $this->table . " where principal = 'TOASTBOX' ORDER BY id");
+		return $this->db->resultSet();
+	}
+
 	public function getSkuById($id)
 	{
 		$this->db->opendb();
