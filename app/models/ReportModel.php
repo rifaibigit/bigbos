@@ -1045,31 +1045,31 @@ class ReportModel {
 		$area = str_replace(",", "','", $_SESSION['area']);
 		$area = str_replace(" ", "", $area);
 
-		if (isset($data['principal']))
+		if (isset($data['by_principal']))
 		{
-			$principal = $data['principal'];
+			$principal = $data['by_principal'];
 		}
-		if (isset($data['year']))
+		if (isset($data['by_year']))
 		{
-			$year = $data['year'];
+			$year = $data['by_year'];
 		}else
 		{
 			$year = date('Y');
 		}
-		if (isset($data['month']))
+		if (isset($data['by_month']))
 		{
-			$month = $data['month'];
+			$month = $data['by_month'];
 		}else
 		{
 			$month = date('m');
 		}
 
-		$str_sql = "SELECT * from";
-		$str_sql = $str_sql . " (SELECT b.asm, a.distributor, b.area, a.qty, a.value, b.qty as qty_target, b.value as value_target,";
+		$str_sql = "SELECT * FROM";
+		$str_sql = $str_sql . " (select b.asm, a.distributor, b.area, a.qty, a.value, b.qty as qty_target, b.value as value_target,";
 		$str_sql = $str_sql . " (sum(a.value)/sum(b.value))*100 as p";
 		$str_sql = $str_sql . " from";
 
-		$str_sql = $str_sql . " (SELECT b.asm, b.distributor, b.area, sum(a.qty) as qty, (sum(a.value_exc)+sum(a.total_diskon))/1000 as value";
+		$str_sql = $str_sql . " (select b.asm, b.distributor, b.area, sum(a.qty) as qty, (sum(a.value_exc)+sum(a.total_diskon))/1000 as value";
 		$str_sql = $str_sql . " from selling_in a";
 		$str_sql = $str_sql . " inner join distributor b on a.cust_code = b.cust_code";
 		$str_sql = $str_sql . " inner join area d on b.area = d.area and d.area <> 'JKT MT'";
@@ -1083,7 +1083,7 @@ class ReportModel {
 
 		$str_sql = $str_sql . " right join";
 
-		$str_sql = $str_sql . " (SELECT b.asm, b.area, sum(a.qty) as qty, sum(a.value)/1000 as value";
+		$str_sql = $str_sql . " (select b.asm, b.area, sum(a.qty) as qty, sum(a.value)/1000 as value";
 		$str_sql = $str_sql . " from sellingout_target a";
 		$str_sql = $str_sql . " left join distributor b on a.area = b.area";
 		$str_sql = $str_sql . " inner join area d on b.area = d.area and d.area <> 'JKT MT'";
@@ -1100,16 +1100,16 @@ class ReportModel {
 		{
 			$str_sql = $str_sql . " where c.area in ('" . $area . "')";
 		}
-		$str_sql = $str_sql . " group by b.area";
+		$str_sql = $str_sql . " group by b.area, a.distributor";
 		$str_sql = $str_sql . " order by c.id) a";
 
 		$str_sql = $str_sql . " UNION ALL"; //========================================================================================
 
 		$str_sql = $str_sql . " SELECT b.asm, b.distributor, b.area, a.qty, a.value, b.qty as qty_target, b.value as value_target,";
 		$str_sql = $str_sql . " (sum(a.value)/sum(b.value))*100 as p";
-		$str_sql = $str_sql . " from";
+		$str_sql = $str_sql . " FROM";
 
-		$str_sql = $str_sql . " (SELECT (select asm from distributor where area = 'JKT MT') as asm, c.distributor, b.area, sum(a.qty) as qty, (sum(a.value_exc)+sum(a.total_diskon))/1000 as value";
+		$str_sql = $str_sql . " (select (select asm from distributor where area = 'JKT MT') as asm, c.distributor, b.area, sum(a.qty) as qty, (sum(a.value_exc)+sum(a.total_diskon))/1000 as value";
 		$str_sql = $str_sql . " from selling_in a";
 		$str_sql = $str_sql . " inner join outlet b on a.cust_code = b.outlet_code";
 		$str_sql = $str_sql . " left join distributor c on b.area = c.area";
@@ -1122,9 +1122,9 @@ class ReportModel {
 		$str_sql = $str_sql . " group by asm, d.area";
 		$str_sql = $str_sql . " order by d.id) a";
 
-		$str_sql = $str_sql . " right join";
+		$str_sql = $str_sql . " RIGHT JOIN";
 
-		$str_sql = $str_sql . " (SELECT b.asm, b.distributor, b.area, sum(a.qty) as qty, sum(a.value)/1000 as value";
+		$str_sql = $str_sql . " (select b.asm, b.distributor, b.area, sum(a.qty) as qty, sum(a.value)/1000 as value";
 		$str_sql = $str_sql . " from sellingout_target a";
 		$str_sql = $str_sql . " inner join distributor b on a.area = b.area";
 		$str_sql = $str_sql . " inner join area d on b.area = d.area and b.area = 'JKT MT' ";
@@ -1136,14 +1136,14 @@ class ReportModel {
 		$str_sql = $str_sql . " group by b.asm, b.distributor";
 		$str_sql = $str_sql . " order by d.id) b on a.asm = b.asm and a.area = b.area";
 
-		$str_sql = $str_sql . " inner join area c on b.area = c.area";
+		$str_sql = $str_sql . " INNER JOIN area c on b.area = c.area";
 		if($area != 'ALL')
 		{
-			$str_sql = $str_sql . " where c.area in ('" . $area . "')";
+			$str_sql = $str_sql . " WHERE c.area in ('" . $area . "')";
 		}
-		$str_sql = $str_sql . " group by c.id, c.island, c.region, c.area asc";
+		$str_sql = $str_sql . " GROUP BY c.id, c.island, c.region, c.area asc";
 
-		////Flasher::setMessage('Berhasil',$str_sql,'success');
+		// Flasher::setMessage('Berhasil',$str_sql,'success');
 
 		$this->db->opendb();
 		$this->db->query($str_sql);
@@ -1265,31 +1265,31 @@ class ReportModel {
 		$area = str_replace(",", "','", $_SESSION['area']);
 		$area = str_replace(" ", "", $area);
 
-		if (isset($data['principal']))
+		if (isset($data['by_principal']))
 		{
-			$principal = $data['principal'];
+			$principal = $data['by_principal'];
 		}
-		if (isset($data['year']))
+		if (isset($data['by_year']))
 		{
-			$year = $data['year'];
+			$year = $data['by_year'];
 		}else
 		{
 			$year = date('Y');
 		}
-		if (isset($data['month']))
+		if (isset($data['by_month']))
 		{
-			$month = $data['month'];
+			$month = $data['by_month'];
 		}else
 		{
 			$month = date('m');
 		}
 
-		$str_sql = "SELECT * from";
-		$str_sql = $str_sql . " (SELECT b.asm, a.distributor, b.area, a.qty, a.value, b.qty as qty_target, b.value as value_target,";
+		$str_sql = "SELECT * FROM";
+		$str_sql = $str_sql . " (select b.asm, a.distributor, b.area, a.qty, a.value, b.qty as qty_target, b.value as value_target,";
 		$str_sql = $str_sql . " (sum(a.value)/sum(b.value))*100 as p";
 		$str_sql = $str_sql . " from";
 
-		$str_sql = $str_sql . " (SELECT b.asm, b.distributor, b.area, sum(a.qty) as qty, sum(a.value_exc)/1000 as value";
+		$str_sql = $str_sql . " (select b.asm, b.distributor, b.area, sum(a.qty) as qty, sum(a.value_exc)/1000 as value";
 		$str_sql = $str_sql . " from selling_out a";
 		$str_sql = $str_sql . " inner join distributor b on a.kode_dist = b.cust_code";
 		$str_sql = $str_sql . " inner join area d on b.area = d.area and d.area <> 'JKT MT'";
@@ -1303,7 +1303,7 @@ class ReportModel {
 
 		$str_sql = $str_sql . " right join";
 
-		$str_sql = $str_sql . " (SELECT b.asm, b.area, sum(a.qty) as qty, sum(a.value)/1000 as value";
+		$str_sql = $str_sql . " (select b.asm, b.area, sum(a.qty) as qty, sum(a.value)/1000 as value";
 		$str_sql = $str_sql . " from sellingout_target a";
 		$str_sql = $str_sql . " left join distributor b on a.area = b.area";
 		$str_sql = $str_sql . " inner join area d on b.area = d.area and d.area <> 'JKT MT'";
@@ -1320,7 +1320,7 @@ class ReportModel {
 		{
 			$str_sql = $str_sql . " where c.area in ('" . $area . "')";
 		}
-		$str_sql = $str_sql . " group by b.area";
+		$str_sql = $str_sql . " group by b.area, a.distributor";
 		$str_sql = $str_sql . " order by c.id) a";
 
 		$str_sql = $str_sql . " UNION ALL"; //========================================================================================
@@ -1363,7 +1363,7 @@ class ReportModel {
 		}
 		$str_sql = $str_sql . " group by c.id, c.island, c.region, c.area asc";
 
-		////Flasher::setMessage('Berhasil',$str_sql,'success');
+		// Flasher::setMessage('Berhasil',$str_sql,'success');
 
 		$this->db->opendb();
 		$this->db->query($str_sql);

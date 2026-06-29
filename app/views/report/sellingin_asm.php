@@ -124,6 +124,10 @@
                                             $sub_target = 0;
                                             $sub_p = 0;
 
+                                            $area_actual = 0;
+                                            $area_target = 0;
+                                            $area_p = 0;
+
                                             $total_actual = 0;
                                             $total_target = 0;
                                             $total_p = 0;
@@ -134,10 +138,51 @@
 
                                         <?php $no=1; ?>
 
+                                        <?php
+
+                                            $areaDistributorCount = [];
+
+                                            foreach ($data['sellingin_asm'] as $r) {
+                                                $areaDistributorCount[$r['area']][] = $r['distributor'];
+                                            }
+
+                                            foreach ($areaDistributorCount as $k => $v) {
+                                                $areaDistributorCount[$k] = count(array_unique($v));
+                                            }
+
+                                        ?>
+
                                         <?php foreach ($data['sellingin_asm'] as $row) :?>
 
                                             <?php
 
+                                                // ======================
+                                                // SUBTOTAL AREA
+                                                // ======================
+                                                if ($area != '' && $area != $row['area'])
+                                                {
+                                                    if ($areaDistributorCount[$area] > 1)
+                                                    {
+                                                        $area_p = ($area_actual / ($area_target ?: 1)) * 100;
+
+                                                        echo '<tr class="table-warning" style="font-weight:bold;">';
+                                                            echo '<td></td>';
+                                                            echo '<td></td>';
+                                                            echo '<td class="text-center">SUBTOTAL AREA</td>';
+                                                            echo '<td>'.$area.'</td>';
+                                                            echo '<td class="text-right">'.number_format($area_actual,2).'</td>';
+                                                            echo '<td class="text-right">'.number_format($area_target,2).'</td>';
+                                                            echo '<td class="text-right">'.number_format($area_p,2).'</td>';
+                                                        echo '</tr>';
+                                                    }
+
+                                                    $area_actual = 0;
+                                                    $area_target = 0;
+                                                }
+
+                                                // ======================
+                                                // SUBTOTAL ASM
+                                                // ======================
                                                 if ($asm != $row['asm'] and $asm != '' )
                                                 {
 
@@ -177,10 +222,12 @@
                                         <?php 
                                             
                                             $sub_actual += $row['value'];
+                                            $area_actual += $row['value'];
 
                                             if($area != $row['area'])
                                             {
                                                 $sub_target += $row['value_target'];
+                                                $area_target += $row['value_target'];
                                                 $total_target += $row['value_target'];
                                             }
 
@@ -193,6 +240,24 @@
                                         <?php $area = $row['area']; ?>
 
                                         <?php $no++; endforeach; ?>
+
+                                        <?php if ($areaDistributorCount[$area] > 1): ?>
+
+                                        <?php
+                                            $area_p = ($area_actual / ($area_target ?: 1)) * 100;
+                                        ?>
+
+                                        <tr class="table-warning" style="font-weight:bold;">
+                                            <td></td>
+                                            <td></td>
+                                            <td class="text-center">SUBTOTAL AREA</td>
+                                            <td><?= $area; ?></td>
+                                            <td class="text-right"><?= number_format($area_actual,2); ?></td>
+                                            <td class="text-right"><?= number_format($area_target,2); ?></td>
+                                            <td class="text-right"><?= number_format($area_p,2); ?></td>
+                                        </tr>
+
+                                        <?php endif; ?>
 
                                         <tr class="table-warning" style="font-weight:bold;">
                                             <td></td>

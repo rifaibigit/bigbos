@@ -217,7 +217,9 @@ class Report extends Controller {
 
 		$data['principal'] = $this->model('ReportModel')->getPrincipalOut();
 
-		$data['sellingin_asm'] = $this->model('ReportModel')->getSellingIn_ASM();
+		$get['period_si'] = $this->model('ReportModel')->getMonth_SI();
+		$month_si = $get['period_si']['to_month'];
+		$year_si = $get['period_si']['year'];
 
 		if(isset($_POST['by_principal']))
 		{
@@ -231,15 +233,17 @@ class Report extends Controller {
 			$data['by_year'] = $_POST['by_year'];
 		}else
 		{
-			$data['by_year'] = date('Y');
+			$data['by_year'] = $year_si;
 		}
 		if(isset($_POST['by_month']))
 		{
 			$data['by_month'] = $_POST['by_month'];
 		}else
 		{
-			$data['by_month'] = date('m');
+			$data['by_month'] = $month_si;
 		}
+
+		$data['sellingin_asm'] = $this->model('ReportModel')->getSellingIn_ASM2($data);
 
 		$this->view('report/sellingin_asm', $data);
 		$this->view('templates/footer');
@@ -254,7 +258,9 @@ class Report extends Controller {
 
 		$data['principal'] = $this->model('ReportModel')->getPrincipalOut();
 
-		$data['sellingout_asm'] = $this->model('ReportModel')->getSellingOut_ASM();
+		$get['period_so'] = $this->model('ReportModel')->getMonth_SO();
+		$month_so = $get['period_so']['to_month'];
+		$year_so = $get['period_so']['year'];
 
 		if(isset($_POST['by_principal']))
 		{
@@ -268,15 +274,17 @@ class Report extends Controller {
 			$data['by_year'] = $_POST['by_year'];
 		}else
 		{
-			$data['by_year'] = date('Y');
+			$data['by_year'] = $year_so;
 		}
 		if(isset($_POST['by_month']))
 		{
 			$data['by_month'] = $_POST['by_month'];
 		}else
 		{
-			$data['by_month'] = date('m');
+			$data['by_month'] = $month_so;
 		}
+
+		$data['sellingout_asm'] = $this->model('ReportModel')->getSellingOut_ASM2($data);
 
 		$this->view('report/sellingout_asm', $data);
 		$this->view('templates/footer');
@@ -12671,31 +12679,34 @@ class Report extends Controller {
 		];
 
 
-		if (isset($_POST['by_principal']))
+		$get['period_so'] = $this->model('ReportModel')->getMonth_SO();
+		$month_so = $get['period_so']['to_month'];
+		$year_so = $get['period_so']['year'];
+
+		if(isset($_POST['by_principal']))
 		{
-			$principal = $_POST['by_principal'];
+			$data['by_principal'] = $_POST['by_principal'];
+		}else
+		{
+			$data['by_principal'] = "";
 		}
-		else
+		if(isset($_POST['by_year']))
 		{
-			$principal = "";
+			$data['by_year'] = $_POST['by_year'];
+		}else
+		{
+			$data['by_year'] = $year_so;
 		}
-		if (isset($_POST['by_year']))
+		if(isset($_POST['by_month']))
 		{
-			$year = $_POST['by_year'];
-		}
-		else
+			$data['by_month'] = $_POST['by_month'];
+		}else
 		{
-			$year = "";
+			$data['by_month'] = $month_so;
 		}
 
-		if (isset($_POST['by_month']))
-		{
-			$month = $_POST['by_month'];
-		}
-		else
-		{
-			$month = "";
-		}
+		$year = $data['by_year'];
+		$principal = $data['by_principal'];
 
 
 		$sheet->setCellValue('A1', "Report Selling In - ASM (" . $year . ")"); // Set kolom A1 dengan tulisan "Report Selling In - By Outlet"
@@ -12755,6 +12766,10 @@ class Report extends Controller {
 		$sub_target = 0;
 		$sub_p = 0;
 
+		$area_actual = 0;
+		$area_target = 0;
+		$area_p = 0;
+
 		$total_actual = 0;
 		$total_target = 0;
 		$total_p = 0;
@@ -12763,17 +12778,73 @@ class Report extends Controller {
 		$no = 1; // Untuk penomoran tabel, di awal set dengan 1
 		$row = 6;
 
-		$data1 = array(
-			'principal' => $principal,
-			'year' => $year,
-			'month' => $month
-		);
+		$data['sellingin_asm'] = $this->model('ReportModel')->getSellingIn_ASM2($data);
+		
+		$areaDistributorCount = [];
 
-		$data['sellingin_asm'] = $this->model('ReportModel')->getSellingIn_ASM2($data1);
-		//$data['sellingin_OT'] = $this->model('ReportModel')->getSellingIn_OT2();
+		foreach ($data['sellingin_asm'] as $r) {
+			$key = $r['asm'].'|'.$r['area'];
+			$areaDistributorCount[$key][] = $r['distributor'];
+		}
+
+		foreach ($areaDistributorCount as $k => $v) {
+			$areaDistributorCount[$k] = count(array_unique($v));
+		}
 
 		foreach ($data['sellingin_asm'] as $rows) :
 
+			// ===================================
+			// SUBTOTAL AREA
+			// ===================================
+			if ($area != '' && $area != $rows['area'])
+			{
+				$key = $asm.'|'.$area;
+
+				if ($areaDistributorCount[$key] > 1)
+				{
+					$area_p = ($area_actual / ($area_target ?: 1)) * 100;
+
+					$sheet->setCellValue('A'.$row,'');
+					$sheet->setCellValue('B'.$row,'');
+					$sheet->setCellValue('C'.$row,'SUBTOTAL AREA');
+					$sheet->setCellValue('D'.$row,$area);
+					$sheet->setCellValue('E'.$row,$area_actual);
+					$sheet->setCellValue('F'.$row,$area_target);
+					$sheet->setCellValue('G'.$row,$area_p);
+
+					$sheet->getStyle('A' . $row)->applyFromArray($style_row);
+					$sheet->getStyle('B' . $row)->applyFromArray($style_row);
+					$sheet->getStyle('C' . $row)->applyFromArray($style_row);
+					$sheet->getStyle('D' . $row)->applyFromArray($style_row);
+					$sheet->getStyle('E' . $row)->applyFromArray($style_row);
+					$sheet->getStyle('F' . $row)->applyFromArray($style_row);
+					$sheet->getStyle('G' . $row)->applyFromArray($style_row);
+
+					$sheet->getStyle('A' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+					$sheet->getStyle('B' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+					$sheet->getStyle('C' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+					$sheet->getStyle('D' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+					$sheet->getStyle('E' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+					$sheet->getStyle('F' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+					$sheet->getStyle('G' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+					$sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+					$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+					$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+
+					$sheet->getStyle('A'.$row.':G'.$row)->getFont()->setBold(true);
+					$sheet->getStyle('A'.$row.':G'.$row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFE4B5'); // hijau muda
+
+					$row++;
+				}
+
+				$area_actual = 0;
+				$area_target = 0;
+			}
+
+			// ===================================
+			// SUBTOTAL ASM
+			// ===================================
 			if ($asm != $rows['asm'] and $asm != '' )
             {
 				
@@ -12848,10 +12919,12 @@ class Report extends Controller {
 			$asm = $rows['asm'];
 
 			$sub_actual += $rows['value'];
+			$area_actual += $rows['value'];
 
 			if($area != $rows['area'])
 			{
 				$sub_target += $rows['value_target'];
+				$area_target += $rows['value_target'];
 				$total_target += $rows['value_target'];
 			}
 
@@ -12864,6 +12937,46 @@ class Report extends Controller {
 			$no++; // Tambah 1 setiap kali looping
     		$row++; // Tambah 1 setiap kali looping
 		endforeach;
+
+		$key = $asm.'|'.$area;
+
+		if ($areaDistributorCount[$key] > 1)
+		{
+			$area_p = ($area_actual / ($area_target ?: 1)) * 100;
+
+			$sheet->setCellValue('A'.$row,'');
+			$sheet->setCellValue('B'.$row,'');
+			$sheet->setCellValue('C'.$row,'SUBTOTAL AREA');
+			$sheet->setCellValue('D'.$row,$area);
+			$sheet->setCellValue('E'.$row,$area_actual);
+			$sheet->setCellValue('F'.$row,$area_target);
+			$sheet->setCellValue('G'.$row,$area_p);
+
+			$sheet->getStyle('A' . $row)->applyFromArray($style_row);
+			$sheet->getStyle('B' . $row)->applyFromArray($style_row);
+			$sheet->getStyle('C' . $row)->applyFromArray($style_row);
+			$sheet->getStyle('D' . $row)->applyFromArray($style_row);
+			$sheet->getStyle('E' . $row)->applyFromArray($style_row);
+			$sheet->getStyle('F' . $row)->applyFromArray($style_row);
+			$sheet->getStyle('G' . $row)->applyFromArray($style_row);
+
+			$sheet->getStyle('A' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+			$sheet->getStyle('B' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+			$sheet->getStyle('C' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+			$sheet->getStyle('D' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+			$sheet->getStyle('E' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+			$sheet->getStyle('F' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+			$sheet->getStyle('G' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+			$sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+
+			$sheet->getStyle('A'.$row.':G'.$row)->getFont()->setBold(true);
+			$sheet->getStyle('A'.$row.':G'.$row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFE4B5');
+
+			$row++;
+		}
 
 		//asm end
 		//$row = $row + 1;
@@ -12990,32 +13103,34 @@ class Report extends Controller {
 		];
 
 
-		if (isset($_POST['by_principal']))
+		$get['period_so'] = $this->model('ReportModel')->getMonth_SO();
+		$month_so = $get['period_so']['to_month'];
+		$year_so = $get['period_so']['year'];
+
+		if(isset($_POST['by_principal']))
 		{
-			$principal = $_POST['by_principal'];
+			$data['by_principal'] = $_POST['by_principal'];
+		}else
+		{
+			$data['by_principal'] = "";
 		}
-		else
+		if(isset($_POST['by_year']))
 		{
-			$principal = "";
+			$data['by_year'] = $_POST['by_year'];
+		}else
+		{
+			$data['by_year'] = $year_so;
 		}
-		if (isset($_POST['by_year']))
+		if(isset($_POST['by_month']))
 		{
-			$year = $_POST['by_year'];
-		}
-		else
+			$data['by_month'] = $_POST['by_month'];
+		}else
 		{
-			$year = "";
+			$data['by_month'] = $month_so;
 		}
 
-		if (isset($_POST['by_month']))
-		{
-			$month = $_POST['by_month'];
-		}
-		else
-		{
-			$month = "";
-		}
-
+		$year = $data['by_year'];
+		$principal = $data['by_principal'];
 
 		$sheet->setCellValue('A1', "Report Selling Out - ASM (" . $year . ")"); // Set kolom A1 dengan tulisan "Report Selling In - By Outlet"
 		$sheet->setCellValue('A2', "Principal : " . $principal); // Set kolom A2 dengan tulisan "Outlet Type : EC_EC"
@@ -13074,6 +13189,10 @@ class Report extends Controller {
 		$sub_target = 0;
 		$sub_p = 0;
 
+		$area_actual = 0;
+		$area_target = 0;
+		$area_p = 0;
+
 		$total_actual = 0;
 		$total_target = 0;
 		$total_p = 0;
@@ -13082,17 +13201,73 @@ class Report extends Controller {
 		$no = 1; // Untuk penomoran tabel, di awal set dengan 1
 		$row = 6;
 
-		$data1 = array(
-			'principal' => $principal,
-			'year' => $year,
-			'month' => $month
-		);
+		$data['sellingout_asm'] = $this->model('ReportModel')->getSellingOut_ASM2($data);
 
-		$data['sellingout_asm'] = $this->model('ReportModel')->getSellingOut_ASM2($data1);
-		//$data['sellingin_OT'] = $this->model('ReportModel')->getSellingIn_OT2();
+		$areaDistributorCount = [];
+
+		foreach ($data['sellingout_asm'] as $r) {
+			$key = $r['asm'].'|'.$r['area'];
+			$areaDistributorCount[$key][] = $r['distributor'];
+		}
+
+		foreach ($areaDistributorCount as $k => $v) {
+			$areaDistributorCount[$k] = count(array_unique($v));
+		}
 
 		foreach ($data['sellingout_asm'] as $rows) :
 
+			// ===================================
+			// SUBTOTAL AREA
+			// ===================================
+			if ($area != '' && $area != $rows['area'])
+			{
+				$key = $asm.'|'.$area;
+
+				if ($areaDistributorCount[$key] > 1)
+				{
+					$area_p = ($area_actual / ($area_target ?: 1)) * 100;
+
+					$sheet->setCellValue('A'.$row,'');
+					$sheet->setCellValue('B'.$row,'');
+					$sheet->setCellValue('C'.$row,'SUBTOTAL AREA');
+					$sheet->setCellValue('D'.$row,$area);
+					$sheet->setCellValue('E'.$row,$area_actual);
+					$sheet->setCellValue('F'.$row,$area_target);
+					$sheet->setCellValue('G'.$row,$area_p);
+
+					$sheet->getStyle('A' . $row)->applyFromArray($style_row);
+					$sheet->getStyle('B' . $row)->applyFromArray($style_row);
+					$sheet->getStyle('C' . $row)->applyFromArray($style_row);
+					$sheet->getStyle('D' . $row)->applyFromArray($style_row);
+					$sheet->getStyle('E' . $row)->applyFromArray($style_row);
+					$sheet->getStyle('F' . $row)->applyFromArray($style_row);
+					$sheet->getStyle('G' . $row)->applyFromArray($style_row);
+
+					$sheet->getStyle('A' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+					$sheet->getStyle('B' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+					$sheet->getStyle('C' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+					$sheet->getStyle('D' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+					$sheet->getStyle('E' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+					$sheet->getStyle('F' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+					$sheet->getStyle('G' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+					$sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+					$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+					$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+
+					$sheet->getStyle('A'.$row.':G'.$row)->getFont()->setBold(true);
+					$sheet->getStyle('A'.$row.':G'.$row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFE4B5'); // hijau muda
+
+					$row++;
+				}
+
+				$area_actual = 0;
+				$area_target = 0;
+			}
+
+			// ===================================
+			// SUBTOTAL ASM
+			// ===================================
 			if ($asm != $rows['asm'] and $asm != '' )
             {
 				
@@ -13167,10 +13342,12 @@ class Report extends Controller {
 			$asm = $rows['asm'];
 
 			$sub_actual += $rows['value'];
+			$area_actual += $rows['value'];
 
 			if($area != $rows['area'])
 			{
 				$sub_target += $rows['value_target'];
+				$area_target += $rows['value_target'];
 				$total_target += $rows['value_target'];
 			}
 
@@ -13183,6 +13360,46 @@ class Report extends Controller {
 			$no++; // Tambah 1 setiap kali looping
     		$row++; // Tambah 1 setiap kali looping
 		endforeach;
+
+		$key = $asm.'|'.$area;
+
+		if ($areaDistributorCount[$key] > 1)
+		{
+			$area_p = ($area_actual / ($area_target ?: 1)) * 100;
+
+			$sheet->setCellValue('A'.$row,'');
+			$sheet->setCellValue('B'.$row,'');
+			$sheet->setCellValue('C'.$row,'SUBTOTAL AREA');
+			$sheet->setCellValue('D'.$row,$area);
+			$sheet->setCellValue('E'.$row,$area_actual);
+			$sheet->setCellValue('F'.$row,$area_target);
+			$sheet->setCellValue('G'.$row,$area_p);
+
+			$sheet->getStyle('A' . $row)->applyFromArray($style_row);
+			$sheet->getStyle('B' . $row)->applyFromArray($style_row);
+			$sheet->getStyle('C' . $row)->applyFromArray($style_row);
+			$sheet->getStyle('D' . $row)->applyFromArray($style_row);
+			$sheet->getStyle('E' . $row)->applyFromArray($style_row);
+			$sheet->getStyle('F' . $row)->applyFromArray($style_row);
+			$sheet->getStyle('G' . $row)->applyFromArray($style_row);
+
+			$sheet->getStyle('A' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+			$sheet->getStyle('B' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+			$sheet->getStyle('C' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+			$sheet->getStyle('D' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+			$sheet->getStyle('E' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+			$sheet->getStyle('F' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+			$sheet->getStyle('G' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+			$sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+
+			$sheet->getStyle('A'.$row.':G'.$row)->getFont()->setBold(true);
+			$sheet->getStyle('A'.$row.':G'.$row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFE4B5');
+
+			$row++;
+		}
 
 		//asm end
 		//$row = $row + 1;
