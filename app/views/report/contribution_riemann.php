@@ -125,7 +125,7 @@
                             </div>
                             <div style="margin-left : 5px;">
                               <button class="btn btn-outline-primary" type="submit">Go!</button>
-                              <a class="btn btn-outline-secondary" href="<?= base_url; ?>/Report/contribution_lord">Reset</a>
+                              <a class="btn btn-outline-secondary" href="<?= base_url; ?>/Report/contribution_riemann">Reset</a>
                             </div>
                             <div style="margin-left : 5px;">
                               <button class="btn float-right btn btn-outline-success" type="submit" formaction="<?= base_url; ?>/Report/export_contribution_riemann"><i class = "fa fa-download"> Excel</i></button>

@@ -3720,7 +3720,7 @@ class Report extends Controller {
 		
 	}
 
-	public function activeoutlet_Jordan()
+	public function activeoutlet_jordan()
 	{
 
 		$data['title'] = 'Active Outlet - JORDAN';
@@ -3799,7 +3799,7 @@ class Report extends Controller {
 		
 	}
 
-	public function activeoutlet_Riemann()
+	public function activeoutlet_riemann()
 	{
 
 		$data['title'] = 'Active Outlet - RIEMANN';
@@ -3874,6 +3874,85 @@ class Report extends Controller {
 		}
 
 		$this->view('report/activeoutlet_riemann', $data);
+		$this->view('templates/footer');
+		
+	}
+
+	public function activeoutlet_toastbox()
+	{
+
+		$data['title'] = 'Active Outlet - TOASTBOX';
+		$this->template('header', $data);
+		$this->template('sidebar', $data);
+
+        $data['area'] = $this->model('ReportModel')->getAreaOut();
+		$data['region'] = $this->model('ReportModel')->getRegionOut();
+        $data['island'] = $this->model('ReportModel')->getIslandOut();
+		$data['sku_code'] = $this->model('SkuModel')->getItemCodeSKUToastBox();
+
+		//$data['distr_jordan'] = $this->model('ReportModel')->getAO_jordan();
+		$data['distr_toastbox'] = $this->model('ReportModel')->getAO_toastbox_ALL($data);
+
+		$data['sku_name'] = $this->model('SkuModel')->getItemNameSKUToastBox();
+		$data['sku_group'] = $this->model('SkuModel')->getGroupSKUToastBox();
+		$data['sku_count'] = $this->model('SkuModel')->getCountSKUToastBox();
+
+		if(isset($_POST['by_region']))
+		{
+			$data['by_region'] = $_POST['by_region'];
+		}else
+		{
+			$data['by_region'] = "";
+		}
+
+		if(isset($_POST['by_area']))
+		{
+			$data['by_area'] = $_POST['by_area'];
+		}
+		elseif ($_SESSION['area'] != 'ALL')
+		{
+			$data['by_area'] = explode(', ', $_SESSION['area']);
+		}
+		else
+		{
+			$data['by_area'] = "";
+		}
+
+		if(isset($_POST['by_island']))
+		{
+			$data['by_island'] = $_POST['by_island'];
+		}else
+		{
+			$data['by_island'] = "";
+		}
+
+		if(isset($_POST['by_month1']))
+		{
+			$data['by_month1'] = $_POST['by_month1'];
+		}else
+		{
+			$get['period_si'] = $this->model('ReportModel')->getMonth_SO();
+			$data['by_month1'] = $get['period_si']['to_month'];
+		}
+
+		if(isset($_POST['by_month2']))
+		{
+			$data['by_month2'] = $_POST['by_month2'];
+		}else
+		{
+			$get['period_si'] = $this->model('ReportModel')->getMonth_SO();
+			$data['by_month2'] = $get['period_si']['to_month'];
+		}
+
+		if(isset($_POST['by_year']))
+		{
+			$data['by_year'] = $_POST['by_year'];
+		}else
+		{
+			$data['by_year'] = date('Y');
+		}
+
+		$this->view('report/activeoutlet_toastbox', $data);
 		$this->view('templates/footer');
 		
 	}
@@ -4093,6 +4172,79 @@ class Report extends Controller {
 		$data['sku_count'] = $this->model('SkuModel')->getCountSKURiemann();
 
 		$this->view('report/distribution_riemann', $data);
+		$this->view('templates/footer');
+		
+	}
+
+	public function distribution_toastbox()
+	{
+
+		$data['title'] = 'Distribution - TOASTBOX';
+		$this->template('header', $data);
+		$this->template('sidebar', $data);
+
+		//$data['username'] = $_SESSION['username'];
+		//$data['user_area'] = $this->model('UserModel')->getUserArea($data['username']);
+
+        $data['area'] = $this->model('ReportModel')->getAreaOut();
+		$data['region'] = $this->model('ReportModel')->getRegionOut();
+        $data['island'] = $this->model('ReportModel')->getIslandOut();
+		$data['sku_code'] = $this->model('SkuModel')->getItemCodeSKUToastBox();
+
+		if(isset($_POST['by_region']))
+		{
+			$data['by_region'] = $_POST['by_region'];
+		}else
+		{
+			$data['by_region'] = "";
+		}
+
+		if(isset($_POST['by_area']))
+		{
+			$data['by_area'] = $_POST['by_area'];
+		}
+		elseif ($_SESSION['area'] != 'ALL')
+		{
+			$data['by_area'] = explode(', ', $_SESSION['area']);
+		}
+		else
+		{
+			$data['by_area'] = "";
+		}
+
+		if(isset($_POST['by_island']))
+		{
+			$data['by_island'] = $_POST['by_island'];
+		}else
+		{
+			$data['by_island'] = "";
+		}
+
+		if(isset($_POST['by_month']))
+		{
+			$data['by_month'] = $_POST['by_month'];
+		}else
+		{
+			$get['period_si'] = $this->model('ReportModel')->getMonth_SO();
+			$data['by_month'] = $get['period_si']['to_month'];
+		}
+
+		if(isset($_POST['by_year']))
+		{
+			$data['by_year'] = $_POST['by_year'];
+		}else
+		{
+			$get['period_si'] = $this->model('ReportModel')->getMonth_SO();
+			$data['by_year'] = $get['period_si']['year'];
+		}
+
+		$data['distr_toastbox'] = $this->model('ReportModel')->getDistr_toastbox_ALL($data);
+
+		$data['sku_name'] = $this->model('SkuModel')->getItemNameSKUToastBox();
+		$data['sku_group'] = $this->model('SkuModel')->getGroupSKUToastBox();
+		$data['sku_count'] = $this->model('SkuModel')->getCountSKUToastBox();
+
+		$this->view('report/distribution_toastbox', $data);
 		$this->view('templates/footer');
 		
 	}
@@ -39390,7 +39542,7 @@ class Report extends Controller {
 		$data['sku_name'] = $this->model('SkuModel')->getItemNameSKURiemann();
 		$data['sku_group'] = $this->model('SkuModel')->getGroupSKURiemann();
 		$data['sku_count'] = $this->model('SkuModel')->getCountSKURiemann();
-		$data['sku_code'] = $this->model('SkuModel')->getItemCodeRiemann();
+		$data['sku_code'] = $this->model('SkuModel')->getItemCodeSKURiemann();
 
 		$dateObj   = DateTime::createFromFormat('!m', $month);
 		$monthName = $dateObj->format('F'); // March
@@ -39861,6 +40013,956 @@ class Report extends Controller {
 		// Proses file excel
 		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 		header('Content-Disposition: attachment; filename="Report Distribution - RIEMANN (Area Detail).xlsx"'); // Set nama file excel nya
+		header('Cache-Control: max-age=0');
+
+		$writer = new Xlsx($spreadsheet);
+		$writer->save('php://output');
+
+
+	}
+
+	public function export_distribution_toastbox()
+	{
+		$spreadsheet = new Spreadsheet();
+		$sheet = $spreadsheet->getActiveSheet();
+		// Buat sebuah variabel untuk menampung pengaturan style dari header tabel
+		$style_col = [
+			'font' => ['bold' => true], // Set font nya jadi bold
+			'alignment' => [
+				'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER, // Set text jadi ditengah secara horizontal (center)
+				'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
+			],
+			'borders' => [
+				'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN], // Set border top dengan garis tipis
+				'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],  // Set border right dengan garis tipis
+				'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN], // Set border bottom dengan garis tipis
+				'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN] // Set border left dengan garis tipis
+			]
+		];
+
+		$style_range = [
+			'font' => ['bold' => true], // Set font nya jadi bold
+			'alignment' => [
+				'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER, // Set text jadi ditengah secara horizontal (center)
+				'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
+			],
+			'borders' => [
+				'allBorders' => [
+					'borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN, // Set border top dengan garis tipis
+				]
+			]
+		];
+
+		$style_range_row = [
+			'alignment' => [
+				'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER, // Set text jadi ditengah secara horizontal (center)
+				'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
+			],
+			'borders' => [
+				'allBorders' => [
+					'borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN, // Set border top dengan garis tipis
+				]
+			]
+		];
+
+		// Buat sebuah variabel untuk menampung pengaturan style dari isi tabel
+		$style_row = [
+			'alignment' => [
+				'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
+			],
+			'borders' => [
+				'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN], // Set border top dengan garis tipis
+				'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],  // Set border right dengan garis tipis
+				'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN], // Set border bottom dengan garis tipis
+				'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN] // Set border left dengan garis tipis
+			]
+		];
+
+
+		if (isset($_POST['by_island']))
+		{
+			$island = $_POST['by_island'];
+		}
+		else
+		{
+			$island = "";
+		}
+
+		if (isset($_POST['by_region']))
+		{
+			$region = $_POST['by_region'];
+		}
+		else
+		{
+			$region = "";
+		}
+
+		if (isset($_POST['by_area']))
+		{
+			$area = implode(',', $_POST['by_area']);
+			$area = str_replace(",", "','", $area);
+			// $data['area_arr'] = $_POST['by_area'];
+			$title = $area;
+		}
+		else
+		{
+			$area = "";
+			// $data['area_arr'] = $data['area'];
+			$title = "NATIONAL";
+		}
+
+		if(isset($_POST['by_month']))
+		{
+			$month = $_POST['by_month'];
+		}else
+		{
+			$month = date('m');
+		}
+
+		if(isset($_POST['by_year']))
+		{
+			$year = $_POST['by_year'];
+		}else
+		{
+			$year = date('Y');
+		}
+
+		$fromdate = '-' .$month. '-1';
+		$todate = '-' .$month. '-31';
+
+		$data['sku_name'] = $this->model('SkuModel')->getItemNameSKUToastBox();
+		$data['sku_group'] = $this->model('SkuModel')->getGroupSKUToastBox();
+		$data['sku_count'] = $this->model('SkuModel')->getCountSKUToastBox();
+		$data['sku_code'] = $this->model('SkuModel')->getItemCodeSKUToastBox();
+
+		$dateObj   = DateTime::createFromFormat('!m', $month);
+		$monthName = $dateObj->format('F'); // March
+
+		$sheet->setCellValue('A1', "Report Distribution - TOASTBOX"); // Set kolom A1 dengan tulisan "Report Selling In - By Outlet"
+		$sheet->setCellValue('A2', "Island : " . $island); // Set kolom A2 dengan tulisan "Outlet Type : EC_EC"
+		$sheet->setCellValue('A3', "Region : " . $region); // Set kolom A3 dengan tulisan "Outlet Type : EC_EC"
+		$sheet->setCellValue('A4', "Area : " . $area);
+		$sheet->setCellValue('A5', "Month : " . $monthName . " - " .$year);
+		//$sheet->mergeCells('A1:F1'); // Set Merge Cell pada kolom A1 sampai F1
+		$sheet->getStyle('A1')->getFont()->setBold(true); // Set bold kolom A1
+		$sheet->getStyle('A2')->getFont()->setBold(true); // Set bold kolom A2
+		$sheet->getStyle('A3')->getFont()->setBold(true); // Set bold kolom A3
+		$sheet->getStyle('A4')->getFont()->setBold(true);
+		$sheet->getStyle('A5')->getFont()->setBold(true);
+		$sheet->getStyle('A1')->getFont()->setSize(20); // Set font size 15 untuk kolom A1
+		// Buat header tabel nya pada baris ke 7
+		$sheet->setCellValue('A7', "#"); // Set kolom A6 dengan tulisan "NO"
+		$sheet->mergeCells('A7:A9'); // Set Merge Row pada kolom A6 sampai A8
+		$sheet->setCellValue('B7', "TYPE OF OUTLET"); // Set kolom A6 dengan tulisan "NO"
+		$sheet->mergeCells('B7:B9'); // Set Merge Row pada kolom A6 sampai A8
+		$sheet->setCellValue('C7', "Code"); // Set kolom A6 dengan tulisan "NO"
+		$sheet->mergeCells('C7:C9'); // Set Merge Row pada kolom A6 sampai A8
+		$sheet->setCellValue('D7', "RO"); // Set kolom A6 dengan tulisan "NO"
+		$sheet->mergeCells('D7:D9');
+		$start_col = 5;
+
+		foreach ($data['sku_group'] as $row_sku) :
+			//$sheet->setCellValue('E7', $row_sku['item_group']);
+			$sheet->setCellValueByColumnAndRow($start_col, 7, $row_sku['item_group']);
+			$last_col = $start_col + ($row_sku['count_name']*2) - 1;
+			$sheet->mergeCellsByColumnAndRow($start_col, 7, $last_col, 7);
+			$start_col = $last_col + 1;
+		endforeach;
+
+		$sheet->setCellValueByColumnAndRow($start_col, 7, 'TOTAL');
+		$sheet->mergeCellsByColumnAndRow($start_col, 7, $start_col + 1 , 8);
+
+		$start_col = 5;
+		foreach ($data['sku_name'] as $row_sku) :
+			//$sheet->setCellValue('E7', $row_sku['item_group']);
+			$sheet->setCellValueByColumnAndRow($start_col, 8, $row_sku['item_name']);
+			$last_col = $start_col + 1;
+			$sheet->mergeCellsByColumnAndRow($start_col, 8, $last_col, 8);
+			$start_col = $last_col + 1;
+		endforeach;
+		$start_col = 5;
+		foreach ($data['sku_name'] as $row_sku) :
+			$sheet->setCellValueByColumnAndRow($start_col, 9, "DISTR. NO'S");
+			$start_col = $start_col + 1;
+			$sheet->setCellValueByColumnAndRow($start_col, 9, "%");
+			$start_col = $start_col + 1;
+		endforeach;
+
+		$sheet->setCellValueByColumnAndRow($start_col, 9, "DISTR. NO'S");
+		$sheet->setCellValueByColumnAndRow($start_col + 1, 9, "%");
+		
+		// Apply style header yang telah kita buat tadi ke masing-masing kolom header
+		$sheet->getStyleByColumnAndRow(1, 8, $last_col, 8)->getAlignment()->setWrapText(true);
+		$sheet->getStyleByColumnAndRow(1, 9, $last_col, 9)->getAlignment()->setWrapText(true);
+		$sheet->getStyleByColumnAndRow(1, 7, $last_col, 9)->applyFromArray($style_range);
+		$sheet->getStyleByColumnAndRow(1, 7, $last_col, 9)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFE4B5');
+		$sheet->getStyleByColumnAndRow($last_col + 1, 7, $last_col + 2, 9)->getAlignment()->setWrapText(true);
+		$sheet->getStyleByColumnAndRow($last_col + 1, 7, $last_col + 2, 9)->applyFromArray($style_range);
+		$sheet->getStyleByColumnAndRow($last_col + 1, 7, $last_col + 2, 9)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FF6D6D');
+
+		// Set height baris ke 1, 2 dan 3
+		$sheet->getRowDimension('1')->setRowHeight(40);
+		$sheet->getRowDimension('2')->setRowHeight(20);
+		$sheet->getRowDimension('3')->setRowHeight(20);
+		$sheet->getRowDimension('4')->setRowHeight(20);
+		$sheet->getRowDimension('5')->setRowHeight(20);
+		$sheet->getRowDimension('8')->setRowHeight(60);
+
+		$no = 1; // Untuk penomoran tabel, di awal set dengan 1
+		$row = 10;
+
+		$data1 = array(
+			'island' => $island,
+			'region' => $region,
+			'area' => $area,
+			'month' => $month,
+			'year' => $year
+		);
+
+		$data['distr_toastbox'] = $this->model('ReportModel')->getDistr_toastbox_ALL($data);
+
+		$data_col = 1;
+		$data_row = 10;
+
+		$channel='';
+
+		$total_RO = 0;
+		$x=1;
+		foreach($data['sku_code'] as $sku):
+			$total_d[$x] = 0;
+			$total_p[$x] = 0;
+			$x++;
+		endforeach;
+		
+		$total_dAll = 0;
+		$total_pAll = 0;
+
+		foreach ($data['distr_toastbox'] as $rows) :
+			$data_col = 1;
+
+			if ($channel != $rows['channel'])
+            {
+				$channel = $rows['channel'];
+				$sheet->setCellValueByColumnAndRow($data_col, $data_row, '');
+				$sheet->setCellValueByColumnAndRow($data_col + 1, $data_row, $rows['channel']);
+				$sheet->setCellValueByColumnAndRow($data_col + 2, $data_row, '');
+				$sheet->setCellValueByColumnAndRow($data_col + 3, $data_row, '');
+				$a=1;
+				$baris=4;
+				foreach($data['sku_code'] as $sku):
+					$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, '');
+					$baris = $baris + 1;
+					$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, '');
+					$a++;
+					$baris++;
+				endforeach;
+				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, '');
+				$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, '');
+
+				$sheet->getStyleByColumnAndRow(1, $data_row, $last_col + 2, $data_row)->applyFromArray($style_range);
+				$sheet->getStyleByColumnAndRow(1, $data_row, $last_col + 2, $data_row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('d9e1f2');
+
+				$data_row++;
+
+			}
+
+			$sheet->setCellValueByColumnAndRow($data_col, $data_row, $no);
+			$sheet->setCellValueByColumnAndRow($data_col + 1, $data_row, $rows['desc_type']);
+			$sheet->setCellValueByColumnAndRow($data_col + 2, $data_row, $rows['outlet_type']);
+			$sheet->setCellValueByColumnAndRow($data_col + 3, $data_row, $rows['RO']);
+			$sheet->getStyleByColumnAndRow($data_col + 3, $data_row)->getNumberFormat()->setFormatCode('#,##0');
+			$a=1;
+			$baris=4;
+			foreach($data['sku_code'] as $sku):
+				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($rows['d'.$a], 0));
+				$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
+				$baris = $baris + 1;
+				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($rows['%'.$a], 2));
+				$a++;
+				$baris++;
+			endforeach;
+			
+			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $rows['dtotal']);
+			$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, number_format($rows['%total'], 0));
+
+			$total_RO += $rows['RO'];
+			$x = 1;
+			foreach($data['sku_code'] as $sku):
+				$total_d[$x] += $rows['d'.$x];
+				if($total_RO==0)
+				{
+					$total_p[$x] = 0;
+				}
+				else
+				{
+					$total_p[$x] = ($total_d[$x]/$total_RO)*100;
+				} 
+				//$total_p[$x] = ($total_d[$x]/($total_RO ?: 1))*100;
+				$x++;
+			endforeach;
+			
+			$total_dAll += $rows['dtotal'];
+
+			
+			// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
+			$sheet->getStyleByColumnAndRow(1, $data_row, $last_col + 2, $data_row)->applyFromArray($style_range_row);
+			$sheet->getStyleByColumnAndRow(1, $data_row, null, $data_row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+			$sheet->getStyleByColumnAndRow(2, $data_row, null, $data_row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+			$sheet->getStyleByColumnAndRow(3, $data_row, null, $data_row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+			$sheet->getStyleByColumnAndRow(4, 10, $last_col + 2, $data_row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+			$no++; // Tambah 1 setiap kali looping
+    		$row++; // Tambah 1 setiap kali looping
+			$data_row++;
+		endforeach;
+
+		if($total_RO==0)
+		{
+			$total_pAll = 0;
+		}
+		else
+		{
+			$total_pAll = ($total_dAll/$total_RO)*100;
+		}
+		//$total_pAll = ($total_dAll/($total_RO ?: 1))*100;
+
+		//$data_row = $data_row + 1;
+
+		$sheet->setCellValueByColumnAndRow($data_col, $data_row, '');
+		$sheet->setCellValueByColumnAndRow($data_col + 1, $data_row, 'TOTAL');
+		$sheet->setCellValueByColumnAndRow($data_col + 2, $data_row, '');
+		$sheet->setCellValueByColumnAndRow($data_col + 3, $data_row, $total_RO);
+		$sheet->getStyleByColumnAndRow($data_col + 3, $data_row)->getNumberFormat()->setFormatCode('#,##0');
+		$a=1;
+		$baris=4;
+		foreach($data['sku_code'] as $sku):
+			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($total_d[$a], 0));
+			$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
+			$baris = $baris + 1;
+			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($total_p[$a], 2));
+			$a++;
+			$baris++;
+		endforeach;
+		
+		$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $total_dAll);
+		$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, number_format($total_pAll, 2));
+
+		$sheet->getStyleByColumnAndRow(1, $data_row, $last_col + 2, $data_row)->applyFromArray($style_range);
+		$sheet->getStyleByColumnAndRow(1, $data_row, $last_col + 2, $data_row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');
+
+		$sheet->getStyleByColumnAndRow(4, 10, $last_col + 2, $data_row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+		
+
+		$sheet->getColumnDimension('A')->setWidth(5); // Set width kolom A
+		$sheet->getColumnDimension('B')->setWidth(40); // Set width kolom B
+		$sheet->getColumnDimension('C')->setWidth(11); // Set width kolom C
+		$sheet->getColumnDimension('D')->setWidth(10);
+
+		// Set orientasi kertas jadi LANDSCAPE
+		$sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+		// Set judul file excel nya
+		$sheet->setTitle('Distribution - TOASTBOX');
+		// Proses file excel
+		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+		header('Content-Disposition: attachment; filename="Report Distribution - TOASTBOXd.xlsx"'); // Set nama file excel nya
+		header('Cache-Control: max-age=0');
+
+		$writer = new Xlsx($spreadsheet);
+		$writer->save('php://output');
+
+
+	}
+
+	public function export_distribution_toastbox_area()
+	{
+		$data['area'] = $this->model('AreaModel')->getAllArea();
+
+		$spreadsheet = new Spreadsheet();
+		$sheet = $spreadsheet->getActiveSheet();
+		$sheet_arr = [];
+		// Buat sebuah variabel untuk menampung pengaturan style dari header tabel
+		$style_col = [
+			'font' => ['bold' => true], // Set font nya jadi bold
+			'alignment' => [
+				'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER, // Set text jadi ditengah secara horizontal (center)
+				'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
+			],
+			'borders' => [
+				'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN], // Set border top dengan garis tipis
+				'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],  // Set border right dengan garis tipis
+				'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN], // Set border bottom dengan garis tipis
+				'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN] // Set border left dengan garis tipis
+			]
+		];
+
+		$style_range = [
+			'font' => ['bold' => true], // Set font nya jadi bold
+			'alignment' => [
+				'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER, // Set text jadi ditengah secara horizontal (center)
+				'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
+			],
+			'borders' => [
+				'allBorders' => [
+					'borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN, // Set border top dengan garis tipis
+				]
+			]
+		];
+
+		$style_range_row = [
+			'alignment' => [
+				'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER, // Set text jadi ditengah secara horizontal (center)
+				'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
+			],
+			'borders' => [
+				'allBorders' => [
+					'borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN, // Set border top dengan garis tipis
+				]
+			]
+		];
+
+		// Buat sebuah variabel untuk menampung pengaturan style dari isi tabel
+		$style_row = [
+			'alignment' => [
+				'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
+			],
+			'borders' => [
+				'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN], // Set border top dengan garis tipis
+				'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],  // Set border right dengan garis tipis
+				'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN], // Set border bottom dengan garis tipis
+				'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN] // Set border left dengan garis tipis
+			]
+		];
+
+
+		if (isset($_POST['by_island']))
+		{
+			$island = $_POST['by_island'];
+		}
+		else
+		{
+			$island = "";
+		}
+
+		if (isset($_POST['by_region']))
+		{
+			$region = $_POST['by_region'];
+		}
+		else
+		{
+			$region = "";
+		}
+
+		if (isset($_POST['by_area']))
+		{
+			$area = implode(',', $_POST['by_area']);
+			$area2 = implode(',', $_POST['by_area']);
+			$area = str_replace(",", "','", $area);
+			// $area3 = "'" . $area . "'";
+			$data['area_arr'] = $this->model('AreaModel')->getArea($area);
+			$title = "COMBINED AREA";
+		}
+		else
+		{
+			$area = "";
+			$data['area_arr'] = $data['area'];
+			$title = "NATIONAL";
+		}
+
+		if(isset($_POST['by_month']))
+		{
+			$month = $_POST['by_month'];
+		}else
+		{
+			$month = date('m');
+		}
+
+		if(isset($_POST['by_year']))
+		{
+			$year = $_POST['by_year'];
+		}else
+		{
+			$year = date('Y');
+		}
+
+		$fromdate = '-' .$month. '-1';
+		$todate = '-' .$month. '-31';
+
+		$data['sku_name'] = $this->model('SkuModel')->getItemNameSKUToastBox();
+		$data['sku_group'] = $this->model('SkuModel')->getGroupSKUToastBox();
+		$data['sku_count'] = $this->model('SkuModel')->getCountSKUToastBox();
+		$data['sku_code'] = $this->model('SkuModel')->getItemCodeSKUToastBox();
+
+		$dateObj   = DateTime::createFromFormat('!m', $month);
+		$monthName = $dateObj->format('F'); // March
+
+		$sheet->setCellValue('A1', "Report Distribution - TOASTBOX"); // Set kolom A1 dengan tulisan "Report Selling In - By Outlet"
+		$sheet->setCellValue('A2', "Island : " . $island); // Set kolom A2 dengan tulisan "Outlet Type : EC_EC"
+		$sheet->setCellValue('A3', "Region : " . $region); // Set kolom A3 dengan tulisan "Outlet Type : EC_EC"
+		$sheet->setCellValue('A4', "Area : " . $area2);
+		$sheet->setCellValue('A5', "Month : " . $monthName . " - " .$year);
+		//$sheet->mergeCells('A1:F1'); // Set Merge Cell pada kolom A1 sampai F1
+		$sheet->getStyle('A1')->getFont()->setBold(true); // Set bold kolom A1
+		$sheet->getStyle('A2')->getFont()->setBold(true); // Set bold kolom A2
+		$sheet->getStyle('A3')->getFont()->setBold(true); // Set bold kolom A3
+		$sheet->getStyle('A4')->getFont()->setBold(true);
+		$sheet->getStyle('A5')->getFont()->setBold(true);
+		$sheet->getStyle('A1')->getFont()->setSize(20); // Set font size 15 untuk kolom A1
+		// Buat header tabel nya pada baris ke 7
+		$sheet->setCellValue('A7', "#"); // Set kolom A6 dengan tulisan "NO"
+		$sheet->mergeCells('A7:A9'); // Set Merge Row pada kolom A6 sampai A8
+		$sheet->setCellValue('B7', "TYPE OF OUTLET"); // Set kolom A6 dengan tulisan "NO"
+		$sheet->mergeCells('B7:B9'); // Set Merge Row pada kolom A6 sampai A8
+		$sheet->setCellValue('C7', "Code"); // Set kolom A6 dengan tulisan "NO"
+		$sheet->mergeCells('C7:C9'); // Set Merge Row pada kolom A6 sampai A8
+		$sheet->setCellValue('D7', "RO"); // Set kolom A6 dengan tulisan "NO"
+		$sheet->mergeCells('D7:D9');
+		$start_col = 5;
+
+		foreach ($data['sku_group'] as $row_sku) :
+			//$sheet->setCellValue('E7', $row_sku['item_group']);
+			$sheet->setCellValueByColumnAndRow($start_col, 7, $row_sku['item_group']);
+			$last_col = $start_col + ($row_sku['count_name']*2) - 1;
+			$sheet->mergeCellsByColumnAndRow($start_col, 7, $last_col, 7);
+			$start_col = $last_col + 1;
+		endforeach;
+
+		$sheet->setCellValueByColumnAndRow($start_col, 7, 'TOTAL');
+		$sheet->mergeCellsByColumnAndRow($start_col, 7, $start_col + 1 , 8);
+
+		$start_col = 5;
+		foreach ($data['sku_name'] as $row_sku) :
+			//$sheet->setCellValue('E7', $row_sku['item_group']);
+			$sheet->setCellValueByColumnAndRow($start_col, 8, $row_sku['item_name']);
+			$last_col = $start_col + 1;
+			$sheet->mergeCellsByColumnAndRow($start_col, 8, $last_col, 8);
+			$start_col = $last_col + 1;
+		endforeach;
+		$start_col = 5;
+		foreach ($data['sku_name'] as $row_sku) :
+			$sheet->setCellValueByColumnAndRow($start_col, 9, "DISTR. NO'S");
+			$start_col = $start_col + 1;
+			$sheet->setCellValueByColumnAndRow($start_col, 9, "%");
+			$start_col = $start_col + 1;
+		endforeach;
+
+		$sheet->setCellValueByColumnAndRow($start_col, 9, "DISTR. NO'S");
+		$sheet->setCellValueByColumnAndRow($start_col + 1, 9, "%");
+		
+		// Apply style header yang telah kita buat tadi ke masing-masing kolom header
+		$sheet->getStyleByColumnAndRow(1, 8, $last_col, 8)->getAlignment()->setWrapText(true);
+		$sheet->getStyleByColumnAndRow(1, 9, $last_col, 9)->getAlignment()->setWrapText(true);
+		$sheet->getStyleByColumnAndRow(1, 7, $last_col, 9)->applyFromArray($style_range);
+		$sheet->getStyleByColumnAndRow(1, 7, $last_col, 9)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFE4B5');
+		$sheet->getStyleByColumnAndRow($last_col + 1, 7, $last_col + 2, 9)->getAlignment()->setWrapText(true);
+		$sheet->getStyleByColumnAndRow($last_col + 1, 7, $last_col + 2, 9)->applyFromArray($style_range);
+		$sheet->getStyleByColumnAndRow($last_col + 1, 7, $last_col + 2, 9)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FF6D6D');
+
+		// Set height baris ke 1, 2 dan 3
+		$sheet->getRowDimension('1')->setRowHeight(40);
+		$sheet->getRowDimension('2')->setRowHeight(20);
+		$sheet->getRowDimension('3')->setRowHeight(20);
+		$sheet->getRowDimension('4')->setRowHeight(20);
+		$sheet->getRowDimension('5')->setRowHeight(20);
+		$sheet->getRowDimension('8')->setRowHeight(60);
+
+		$no = 1; // Untuk penomoran tabel, di awal set dengan 1
+		$row = 10;
+
+		// $data1 = array(
+		// 	'island' => $island,
+		// 	'region' => $region,
+		// 	'area' => $area,
+		// 	'month' => $month,
+		// 	'year' => $year
+		// );
+
+		$data['distr_toastbox'] = $this->model('ReportModel')->getDistr_toastbox_ALL($data);
+
+		$data_col = 1;
+		$data_row = 10;
+
+		$channel='';
+
+		$total_RO = 0;
+		$x=1;
+		foreach($data['sku_code'] as $sku):
+			$total_d[$x] = 0;
+			$total_p[$x] = 0;
+			$x++;
+		endforeach;
+		
+		$total_dAll = 0;
+		$total_pAll = 0;
+
+		foreach ($data['distr_toastbox'] as $rows) :
+			$data_col = 1;
+
+			if ($channel != $rows['channel'])
+            {
+				$channel = $rows['channel'];
+				$sheet->setCellValueByColumnAndRow($data_col, $data_row, '');
+				$sheet->setCellValueByColumnAndRow($data_col + 1, $data_row, $rows['channel']);
+				$sheet->setCellValueByColumnAndRow($data_col + 2, $data_row, '');
+				$sheet->setCellValueByColumnAndRow($data_col + 3, $data_row, '');
+				$a=1;
+				$baris=4;
+				foreach($data['sku_code'] as $sku):
+					$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, '');
+					$baris = $baris + 1;
+					$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, '');
+					$a++;
+					$baris++;
+				endforeach;
+				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, '');
+				$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, '');
+
+				$sheet->getStyleByColumnAndRow(1, $data_row, $last_col + 2, $data_row)->applyFromArray($style_range);
+				$sheet->getStyleByColumnAndRow(1, $data_row, $last_col + 2, $data_row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('d9e1f2');
+
+				$data_row++;
+
+			}
+
+			$sheet->setCellValueByColumnAndRow($data_col, $data_row, $no);
+			$sheet->setCellValueByColumnAndRow($data_col + 1, $data_row, $rows['desc_type']);
+			$sheet->setCellValueByColumnAndRow($data_col + 2, $data_row, $rows['outlet_type']);
+			$sheet->setCellValueByColumnAndRow($data_col + 3, $data_row, $rows['RO']);
+			$sheet->getStyleByColumnAndRow($data_col + 3, $data_row)->getNumberFormat()->setFormatCode('#,##0');
+			$a=1;
+			$baris=4;
+			foreach($data['sku_code'] as $sku):
+				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($rows['d'.$a], 0));
+				$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
+				$baris = $baris + 1;
+				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($rows['%'.$a], 2));
+				$a++;
+				$baris++;
+			endforeach;
+			
+			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $rows['dtotal']);
+			$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, number_format($rows['%total'], 0));
+
+			$total_RO += $rows['RO'];
+			$x = 1;
+			foreach($data['sku_code'] as $sku):
+				$total_d[$x] += $rows['d'.$x];
+				if($total_RO==0)
+				{
+					$total_p[$x] = 0;
+				}
+				else
+				{
+					$total_p[$x] = ($total_d[$x]/$total_RO)*100;
+				} 
+				//$total_p[$x] = ($total_d[$x]/($total_RO ?: 1))*100;
+				$x++;
+			endforeach;
+			
+			$total_dAll += $rows['dtotal'];
+
+			
+			// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
+			$sheet->getStyleByColumnAndRow(1, $data_row, $last_col + 2, $data_row)->applyFromArray($style_range_row);
+			$sheet->getStyleByColumnAndRow(1, $data_row, null, $data_row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+			$sheet->getStyleByColumnAndRow(2, $data_row, null, $data_row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+			$sheet->getStyleByColumnAndRow(3, $data_row, null, $data_row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+			$sheet->getStyleByColumnAndRow(4, 10, $last_col + 2, $data_row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+			$no++; // Tambah 1 setiap kali looping
+    		$row++; // Tambah 1 setiap kali looping
+			$data_row++;
+		endforeach;
+
+		if($total_RO==0)
+		{
+			$total_pAll = 0;
+		}
+		else
+		{
+			$total_pAll = ($total_dAll/$total_RO)*100;
+		}
+		//$total_pAll = ($total_dAll/($total_RO ?: 1))*100;
+
+		//$data_row = $data_row + 1;
+
+		$sheet->setCellValueByColumnAndRow($data_col, $data_row, '');
+		$sheet->setCellValueByColumnAndRow($data_col + 1, $data_row, 'TOTAL');
+		$sheet->setCellValueByColumnAndRow($data_col + 2, $data_row, '');
+		$sheet->setCellValueByColumnAndRow($data_col + 3, $data_row, $total_RO);
+		$sheet->getStyleByColumnAndRow($data_col + 3, $data_row)->getNumberFormat()->setFormatCode('#,##0');
+		$a=1;
+		$baris=4;
+		foreach($data['sku_code'] as $sku):
+			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($total_d[$a], 0));
+			$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
+			$baris = $baris + 1;
+			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($total_p[$a], 2));
+			$a++;
+			$baris++;
+		endforeach;
+		
+		$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $total_dAll);
+		$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, number_format($total_pAll, 2));
+
+		$sheet->getStyleByColumnAndRow(1, $data_row, $last_col + 2, $data_row)->applyFromArray($style_range);
+		$sheet->getStyleByColumnAndRow(1, $data_row, $last_col + 2, $data_row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');
+
+		$sheet->getStyleByColumnAndRow(4, 10, $last_col + 2, $data_row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+		
+
+		$sheet->getColumnDimension('A')->setWidth(5); // Set width kolom A
+		$sheet->getColumnDimension('B')->setWidth(40); // Set width kolom B
+		$sheet->getColumnDimension('C')->setWidth(11); // Set width kolom C
+		$sheet->getColumnDimension('D')->setWidth(10);
+
+		// Set orientasi kertas jadi LANDSCAPE
+		$sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+		// Set judul file excel nya
+		$sheet->setTitle($title);
+		
+		if(count($data['area_arr']) > 1)
+		{
+			$arr = 0;
+			foreach($data['area_arr'] as $areas):
+				$sheet_arr[$arr] = $spreadsheet->createSheet();
+				// $sheet_arr[$arr] = $spreadsheet->getActiveSheet();
+
+				$sheet_arr[$arr]->setCellValue('A1', "Report Distribution - TOASTBOX"); // Set kolom A1 dengan tulisan "Report Selling In - By Outlet"
+				$sheet_arr[$arr]->setCellValue('A2', "Island : " . $island); // Set kolom A2 dengan tulisan "Outlet Type : EC_EC"
+				$sheet_arr[$arr]->setCellValue('A3', "Region : " . $region); // Set kolom A3 dengan tulisan "Outlet Type : EC_EC"
+				$sheet_arr[$arr]->setCellValue('A4', "Area : " . $areas['area']);
+				$sheet_arr[$arr]->setCellValue('A5', "Month : " . $monthName . " - " .$year);
+				//$sheet_arr[$arr]->mergeCells('A1:F1'); // Set Merge Cell pada kolom A1 sampai F1
+				$sheet_arr[$arr]->getStyle('A1')->getFont()->setBold(true); // Set bold kolom A1
+				$sheet_arr[$arr]->getStyle('A2')->getFont()->setBold(true); // Set bold kolom A2
+				$sheet_arr[$arr]->getStyle('A3')->getFont()->setBold(true); // Set bold kolom A3
+				$sheet_arr[$arr]->getStyle('A4')->getFont()->setBold(true);
+				$sheet_arr[$arr]->getStyle('A5')->getFont()->setBold(true);
+				$sheet_arr[$arr]->getStyle('A1')->getFont()->setSize(20); // Set font size 15 untuk kolom A1
+				// Buat header tabel nya pada baris ke 7
+				$sheet_arr[$arr]->setCellValue('A7', "#"); // Set kolom A6 dengan tulisan "NO"
+				$sheet_arr[$arr]->mergeCells('A7:A9'); // Set Merge Row pada kolom A6 sampai A8
+				$sheet_arr[$arr]->setCellValue('B7', "TYPE OF OUTLET"); // Set kolom A6 dengan tulisan "NO"
+				$sheet_arr[$arr]->mergeCells('B7:B9'); // Set Merge Row pada kolom A6 sampai A8
+				$sheet_arr[$arr]->setCellValue('C7', "Code"); // Set kolom A6 dengan tulisan "NO"
+				$sheet_arr[$arr]->mergeCells('C7:C9'); // Set Merge Row pada kolom A6 sampai A8
+				$sheet_arr[$arr]->setCellValue('D7', "RO"); // Set kolom A6 dengan tulisan "NO"
+				$sheet_arr[$arr]->mergeCells('D7:D9');
+				$start_col = 5;
+
+				foreach ($data['sku_group'] as $row_sku) :
+					$sheet_arr[$arr]->setCellValueByColumnAndRow($start_col, 7, $row_sku['item_group']);
+					$last_col = $start_col + ($row_sku['count_name']*2) - 1;
+					$sheet_arr[$arr]->mergeCellsByColumnAndRow($start_col, 7, $last_col, 7);
+					$start_col = $last_col + 1;
+				endforeach;
+
+				$sheet_arr[$arr]->setCellValueByColumnAndRow($start_col, 7, 'TOTAL');
+				$sheet_arr[$arr]->mergeCellsByColumnAndRow($start_col, 7, $start_col + 1 , 8);
+
+				$start_col = 5;
+				foreach ($data['sku_name'] as $row_sku) :
+					$sheet_arr[$arr]->setCellValueByColumnAndRow($start_col, 8, $row_sku['item_name']);
+					$last_col = $start_col + 1;
+					$sheet_arr[$arr]->mergeCellsByColumnAndRow($start_col, 8, $last_col, 8);
+					$start_col = $last_col + 1;
+				endforeach;
+				$start_col = 5;
+				foreach ($data['sku_name'] as $row_sku) :
+					$sheet_arr[$arr]->setCellValueByColumnAndRow($start_col, 9, "DISTR. NO'S");
+					$start_col = $start_col + 1;
+					$sheet_arr[$arr]->setCellValueByColumnAndRow($start_col, 9, "%");
+					$start_col = $start_col + 1;
+				endforeach;
+
+				$sheet_arr[$arr]->setCellValueByColumnAndRow($start_col, 9, "DISTR. NO'S");
+				$sheet_arr[$arr]->setCellValueByColumnAndRow($start_col + 1, 9, "%");
+				
+				// Apply style header yang telah kita buat tadi ke masing-masing kolom header
+				$sheet_arr[$arr]->getStyleByColumnAndRow(1, 8, $last_col, 8)->getAlignment()->setWrapText(true);
+				$sheet_arr[$arr]->getStyleByColumnAndRow(1, 9, $last_col, 9)->getAlignment()->setWrapText(true);
+				$sheet_arr[$arr]->getStyleByColumnAndRow(1, 7, $last_col, 9)->applyFromArray($style_range);
+				$sheet_arr[$arr]->getStyleByColumnAndRow(1, 7, $last_col, 9)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFE4B5');
+				$sheet_arr[$arr]->getStyleByColumnAndRow($last_col + 1, 7, $last_col + 2, 9)->getAlignment()->setWrapText(true);
+				$sheet_arr[$arr]->getStyleByColumnAndRow($last_col + 1, 7, $last_col + 2, 9)->applyFromArray($style_range);
+				$sheet_arr[$arr]->getStyleByColumnAndRow($last_col + 1, 7, $last_col + 2, 9)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FF6D6D');
+
+				// Set height baris ke 1, 2 dan 3
+				$sheet_arr[$arr]->getRowDimension('1')->setRowHeight(40);
+				$sheet_arr[$arr]->getRowDimension('2')->setRowHeight(20);
+				$sheet_arr[$arr]->getRowDimension('3')->setRowHeight(20);
+				$sheet_arr[$arr]->getRowDimension('4')->setRowHeight(20);
+				$sheet_arr[$arr]->getRowDimension('5')->setRowHeight(20);
+				$sheet_arr[$arr]->getRowDimension('8')->setRowHeight(60);
+
+				$no = 1; // Untuk penomoran tabel, di awal set dengan 1
+				$row = 10;
+
+				$data1 = array(
+					'island' => $island,
+					'region' => $region,
+					'area' => $areas['area'],
+					'month' => $month,
+					'year' => $year
+				);
+
+				$data['distr_toastbox_area'] = $this->model('ReportModel')->getDistr_toastbox_ALL_Area($data1);
+
+				$data_col = 1;
+				$data_row = 10;
+
+				$channel='';
+
+				$total_RO = 0;
+				$x=1;
+				foreach($data['sku_code'] as $sku):
+					$total_d[$x] = 0;
+					$total_p[$x] = 0;
+					$x++;
+				endforeach;
+				
+				$total_dAll = 0;
+				$total_pAll = 0;
+
+				foreach ($data['distr_toastbox_area'] as $row3) :
+					$data_col = 1;
+
+					if ($channel != $row3['channel'])
+					{
+						$channel = $row3['channel'];
+						$sheet_arr[$arr]->setCellValueByColumnAndRow($data_col, $data_row, '');
+						$sheet_arr[$arr]->setCellValueByColumnAndRow($data_col + 1, $data_row, $row3['channel']);
+						$sheet_arr[$arr]->setCellValueByColumnAndRow($data_col + 2, $data_row, '');
+						$sheet_arr[$arr]->setCellValueByColumnAndRow($data_col + 3, $data_row, '');
+						$a=1;
+						$baris=4;
+						foreach($data['sku_code'] as $sku):
+							$sheet_arr[$arr]->setCellValueByColumnAndRow($data_col + $baris, $data_row, '');
+							$baris = $baris + 1;
+							$sheet_arr[$arr]->setCellValueByColumnAndRow($data_col + $baris, $data_row, '');
+							$a++;
+							$baris++;
+						endforeach;
+						$sheet_arr[$arr]->setCellValueByColumnAndRow($data_col + $baris, $data_row, '');
+						$sheet_arr[$arr]->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, '');
+
+						$sheet_arr[$arr]->getStyleByColumnAndRow(1, $data_row, $last_col + 2, $data_row)->applyFromArray($style_range);
+						$sheet_arr[$arr]->getStyleByColumnAndRow(1, $data_row, $last_col + 2, $data_row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('d9e1f2');
+
+						$data_row++;
+
+					}
+
+					$sheet_arr[$arr]->setCellValueByColumnAndRow($data_col, $data_row, $no);
+					$sheet_arr[$arr]->setCellValueByColumnAndRow($data_col + 1, $data_row, $row3['desc_type']);
+					$sheet_arr[$arr]->setCellValueByColumnAndRow($data_col + 2, $data_row, $row3['outlet_type']);
+					$sheet_arr[$arr]->setCellValueByColumnAndRow($data_col + 3, $data_row, $row3['RO']);
+					$sheet_arr[$arr]->getStyleByColumnAndRow($data_col + 3, $data_row)->getNumberFormat()->setFormatCode('#,##0');
+					$a=1;
+					$baris=4;
+					foreach($data['sku_code'] as $sku):
+						$sheet_arr[$arr]->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($row3['d'.$a], 0));
+						$sheet_arr[$arr]->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
+						$baris = $baris + 1;
+						$sheet_arr[$arr]->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($row3['%'.$a], 2));
+						$a++;
+						$baris++;
+					endforeach;
+					
+					$sheet_arr[$arr]->setCellValueByColumnAndRow($data_col + $baris, $data_row, $row3['dtotal']);
+					$sheet_arr[$arr]->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
+					$sheet_arr[$arr]->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, number_format($row3['%total'], 0));
+
+					$total_RO += $row3['RO'];
+					$x = 1;
+					foreach($data['sku_code'] as $sku):
+						$total_d[$x] += $row3['d'.$x];
+						if($total_RO==0)
+						{
+							$total_p[$x] = 0;
+						}
+						else
+						{
+							$total_p[$x] = ($total_d[$x]/$total_RO)*100;
+						} 
+						//$total_p[$x] = ($total_d[$x]/($total_RO ?: 1))*100;
+						$x++;
+					endforeach;
+					
+					$total_dAll += $row3['dtotal'];
+
+					
+					// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
+					$sheet_arr[$arr]->getStyleByColumnAndRow(1, $data_row, $last_col + 2, $data_row)->applyFromArray($style_range_row);
+					$sheet_arr[$arr]->getStyleByColumnAndRow(1, $data_row, null, $data_row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+					$sheet_arr[$arr]->getStyleByColumnAndRow(2, $data_row, null, $data_row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+					$sheet_arr[$arr]->getStyleByColumnAndRow(3, $data_row, null, $data_row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+					$sheet_arr[$arr]->getStyleByColumnAndRow(4, 10, $last_col + 2, $data_row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+					$no++; // Tambah 1 setiap kali looping
+					$row++; // Tambah 1 setiap kali looping
+					$data_row++;
+				endforeach;
+
+				if($total_RO==0)
+				{
+					$total_pAll = 0;
+				}
+				else
+				{
+					$total_pAll = ($total_dAll/$total_RO)*100;
+				}
+				//$total_pAll = ($total_dAll/($total_RO ?: 1))*100;
+
+				//$data_row = $data_row + 1;
+
+				$sheet_arr[$arr]->setCellValueByColumnAndRow($data_col, $data_row, '');
+				$sheet_arr[$arr]->setCellValueByColumnAndRow($data_col + 1, $data_row, 'TOTAL');
+				$sheet_arr[$arr]->setCellValueByColumnAndRow($data_col + 2, $data_row, '');
+				$sheet_arr[$arr]->setCellValueByColumnAndRow($data_col + 3, $data_row, $total_RO);
+				$sheet_arr[$arr]->getStyleByColumnAndRow($data_col + 3, $data_row)->getNumberFormat()->setFormatCode('#,##0');
+				$a=1;
+				$baris=4;
+				foreach($data['sku_code'] as $sku):
+					$sheet_arr[$arr]->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($total_d[$a], 0));
+					$sheet_arr[$arr]->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
+					$baris = $baris + 1;
+					$sheet_arr[$arr]->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($total_p[$a], 2));
+					$a++;
+					$baris++;
+				endforeach;
+				
+				$sheet_arr[$arr]->setCellValueByColumnAndRow($data_col + $baris, $data_row, $total_dAll);
+				$sheet_arr[$arr]->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
+				$sheet_arr[$arr]->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, number_format($total_pAll, 2));
+
+				$sheet_arr[$arr]->getStyleByColumnAndRow(1, $data_row, $last_col + 2, $data_row)->applyFromArray($style_range);
+				$sheet_arr[$arr]->getStyleByColumnAndRow(1, $data_row, $last_col + 2, $data_row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');
+
+				$sheet_arr[$arr]->getStyleByColumnAndRow(4, 10, $last_col + 2, $data_row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+				
+
+				$sheet_arr[$arr]->getColumnDimension('A')->setWidth(5); // Set width kolom A
+				$sheet_arr[$arr]->getColumnDimension('B')->setWidth(40); // Set width kolom B
+				$sheet_arr[$arr]->getColumnDimension('C')->setWidth(11); // Set width kolom C
+				$sheet_arr[$arr]->getColumnDimension('D')->setWidth(10);
+
+				// Set orientasi kertas jadi LANDSCAPE
+				$sheet_arr[$arr]->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+				// Set judul file excel nya
+				$sheet_arr[$arr]->setTitle($areas['area']);
+
+				$arr++;
+			endforeach;
+		}
+		
+		// Proses file excel
+		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+		header('Content-Disposition: attachment; filename="Report Distribution - TOASTBOX (Area Detail).xlsx"'); // Set nama file excel nya
 		header('Cache-Control: max-age=0');
 
 		$writer = new Xlsx($spreadsheet);
@@ -43476,19 +44578,24 @@ class Report extends Controller {
 			$sheet->setCellValueByColumnAndRow($data_col, $data_row, $no);
 			$sheet->setCellValueByColumnAndRow($data_col + 1, $data_row, $rows['desc_type']);
 			$sheet->setCellValueByColumnAndRow($data_col + 2, $data_row, $rows['outlet_type']);
-			$sheet->setCellValueByColumnAndRow($data_col + 3, $data_row, number_format($rows['RO'], 0));
+			$sheet->setCellValueByColumnAndRow($data_col + 3, $data_row, $rows['RO']);
+			$sheet->getStyleByColumnAndRow($data_col + 3, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 			$a=1;
 			$baris=4;
 			foreach($data['sku_code'] as $sku):
-				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($rows['d'.$a], 0));
+				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $rows['d'.$a]);
+				$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 				$baris = $baris + 1;
-				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($rows['%'.$a], 2));
+				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $rows['%'.$a]);
+				$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0.00');
 				$a++;
 				$baris++;
 			endforeach;
 			
-			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($rows['dtotal'], 0));
-			$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, number_format($rows['%total'], 0));
+			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $rows['dtotal']);
+			$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, $rows['%total']);
+			$sheet->getStyleByColumnAndRow($data_col + $baris + 1, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 
 			$total_RO += $rows['RO'];
 			$x = 1;
@@ -43536,19 +44643,24 @@ class Report extends Controller {
 		$sheet->setCellValueByColumnAndRow($data_col, $data_row, '');
 		$sheet->setCellValueByColumnAndRow($data_col + 1, $data_row, 'TOTAL');
 		$sheet->setCellValueByColumnAndRow($data_col + 2, $data_row, '');
-		$sheet->setCellValueByColumnAndRow($data_col + 3, $data_row, number_format($total_RO, 0));
+		$sheet->setCellValueByColumnAndRow($data_col + 3, $data_row, $total_RO);
+		$sheet->getStyleByColumnAndRow($data_col + 3, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 		$a=1;
 		$baris=4;
 		foreach($data['sku_code'] as $sku):
-			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($total_d[$a], 0));
+			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $total_d[$a]);
+			$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 			$baris = $baris + 1;
-			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($total_p[$a], 2));
+			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $total_p[$a]);
+			$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0.00');
 			$a++;
 			$baris++;
 		endforeach;
 		
-		$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($total_dAll, 0));
-		$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, number_format($total_pAll, 2));
+		$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $total_dAll);
+		$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, $total_pAll);
+		$sheet->getStyleByColumnAndRow($data_col + $baris + 1, $data_row)->getNumberFormat()->setFormatCode('#,##0.00');
 
 		$sheet->getStyleByColumnAndRow(1, $data_row, $last_col + 2, $data_row)->applyFromArray($style_range);
 		$sheet->getStyleByColumnAndRow(1, $data_row, $last_col + 2, $data_row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');
@@ -43833,19 +44945,24 @@ class Report extends Controller {
 			$sheet->setCellValueByColumnAndRow($data_col, $data_row, $no);
 			$sheet->setCellValueByColumnAndRow($data_col + 1, $data_row, $rows['desc_type']);
 			$sheet->setCellValueByColumnAndRow($data_col + 2, $data_row, $rows['outlet_type']);
-			$sheet->setCellValueByColumnAndRow($data_col + 3, $data_row, number_format($rows['RO'], 0));
+			$sheet->setCellValueByColumnAndRow($data_col + 3, $data_row, $rows['RO']);
+			$sheet->getStyleByColumnAndRow($data_col + 3, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 			$a=1;
 			$baris=4;
 			foreach($data['sku_code'] as $sku):
-				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($rows['d'.$a], 0));
+				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $rows['d'.$a]);
+				$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 				$baris = $baris + 1;
-				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($rows['%'.$a], 2));
+				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $rows['%'.$a]);
+				$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0.00');
 				$a++;
 				$baris++;
 			endforeach;
 			
-			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($rows['dtotal'], 0));
-			$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, number_format($rows['%total'], 0));
+			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $rows['dtotal']);
+			$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, $rows['%total']);
+			$sheet->getStyleByColumnAndRow($data_col + $baris + 1, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 
 			$total_RO += $rows['RO'];
 			$x = 1;
@@ -43893,19 +45010,24 @@ class Report extends Controller {
 		$sheet->setCellValueByColumnAndRow($data_col, $data_row, '');
 		$sheet->setCellValueByColumnAndRow($data_col + 1, $data_row, 'TOTAL');
 		$sheet->setCellValueByColumnAndRow($data_col + 2, $data_row, '');
-		$sheet->setCellValueByColumnAndRow($data_col + 3, $data_row, number_format($total_RO, 0));
+		$sheet->setCellValueByColumnAndRow($data_col + 3, $data_row, $total_RO);
+		$sheet->getStyleByColumnAndRow($data_col + 3, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 		$a=1;
 		$baris=4;
 		foreach($data['sku_code'] as $sku):
-			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($total_d[$a], 0));
+			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $total_d[$a]);
+			$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 			$baris = $baris + 1;
-			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($total_p[$a], 2));
+			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $total_p[$a]);
+			$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0.00');
 			$a++;
 			$baris++;
 		endforeach;
 		
-		$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($total_dAll, 0));
-		$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, number_format($total_pAll, 2));
+		$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $total_dAll);
+		$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, $total_pAll);
+		$sheet->getStyleByColumnAndRow($data_col + $baris + 1, $data_row)->getNumberFormat()->setFormatCode('#,##0.00');
 		
 
 		$sheet->getStyleByColumnAndRow(1, $data_row, $last_col + 2, $data_row)->applyFromArray($style_range);
@@ -44193,19 +45315,24 @@ class Report extends Controller {
 			$sheet->setCellValueByColumnAndRow($data_col, $data_row, $no);
 			$sheet->setCellValueByColumnAndRow($data_col + 1, $data_row, $rows['desc_type']);
 			$sheet->setCellValueByColumnAndRow($data_col + 2, $data_row, $rows['outlet_type']);
-			$sheet->setCellValueByColumnAndRow($data_col + 3, $data_row, number_format($rows['RO'], 0));
+			$sheet->setCellValueByColumnAndRow($data_col + 3, $data_row, $rows['RO']);
+			$sheet->getStyleByColumnAndRow($data_col + 3, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 			$a=1;
 			$baris=4;
 			foreach($data['sku_code'] as $sku):
-				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($rows['d'.$a], 0));
+				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $rows['d'.$a]);
+				$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 				$baris = $baris + 1;
-				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($rows['%'.$a], 2));
+				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $rows['%'.$a]);
+				$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0.00');
 				$a++;
 				$baris++;
 			endforeach;
 			
-			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($rows['dtotal'], 0));
-			$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, number_format($rows['%total'], 0));
+			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $rows['dtotal']);
+			$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, $rows['%total']);
+			$sheet->getStyleByColumnAndRow($data_col + $baris + 1, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 
 			$total_RO += $rows['RO'];
 			$x = 1;
@@ -44253,19 +45380,24 @@ class Report extends Controller {
 		$sheet->setCellValueByColumnAndRow($data_col, $data_row, '');
 		$sheet->setCellValueByColumnAndRow($data_col + 1, $data_row, 'TOTAL');
 		$sheet->setCellValueByColumnAndRow($data_col + 2, $data_row, '');
-		$sheet->setCellValueByColumnAndRow($data_col + 3, $data_row, number_format($total_RO, 0));
+		$sheet->setCellValueByColumnAndRow($data_col + 3, $data_row, $total_RO);
+		$sheet->getStyleByColumnAndRow($data_col + 3, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 		$a=1;
 		$baris=4;
 		foreach($data['sku_code'] as $sku):
-			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($total_d[$a], 0));
+			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $total_d[$a]);
+			$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
 			$baris = $baris + 1;
-			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($total_p[$a], 2));
+			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $total_p[$a]);
+			$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0.00');
 			$a++;
 			$baris++;
 		endforeach;
 		
-		$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, number_format($total_dAll, 0));
-		$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, number_format($total_pAll, 2));
+		$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $total_dAll);
+		$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, $total_pAll);
+		$sheet->getStyleByColumnAndRow($data_col + $baris + 1, $data_row)->getNumberFormat()->setFormatCode('#,##0.00');
 
 		$sheet->getStyleByColumnAndRow(1, $data_row, $last_col + 2, $data_row)->applyFromArray($style_range);
 		$sheet->getStyleByColumnAndRow(1, $data_row, $last_col + 2, $data_row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');
@@ -44290,6 +45422,374 @@ class Report extends Controller {
 		$writer = new Xlsx($spreadsheet);
 		$writer->save('php://output');
 
+
+	}
+
+	public function export_activeoutlet_toastbox()
+	{
+		$spreadsheet = new Spreadsheet();
+		$sheet = $spreadsheet->getActiveSheet();
+		// Buat sebuah variabel untuk menampung pengaturan style dari header tabel
+		$style_col = [
+			'font' => ['bold' => true], // Set font nya jadi bold
+			'alignment' => [
+				'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER, // Set text jadi ditengah secara horizontal (center)
+				'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
+			],
+			'borders' => [
+				'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN], // Set border top dengan garis tipis
+				'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],  // Set border right dengan garis tipis
+				'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN], // Set border bottom dengan garis tipis
+				'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN] // Set border left dengan garis tipis
+			]
+		];
+
+		$style_range = [
+			'font' => ['bold' => true], // Set font nya jadi bold
+			'alignment' => [
+				'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER, // Set text jadi ditengah secara horizontal (center)
+				'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
+			],
+			'borders' => [
+				'allBorders' => [
+					'borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN, // Set border top dengan garis tipis
+				]
+			]
+		];
+
+		$style_range_row = [
+			'alignment' => [
+				'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER, // Set text jadi ditengah secara horizontal (center)
+				'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
+			],
+			'borders' => [
+				'allBorders' => [
+					'borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN, // Set border top dengan garis tipis
+				]
+			]
+		];
+
+		// Buat sebuah variabel untuk menampung pengaturan style dari isi tabel
+		$style_row = [
+			'alignment' => [
+				'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
+			],
+			'borders' => [
+				'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN], // Set border top dengan garis tipis
+				'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],  // Set border right dengan garis tipis
+				'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN], // Set border bottom dengan garis tipis
+				'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN] // Set border left dengan garis tipis
+			]
+		];
+
+
+		if(isset($_POST['by_region']))
+		{
+			$region = $_POST['by_region'];
+		}else
+		{
+			$region = "";
+		}
+
+		if (isset($_POST['by_area']))
+		{
+			$area = implode(',', $_POST['by_area']);
+			$area = str_replace(",", "','", $area);;
+		}
+		elseif ($_SESSION['area'] != 'ALL')
+		{
+			$session_area = str_replace(", ", "','", $_SESSION['area']); 
+			$area = $session_area;
+		}
+
+		if(isset($_POST['by_island']))
+		{
+			$island = $_POST['by_island'];
+		}else
+		{
+			$island = "";
+		}
+
+		if(isset($_POST['by_month1']))
+		{
+			$month1 = $_POST['by_month1'];
+		}else
+		{
+			$month1 = date('m');
+		}
+
+		if(isset($_POST['by_month2']))
+		{
+			$month2 = $_POST['by_month2'];
+		}else
+		{
+			$month2 = date('m');
+		}
+
+		if(isset($_POST['by_year']))
+		{
+			$year = $_POST['by_year'];
+		}else
+		{
+			$year = date('Y');
+		}
+
+		$data['sku_name'] = $this->model('SkuModel')->getItemNameSKUToastBox();
+		$data['sku_group'] = $this->model('SkuModel')->getGroupSKUToastBox();
+		$data['sku_count'] = $this->model('SkuModel')->getCountSKUToastBox();
+		$data['sku_code'] = $this->model('SkuModel')->getItemCodeSKUToastBox();
+
+		//$dateObj   = DateTime::createFromFormat('!m', $month);
+		//$monthName = $dateObj->format('F'); // March
+
+		$dateObj1   = DateTime::createFromFormat('!m', $month1);
+		$dateObj2   = DateTime::createFromFormat('!m', $month2);
+        $monthName1 = $dateObj1->format('F');
+		$monthName2 = $dateObj2->format('F');
+
+		$data['title'] = 'Contribution Summary - TOASTBOX (' . $monthName1 . ' To ' . $monthName2 . ')';
+
+		$sheet->setCellValue('A1', "Report Active Outlet - TOASTBOX"); // Set kolom A1 dengan tulisan "Report Selling In - By Outlet"
+		$sheet->setCellValue('A2', "Island : " . $island); // Set kolom A2 dengan tulisan "Outlet Type : EC_EC"
+		$sheet->setCellValue('A3', "Region : " . $region); // Set kolom A3 dengan tulisan "Outlet Type : EC_EC"
+		$sheet->setCellValue('A4', "Area : " . $area);
+		$sheet->setCellValue('A5', "Month : " . $monthName1 . " to " . $monthName1 . " - " . $year);
+		//$sheet->mergeCells('A1:F1'); // Set Merge Cell pada kolom A1 sampai F1
+		$sheet->getStyle('A1')->getFont()->setBold(true); // Set bold kolom A1
+		$sheet->getStyle('A2')->getFont()->setBold(true); // Set bold kolom A2
+		$sheet->getStyle('A3')->getFont()->setBold(true); // Set bold kolom A3
+		$sheet->getStyle('A4')->getFont()->setBold(true);
+		$sheet->getStyle('A5')->getFont()->setBold(true);
+		$sheet->getStyle('A1')->getFont()->setSize(20); // Set font size 15 untuk kolom A1
+		// Buat header tabel nya pada baris ke 7
+		$sheet->setCellValue('A7', "#"); // Set kolom A6 dengan tulisan "NO"
+		$sheet->mergeCells('A7:A9'); // Set Merge Row pada kolom A6 sampai A8
+		$sheet->setCellValue('B7', "TYPE OF OUTLET"); // Set kolom A6 dengan tulisan "NO"
+		$sheet->mergeCells('B7:B9'); // Set Merge Row pada kolom A6 sampai A8
+		$sheet->setCellValue('C7', "Code"); // Set kolom A6 dengan tulisan "NO"
+		$sheet->mergeCells('C7:C9'); // Set Merge Row pada kolom A6 sampai A8
+		$sheet->setCellValue('D7', "RO"); // Set kolom A6 dengan tulisan "NO"
+		$sheet->mergeCells('D7:D9');
+		$start_col = 5;
+
+		foreach ($data['sku_group'] as $row_sku) :
+			//$sheet->setCellValue('E7', $row_sku['item_group']);
+			$sheet->setCellValueByColumnAndRow($start_col, 7, $row_sku['item_group']);
+			$last_col = $start_col + ($row_sku['count_name']*2) - 1;
+			$sheet->mergeCellsByColumnAndRow($start_col, 7, $last_col, 7);
+			$start_col = $last_col + 1;
+		endforeach;
+
+		$sheet->setCellValueByColumnAndRow($start_col, 7, 'TOTAL');
+		$sheet->mergeCellsByColumnAndRow($start_col, 7, $start_col + 1 , 8);
+
+		$start_col = 5;
+		foreach ($data['sku_name'] as $row_sku) :
+			//$sheet->setCellValue('E7', $row_sku['item_group']);
+			$sheet->setCellValueByColumnAndRow($start_col, 8, $row_sku['item_name']);
+			$last_col = $start_col + 1;
+			$sheet->mergeCellsByColumnAndRow($start_col, 8, $last_col, 8);
+			$start_col = $last_col + 1;
+		endforeach;
+		$start_col = 5;
+		foreach ($data['sku_name'] as $row_sku) :
+			$sheet->setCellValueByColumnAndRow($start_col, 9, "AO");
+			$start_col = $start_col + 1;
+			$sheet->setCellValueByColumnAndRow($start_col, 9, "%");
+			$start_col = $start_col + 1;
+		endforeach;
+
+		$sheet->setCellValueByColumnAndRow($start_col, 9, "AO");
+		$sheet->setCellValueByColumnAndRow($start_col + 1, 9, "%");
+		
+		// Apply style header yang telah kita buat tadi ke masing-masing kolom header
+		$sheet->getStyleByColumnAndRow(1, 8, $last_col, 8)->getAlignment()->setWrapText(true);
+		$sheet->getStyleByColumnAndRow(1, 9, $last_col, 9)->getAlignment()->setWrapText(true);
+		$sheet->getStyleByColumnAndRow(1, 7, $last_col, 9)->applyFromArray($style_range);
+		$sheet->getStyleByColumnAndRow(1, 7, $last_col, 9)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFE4B5');
+		$sheet->getStyleByColumnAndRow($last_col + 1, 7, $last_col + 2, 9)->getAlignment()->setWrapText(true);
+		$sheet->getStyleByColumnAndRow($last_col + 1, 7, $last_col + 2, 9)->applyFromArray($style_range);
+		$sheet->getStyleByColumnAndRow($last_col + 1, 7, $last_col + 2, 9)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FF6D6D');
+
+		// Set height baris ke 1, 2 dan 3
+		$sheet->getRowDimension('1')->setRowHeight(40);
+		$sheet->getRowDimension('2')->setRowHeight(20);
+		$sheet->getRowDimension('3')->setRowHeight(20);
+		$sheet->getRowDimension('4')->setRowHeight(20);
+		$sheet->getRowDimension('5')->setRowHeight(20);
+		$sheet->getRowDimension('8')->setRowHeight(60);
+
+		$no = 1; // Untuk penomoran tabel, di awal set dengan 1
+		$row = 10;
+
+		$data1 = array(
+			'island' => $island,
+			'region' => $region,
+			'area' => $area,
+			'month1' => $month1,
+			'month2' => $month2,
+			'year' => $year
+		);
+
+		// $this->model('ReportModel')->getAO_jordan1_export($data1);
+		// $this->model('ReportModel')->getAO_jordan2_export($data1);
+
+		$data['ao_toastbox'] = $this->model('ReportModel')->getAO_toastbox_ALL($data);
+
+		$data_col = 1;
+		$data_row = 10;
+
+		$channel='';
+
+		$total_RO = 0;
+		$x=1;
+		foreach($data['sku_code'] as $sku):
+			$total_d[$x] = 0;
+			$total_p[$x] = 0;
+			$x++;
+		endforeach;
+		
+		$total_dAll = 0;
+		$total_pAll = 0;
+
+		foreach ($data['ao_toastbox'] as $rows) :
+			$data_col = 1;
+
+			if ($channel != $rows['channel'])
+            {
+				$channel = $rows['channel'];
+				$sheet->setCellValueByColumnAndRow($data_col, $data_row, '');
+				$sheet->setCellValueByColumnAndRow($data_col + 1, $data_row, $rows['channel']);
+				$sheet->setCellValueByColumnAndRow($data_col + 2, $data_row, '');
+				$sheet->setCellValueByColumnAndRow($data_col + 3, $data_row, '');
+				$a=1;
+				$baris=4;
+				foreach($data['sku_code'] as $sku):
+					$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, '');
+					$baris = $baris + 1;
+					$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, '');
+					$a++;
+					$baris++;
+				endforeach;
+				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, '');
+				$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, '');
+
+				$sheet->getStyleByColumnAndRow(1, $data_row, $last_col + 2, $data_row)->applyFromArray($style_range);
+				$sheet->getStyleByColumnAndRow(1, $data_row, $last_col + 2, $data_row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('d9e1f2');
+
+				$data_row++;
+
+			}
+
+			$sheet->setCellValueByColumnAndRow($data_col, $data_row, $no);
+			$sheet->setCellValueByColumnAndRow($data_col + 1, $data_row, $rows['desc_type']);
+			$sheet->setCellValueByColumnAndRow($data_col + 2, $data_row, $rows['outlet_type']);
+			$sheet->setCellValueByColumnAndRow($data_col + 3, $data_row, $rows['RO']);
+			$sheet->getStyleByColumnAndRow($data_col + 3, $data_row)->getNumberFormat()->setFormatCode('#,##0');
+			$a=1;
+			$baris=4;
+			foreach($data['sku_code'] as $sku):
+				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $rows['d'.$a]);
+				$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
+				$baris = $baris + 1;
+				$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $rows['%'.$a]);
+				$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0.00');
+				$a++;
+				$baris++;
+			endforeach;
+			
+			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $rows['dtotal']);
+			$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, $rows['%total']);
+			$sheet->getStyleByColumnAndRow($data_col + $baris + 1, $data_row)->getNumberFormat()->setFormatCode('#,##0');
+
+			$total_RO += $rows['RO'];
+			$x = 1;
+			foreach($data['sku_code'] as $sku):
+				$total_d[$x] += $rows['d'.$x];
+				if($total_RO==0)
+				{
+					$total_p[$x] = 0;
+				}
+				else
+				{
+					$total_p[$x] = ($total_d[$x]/$total_RO)*100;
+				} 
+				//$total_p[$x] = ($total_d[$x]/($total_RO ?: 1))*100;
+				$x++;
+			endforeach;
+			
+			$total_dAll += $rows['dtotal'];
+
+			
+			// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
+			$sheet->getStyleByColumnAndRow(1, $data_row, $last_col + 2, $data_row)->applyFromArray($style_range_row);
+			$sheet->getStyleByColumnAndRow(1, $data_row, null, $data_row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+			$sheet->getStyleByColumnAndRow(2, $data_row, null, $data_row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+			$sheet->getStyleByColumnAndRow(3, $data_row, null, $data_row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+			$sheet->getStyleByColumnAndRow(4, 10, $last_col + 2, $data_row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+			$no++; // Tambah 1 setiap kali looping
+    		$row++; // Tambah 1 setiap kali looping
+			$data_row++;
+		endforeach;
+
+		if($total_RO==0)
+		{
+			$total_pAll = 0;
+		}
+		else
+		{
+			$total_pAll = ($total_dAll/$total_RO)*100;
+		} 
+		//$total_pAll = ($total_dAll/($total_RO ?: 1))*100;
+
+		//$data_row = $data_row + 1;
+
+		$sheet->setCellValueByColumnAndRow($data_col, $data_row, '');
+		$sheet->setCellValueByColumnAndRow($data_col + 1, $data_row, 'TOTAL');
+		$sheet->setCellValueByColumnAndRow($data_col + 2, $data_row, '');
+		$sheet->setCellValueByColumnAndRow($data_col + 3, $data_row, $total_RO);
+		$sheet->getStyleByColumnAndRow($data_col + 3, $data_row)->getNumberFormat()->setFormatCode('#,##0');
+		$a=1;
+		$baris=4;
+		foreach($data['sku_code'] as $sku):
+			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $total_d[$a]);
+			$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
+			$baris = $baris + 1;
+			$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $total_p[$a]);
+			$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$a++;
+			$baris++;
+		endforeach;
+		
+		$sheet->setCellValueByColumnAndRow($data_col + $baris, $data_row, $total_dAll);
+		$sheet->getStyleByColumnAndRow($data_col + $baris, $data_row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->setCellValueByColumnAndRow($data_col + $baris + 1, $data_row, $total_pAll);
+		$sheet->getStyleByColumnAndRow($data_col + $baris + 1, $data_row)->getNumberFormat()->setFormatCode('#,##0.00');
+
+		$sheet->getStyleByColumnAndRow(1, $data_row, $last_col + 2, $data_row)->applyFromArray($style_range);
+		$sheet->getStyleByColumnAndRow(1, $data_row, $last_col + 2, $data_row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');
+
+		$sheet->getStyleByColumnAndRow(4, 10, $last_col + 2, $data_row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+		
+
+		$sheet->getColumnDimension('A')->setWidth(5); // Set width kolom A
+		$sheet->getColumnDimension('B')->setWidth(40); // Set width kolom B
+		$sheet->getColumnDimension('C')->setWidth(11); // Set width kolom C
+		$sheet->getColumnDimension('D')->setWidth(10);
+
+		// Set orientasi kertas jadi LANDSCAPE
+		$sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+		// Set judul file excel nya
+		$sheet->setTitle("Active Outlet - TOASTBOX");
+		// Proses file excel
+		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+		header('Content-Disposition: attachment; filename="Report Active Outlet - TOASTBOX.xlsx"'); // Set nama file excel nya
+		header('Cache-Control: max-age=0');
+
+		$writer = new Xlsx($spreadsheet);
+		$writer->save('php://output');
 
 	}
 
