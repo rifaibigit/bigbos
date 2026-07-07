@@ -3215,7 +3215,6 @@ class Report extends Controller {
 
 		$data['sellingout'] = $this->model('ReportModel')->getSellingOut_Year();
 		
-
 		if(isset($_POST['by_region']))
 		{
 			$data['by_region'] = $_POST['by_region'];

@@ -1043,7 +1043,7 @@ class ReportModel {
 	public function getSellingIn_ASM2($data)
 	{
 		$area = str_replace(",", "','", $_SESSION['area']);
-		$area = str_replace(" ", "", $area);
+		// $area = str_replace(" ", "", $area);
 
 		if (isset($data['by_principal']))
 		{
