@@ -126,10 +126,12 @@
                         <!-- <div id="hasil_sale_out"></div> -->
                         <div class="table-responsive-sm text-small">
                           <table id="sale_out_salesman2" class="table table-bordered table-sm" align="left" style="font-size:85%; border: 1px solid black;table-layout: fixed;">
-                          <thead class="table-warning">
+                            <thead class="table-warning">
                               <tr>
                                 <th rowspan="3" class="text-center" style="width: 5px; vertical-align: middle;">#</th>
+                                <th rowspan="3" class="text-center" style="width: 100px; vertical-align: middle;">ASM</th>
                                 <th rowspan="3" class="text-center" style="width: 200px; vertical-align: middle;">Salesman</th>
+                                <th rowspan="3" class="text-center" style="width: 70px; vertical-align: middle;">Area</th>
                                 <th colspan="6" class="text-center">January</th>
                                 <th colspan="6" class="text-center">February</th>
                                 <th colspan="6" class="text-center">March</th>
@@ -268,6 +270,9 @@
                             </thead>
                             <tbody>
                                 <?php 
+                                    $asm = '';
+                                    $area = '';
+
                                     $qty_jan = 0;
                                     $qty_feb = 0;
                                     $qty_mar = 0;
@@ -364,7 +369,9 @@
 
                                 <tr>
                                     <td class="text-center"><?= $no;?></td>
+                                    <td><?= $row['asm'];?></td>
                                     <td><?= $row['salesman'];?></td>
+                                    <td><?= $row['area'];?></td>
                                     
                                     <td class="text-right"><?= number_format($row['qty_jan'], 0);?></td>
                                     <td class="text-right"><?= number_format($row['value_jan'], 2);?></td>
@@ -533,6 +540,8 @@
                                 <?php $no++; endforeach; ?>
 
                                 <tr class="table-danger" style="font-weight:bold">
+                                  <td class="text-center"></td>
+                                  <td class="text-center"></td>
                                   <td class="text-center"></td>
                                   <td class="text-center">TOTAL</td>
                                   <td class="text-right"><?= number_format($qty_jan, 0);?></td>

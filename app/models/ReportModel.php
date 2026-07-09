@@ -1285,35 +1285,35 @@ class ReportModel {
 		}
 
 		$str_sql = "SELECT * FROM";
-		$str_sql = $str_sql . " (select b.asm, a.distributor, b.area, a.qty, a.value, b.qty as qty_target, b.value as value_target,";
+		$str_sql = $str_sql . " (select a.asm, a.distributor, b.area, a.qty, a.value, b.qty as qty_target, b.value as value_target,";
 		$str_sql = $str_sql . " (sum(a.value)/sum(b.value))*100 as p";
 		$str_sql = $str_sql . " from";
 
-		$str_sql = $str_sql . " (select b.asm, b.distributor, b.area, sum(a.qty) as qty, sum(a.value_exc)/1000 as value";
-		$str_sql = $str_sql . " from selling_out a";
-		$str_sql = $str_sql . " inner join distributor b on a.kode_dist = b.cust_code";
-		$str_sql = $str_sql . " inner join area d on b.area = d.area and d.area <> 'JKT MT'";
-		$str_sql = $str_sql . " where b.asm <> '' and year(a.tanggal) = '" . $year . "' and month(a.tanggal) = '" . $month . "'";
-		if (isset($principal) and $principal != '' and $principal != 'By Principal')
-		{
-			$str_sql = $str_sql . " and a.principal = '" .$principal. "'";
-		}
-		$str_sql = $str_sql . " group by b.asm, b.cust_code";
-		$str_sql = $str_sql . " order by d.id) a";
+				$str_sql = $str_sql . " (select a.asm, b.distributor, b.area, sum(a.qty) as qty, sum(a.value_exc)/1000 as value";
+				$str_sql = $str_sql . " from selling_out a";
+				$str_sql = $str_sql . " inner join distributor b on a.kode_dist = b.cust_code";
+				$str_sql = $str_sql . " inner join area d on b.area = d.area and d.area <> 'JKT MT'";
+				$str_sql = $str_sql . " where b.asm <> '' and year(a.tanggal) = '" . $year . "' and month(a.tanggal) = '" . $month . "'";
+				if (isset($principal) and $principal != '' and $principal != 'By Principal')
+				{
+					$str_sql = $str_sql . " and a.principal = '" .$principal. "'";
+				}
+				$str_sql = $str_sql . " group by a.asm, b.cust_code";
+				$str_sql = $str_sql . " order by d.id) a";
 
 		$str_sql = $str_sql . " right join";
 
-		$str_sql = $str_sql . " (select b.asm, b.area, sum(a.qty) as qty, sum(a.value)/1000 as value";
-		$str_sql = $str_sql . " from sellingout_target a";
-		$str_sql = $str_sql . " left join distributor b on a.area = b.area";
-		$str_sql = $str_sql . " inner join area d on b.area = d.area and d.area <> 'JKT MT'";
-		$str_sql = $str_sql . " where b.asm <> '' and a.tahun = '" . $year . "' and CONVERT(a.bulan, SIGNED INTEGER) = '" . $month . "'";
-		if (isset($principal) and $principal != '' and $principal != 'By Principal')
-		{
-			$str_sql = $str_sql . " and a.principal = '" .$principal. "'";
-		}
-		$str_sql = $str_sql . " group by a.area, b.cust_code";
-		$str_sql = $str_sql . " order by d.id) b on a.area = b.area";
+				$str_sql = $str_sql . " (select b.asm, b.area, sum(a.qty) as qty, sum(a.value)/1000 as value";
+				$str_sql = $str_sql . " from sellingout_target a";
+				$str_sql = $str_sql . " left join distributor b on a.area = b.area";
+				$str_sql = $str_sql . " inner join area d on b.area = d.area and d.area <> 'JKT MT'";
+				$str_sql = $str_sql . " where b.asm <> '' and a.tahun = '" . $year . "' and CONVERT(a.bulan, SIGNED INTEGER) = '" . $month . "'";
+				if (isset($principal) and $principal != '' and $principal != 'By Principal')
+				{
+					$str_sql = $str_sql . " and a.principal = '" .$principal. "'";
+				}
+				$str_sql = $str_sql . " group by a.area";
+				$str_sql = $str_sql . " order by d.id, b.id) b on a.area = b.area";
 
 		$str_sql = $str_sql . " inner join area c on b.area = c.area";
 		if($area != 'ALL')
@@ -1325,43 +1325,41 @@ class ReportModel {
 
 		$str_sql = $str_sql . " UNION ALL"; //========================================================================================
 
-		$str_sql = $str_sql . " SELECT b.asm, b.distributor, b.area, a.qty, a.value, b.qty as qty_target, b.value as value_target,";
-		$str_sql = $str_sql . " (sum(a.value)/sum(b.value))*100 as p";
-		$str_sql = $str_sql . " from";
+		$str_sql = $str_sql . " SELECT a.asm, a.distributor, a.area, a.qty, a.value, b.qty as qty_target, b.value as value_target, (sum(a.value)/sum(b.value))*100 as p";
+		$str_sql = $str_sql . " FROM";
 
-		$str_sql = $str_sql . " (SELECT (select asm from distributor where area = 'JKT MT') as asm, c.distributor, b.area, sum(a.qty) as qty, sum(a.value_exc)/1000 as value";
-		$str_sql = $str_sql . " from selling_out a";
-		$str_sql = $str_sql . " inner join outlet b on a.cust_code = b.outlet_code";
-		$str_sql = $str_sql . " left join distributor c on b.area = c.area";
-		$str_sql = $str_sql . " inner join area d on b.area = d.area and b.area = 'JKT MT'";
-		$str_sql = $str_sql . " where year(a.tanggal) = '" . $year . "' and month(a.tanggal) = '" . $month . "'";
-		if (isset($principal) and $principal != '' and $principal != 'By Principal')
-		{
-			$str_sql = $str_sql . " and a.principal = '" .$principal. "'";
-		}
-		$str_sql = $str_sql . " group by asm, d.area";
-		$str_sql = $str_sql . " order by d.id) a";
+				$str_sql = $str_sql . " (select a.asm as asm, b.distributor as distributor, a.area, sum(a.qty) as qty, sum(a.value_exc)/1000 as value";
+				$str_sql = $str_sql . " from selling_out a";;
+				$str_sql = $str_sql . " left join distributor b on a.kode_dist = b.cust_code and a.area = b.area and b.is_active";
+				$str_sql = $str_sql . " inner join area c on a.area = c.area and a.area = 'JKT MT'";
+				$str_sql = $str_sql . " where year(a.tanggal) = '" . $year . "' and month(a.tanggal) = '" . $month . "'";
+				if (isset($principal) and $principal != '' and $principal != 'By Principal')
+				{
+					$str_sql = $str_sql . " and a.principal = '" .$principal. "'";
+				}
+				$str_sql = $str_sql . " group by a.area";
+				$str_sql = $str_sql . " order by c.id) a";
 
-		$str_sql = $str_sql . " right join";
+		$str_sql = $str_sql . " RIGHT JOIN";
 
-		$str_sql = $str_sql . " (SELECT b.asm, b.distributor, b.area, sum(a.qty) as qty, sum(a.value)/1000 as value";
-		$str_sql = $str_sql . " from sellingout_target a";
-		$str_sql = $str_sql . " inner join distributor b on a.area = b.area";
-		$str_sql = $str_sql . " inner join area d on b.area = d.area and b.area = 'JKT MT' ";
-		$str_sql = $str_sql . " where a.tahun = '" . $year . "' and CONVERT(a.bulan, SIGNED INTEGER) = '" . $month . "'";
-		if (isset($principal) and $principal != '' and $principal != 'By Principal')
-		{
-			$str_sql = $str_sql . " and a.principal = '" .$principal. "'";
-		}
-		$str_sql = $str_sql . " group by b.asm, b.distributor";
-		$str_sql = $str_sql . " order by d.id) b on a.asm = b.asm and a.area = b.area";
+				$str_sql = $str_sql . " (select b.distributor, b.area, sum(a.qty) as qty, sum(a.value)/1000 as value";
+				$str_sql = $str_sql . " from sellingout_target a";
+				$str_sql = $str_sql . " inner join distributor b on a.area = b.area";
+				$str_sql = $str_sql . " inner join area d on b.area = d.area and b.area = 'JKT MT' ";
+				$str_sql = $str_sql . " where a.tahun = '" . $year . "' and CONVERT(a.bulan, SIGNED INTEGER) = '" . $month . "'";
+				if (isset($principal) and $principal != '' and $principal != 'By Principal')
+				{
+					$str_sql = $str_sql . " and a.principal = '" .$principal. "'";
+				}
+				$str_sql = $str_sql . " group by b.area";
+				$str_sql = $str_sql . " order by d.id) b on a.area = b.area";
 
-		$str_sql = $str_sql . " inner join area c on b.area = c.area";
+		$str_sql = $str_sql . " INNER JOIN area c on b.area = c.area";
 		if($area != 'ALL')
 		{
-			$str_sql = $str_sql . " where c.area in ('" . $area . "')";
+			$str_sql = $str_sql . " WHERE c.area in ('" . $area . "')";
 		}
-		$str_sql = $str_sql . " group by c.id, c.island, c.region, c.area asc";
+		$str_sql = $str_sql . " GROUP BY c.id, c.island, c.region, c.area ASC";
 
 		// Flasher::setMessage('Berhasil',$str_sql,'success');
 
@@ -28319,7 +28317,7 @@ class ReportModel {
 			$year = date('Y');
 		}
 
-		$str_sql = "SELECT DISTINCT a.salesman, a.area, b.qty_jan, b.value_jan, d.target_qty_jan, d.target_value_jan,";
+		$str_sql = "SELECT DISTINCT a.asm, a.salesman, a.area, b.qty_jan, b.value_jan, d.target_qty_jan, d.target_value_jan,";
 		$str_sql = $str_sql . " (b.qty_jan/d.target_qty_jan)*100 as idx_qty_jan, (b.value_jan/d.target_value_jan)*100 as idx_value_jan,";
 		$str_sql = $str_sql . " b.qty_feb, b.value_feb, d.target_qty_feb, d.target_value_feb,";
 		$str_sql = $str_sql . " (b.qty_feb/d.target_qty_feb)*100 as idx_qty_feb, (b.value_feb/d.target_value_feb)*100 as idx_value_feb,";
@@ -28345,185 +28343,185 @@ class ReportModel {
 		$str_sql = $str_sql . " (b.qty_des/d.target_qty_des)*100 as idx_qty_des, (b.value_des/d.target_value_des)*100 as idx_value_des,";
 		$str_sql = $str_sql . " c.qty_total, c.value_exc_total, e.target_qty_total, e.target_value_total,";
 		$str_sql = $str_sql . " (c.qty_total/e.target_qty_total)*100 as idx_qty_total, (c.value_exc_total/e.target_value_total)*100 as idx_value_total";
-		$str_sql = $str_sql . " from selling_out a";
+		$str_sql = $str_sql . " FROM selling_out a";
 
 		$str_sql = $str_sql . " INNER JOIN";
 
-		$str_sql = $str_sql . " (select a.salesman,";
-		$str_sql = $str_sql . " sum( if( month(a.tanggal) = '1', a.qty, 0)) as qty_jan,";
-		$str_sql = $str_sql . " sum( if( month(a.tanggal) = '1', a.value_exc, 0)) as value_jan,";
-		$str_sql = $str_sql . " sum( if( month(a.tanggal) = '2', a.qty, 0)) as qty_feb,";
-		$str_sql = $str_sql . " sum( if( month(a.tanggal) = '2', a.value_exc, 0)) as value_feb,";
-		$str_sql = $str_sql . " sum( if( month(a.tanggal) = '3', a.qty, 0)) as qty_mar,";
-		$str_sql = $str_sql . " sum( if( month(a.tanggal) = '3', a.value_exc, 0)) as value_mar,";
-		$str_sql = $str_sql . " sum( if( month(a.tanggal) = '4', a.qty, 0)) as qty_apr,";
-		$str_sql = $str_sql . " sum( if( month(a.tanggal) = '4', a.value_exc, 0)) as value_apr,";
-		$str_sql = $str_sql . " sum( if( month(a.tanggal) = '5', a.qty, 0)) as qty_mei,";
-		$str_sql = $str_sql . " sum( if( month(a.tanggal) = '5', a.value_exc, 0)) as value_mei,";
-		$str_sql = $str_sql . " sum( if( month(a.tanggal) = '6', a.qty, 0)) as qty_jun,";
-		$str_sql = $str_sql . " sum( if( month(a.tanggal) = '6', a.value_exc, 0)) as value_jun,";
-		$str_sql = $str_sql . " sum( if( month(a.tanggal) = '7', a.qty, 0)) as qty_jul,";
-		$str_sql = $str_sql . " sum( if( month(a.tanggal) = '7', a.value_exc, 0)) as value_jul,";
-		$str_sql = $str_sql . " sum( if( month(a.tanggal) = '8', a.qty, 0)) as qty_agu,";
-		$str_sql = $str_sql . " sum( if( month(a.tanggal) = '8', a.value_exc, 0)) as value_agu,";
-		$str_sql = $str_sql . " sum( if( month(a.tanggal) = '9', a.qty, 0)) as qty_sep,";
-		$str_sql = $str_sql . " sum( if( month(a.tanggal) = '9', a.value_exc, 0)) as value_sep,";
-		$str_sql = $str_sql . " sum( if( month(a.tanggal) = '10', a.qty, 0)) as qty_okt,";
-		$str_sql = $str_sql . " sum( if( month(a.tanggal) = '10', a.value_exc, 0)) as value_okt,";
-		$str_sql = $str_sql . " sum( if( month(a.tanggal) = '11', a.qty, 0)) as qty_nop,";
-		$str_sql = $str_sql . " sum( if( month(a.tanggal) = '11', a.value_exc, 0)) as value_nop,";
-		$str_sql = $str_sql . " sum( if( month(a.tanggal) = '12', a.qty, 0)) as qty_des,";
-		$str_sql = $str_sql . " sum( if( month(a.tanggal) = '12', a.value_exc, 0)) as value_des";
-		$str_sql = $str_sql . " from";
-		$str_sql = $str_sql . " (select aa.tanggal, aa.salesman, aa.item_code, sum(aa.qty) as qty, if(isnull(bb.price_exc), sum(aa.value_exc)/1000, (sum(aa.qty)*bb.price_exc)/1000) as value_exc";
-		$str_sql = $str_sql . " from selling_out aa";
-		$str_sql = $str_sql . " inner join (";
-						$str_sql = $str_sql . " select a.id, a.item_code, a.price_exc, a.price_inc, a.mt_exc, a.mt_inc, a.dist_exc, a.dist_inc, a.valid_from";
-						$str_sql = $str_sql . " from pricelist a";
-						$str_sql = $str_sql . " inner join (select item_code, max(valid_from) as max_valid_from";
-						$str_sql = $str_sql . " from pricelist";
-						$str_sql = $str_sql . " group by item_code) b on a.item_code = b.item_code and a.valid_from = b.max_valid_from";
-		$str_sql = $str_sql . " ) bb on aa.item_code = bb.item_code";
-		// $str_sql = $str_sql . " inner join (select * from pricelist where valid_from = (select max(valid_from) from pricelist) group by item_code) bb on aa.item_code = bb.item_code";
-		$str_sql = $str_sql . " left join area cc on aa.area = cc.area";
-		$str_sql = $str_sql . " where year(aa.tanggal) = '" . $year . "'";
-		if (isset($principal) and $principal != '')
-		{
-			$str_sql = $str_sql . " AND aa.principal = '" . $principal . "'";
-		}
+					$str_sql = $str_sql . " (select a.asm, a.salesman, a.area,";
+					$str_sql = $str_sql . " sum( if( month(a.tanggal) = '1', a.qty, 0)) as qty_jan,";
+					$str_sql = $str_sql . " sum( if( month(a.tanggal) = '1', a.value_exc, 0)) as value_jan,";
+					$str_sql = $str_sql . " sum( if( month(a.tanggal) = '2', a.qty, 0)) as qty_feb,";
+					$str_sql = $str_sql . " sum( if( month(a.tanggal) = '2', a.value_exc, 0)) as value_feb,";
+					$str_sql = $str_sql . " sum( if( month(a.tanggal) = '3', a.qty, 0)) as qty_mar,";
+					$str_sql = $str_sql . " sum( if( month(a.tanggal) = '3', a.value_exc, 0)) as value_mar,";
+					$str_sql = $str_sql . " sum( if( month(a.tanggal) = '4', a.qty, 0)) as qty_apr,";
+					$str_sql = $str_sql . " sum( if( month(a.tanggal) = '4', a.value_exc, 0)) as value_apr,";
+					$str_sql = $str_sql . " sum( if( month(a.tanggal) = '5', a.qty, 0)) as qty_mei,";
+					$str_sql = $str_sql . " sum( if( month(a.tanggal) = '5', a.value_exc, 0)) as value_mei,";
+					$str_sql = $str_sql . " sum( if( month(a.tanggal) = '6', a.qty, 0)) as qty_jun,";
+					$str_sql = $str_sql . " sum( if( month(a.tanggal) = '6', a.value_exc, 0)) as value_jun,";
+					$str_sql = $str_sql . " sum( if( month(a.tanggal) = '7', a.qty, 0)) as qty_jul,";
+					$str_sql = $str_sql . " sum( if( month(a.tanggal) = '7', a.value_exc, 0)) as value_jul,";
+					$str_sql = $str_sql . " sum( if( month(a.tanggal) = '8', a.qty, 0)) as qty_agu,";
+					$str_sql = $str_sql . " sum( if( month(a.tanggal) = '8', a.value_exc, 0)) as value_agu,";
+					$str_sql = $str_sql . " sum( if( month(a.tanggal) = '9', a.qty, 0)) as qty_sep,";
+					$str_sql = $str_sql . " sum( if( month(a.tanggal) = '9', a.value_exc, 0)) as value_sep,";
+					$str_sql = $str_sql . " sum( if( month(a.tanggal) = '10', a.qty, 0)) as qty_okt,";
+					$str_sql = $str_sql . " sum( if( month(a.tanggal) = '10', a.value_exc, 0)) as value_okt,";
+					$str_sql = $str_sql . " sum( if( month(a.tanggal) = '11', a.qty, 0)) as qty_nop,";
+					$str_sql = $str_sql . " sum( if( month(a.tanggal) = '11', a.value_exc, 0)) as value_nop,";
+					$str_sql = $str_sql . " sum( if( month(a.tanggal) = '12', a.qty, 0)) as qty_des,";
+					$str_sql = $str_sql . " sum( if( month(a.tanggal) = '12', a.value_exc, 0)) as value_des";
+					$str_sql = $str_sql . " from";
+					$str_sql = $str_sql . " (select aa.tanggal, aa.asm, aa.salesman, aa.area, aa.item_code, sum(aa.qty) as qty, if(isnull(bb.price_exc), sum(aa.value_exc)/1000, (sum(aa.qty)*bb.price_exc)/1000) as value_exc";
+					$str_sql = $str_sql . " from selling_out aa";
+					$str_sql = $str_sql . " inner join (";
+									$str_sql = $str_sql . " select a.id, a.item_code, a.price_exc, a.price_inc, a.mt_exc, a.mt_inc, a.dist_exc, a.dist_inc, a.valid_from";
+									$str_sql = $str_sql . " from pricelist a";
+									$str_sql = $str_sql . " inner join (select item_code, max(valid_from) as max_valid_from";
+									$str_sql = $str_sql . " from pricelist";
+									$str_sql = $str_sql . " group by item_code) b on a.item_code = b.item_code and a.valid_from = b.max_valid_from";
+					$str_sql = $str_sql . " ) bb on aa.item_code = bb.item_code";
+					// $str_sql = $str_sql . " inner join (select * from pricelist where valid_from = (select max(valid_from) from pricelist) group by item_code) bb on aa.item_code = bb.item_code";
+					$str_sql = $str_sql . " left join area cc on aa.area = cc.area";
+					$str_sql = $str_sql . " where year(aa.tanggal) = '" . $year . "'";
+					if (isset($principal) and $principal != '')
+					{
+						$str_sql = $str_sql . " AND aa.principal = '" . $principal . "'";
+					}
 
-		if (isset($island) and $island != '')
-		{
-			$str_sql = $str_sql . " AND cc.island = '" . $island . "'";
-		}
+					if (isset($island) and $island != '')
+					{
+						$str_sql = $str_sql . " AND cc.island = '" . $island . "'";
+					}
 
-		if (isset($region) and $region != '')
-		{
-			$str_sql = $str_sql . " AND cc.region = '" . $region . "'";
-		}
+					if (isset($region) and $region != '')
+					{
+						$str_sql = $str_sql . " AND cc.region = '" . $region . "'";
+					}
 
-		if (isset($area) and $area != '')
-		{
-			$str_sql = $str_sql . " AND aa.area = '" . $area . "'";
-		}
-		$str_sql = $str_sql . " group by month(aa.tanggal), aa.salesman, aa.item_code) a";
-		$str_sql = $str_sql . " group by a.salesman) b on a.salesman = b.salesman";
+					if (isset($area) and $area != '')
+					{
+						$str_sql = $str_sql . " AND aa.area = '" . $area . "'";
+					}
+					$str_sql = $str_sql . " group by month(aa.tanggal), aa.asm, aa.salesman, aa.area, aa.item_code) a";
+					$str_sql = $str_sql . " group by a.salesman) b on a.salesman = b.salesman AND a.asm = b.asm AND a.area = b.area";
 
 		$str_sql = $str_sql . " INNER JOIN";
 
-		$str_sql = $str_sql . " (select a.salesman, sum(a.qty) as qty_total, sum(a.value_exc) as value_exc_total";
-		$str_sql = $str_sql . " from";
-		$str_sql = $str_sql . " (select aa.salesman, aa.item_code, sum(aa.qty) as qty, if(isnull(bb.price_exc), sum(aa.value_exc)/1000, (sum(aa.qty)*bb.price_exc)/1000) as value_exc";
-		$str_sql = $str_sql . " from selling_out aa";
-		$str_sql = $str_sql . " inner join (";
-						$str_sql = $str_sql . " select a.id, a.item_code, a.price_exc, a.price_inc, a.mt_exc, a.mt_inc, a.dist_exc, a.dist_inc, a.valid_from";
-						$str_sql = $str_sql . " from pricelist a";
-						$str_sql = $str_sql . " inner join (select item_code, max(valid_from) as max_valid_from";
-						$str_sql = $str_sql . " from pricelist";
-						$str_sql = $str_sql . " group by item_code) b on a.item_code = b.item_code and a.valid_from = b.max_valid_from";
-		$str_sql = $str_sql . " ) bb on aa.item_code = bb.item_code";
-		$str_sql = $str_sql . " left join area cc on aa.area = cc.area";
-		$str_sql = $str_sql . " where year(aa.tanggal) = '" . $year . "'";
-		if (isset($principal) and $principal != '')
-		{
-			$str_sql = $str_sql . " AND aa.principal = '" . $principal . "'";
-		}
+					$str_sql = $str_sql . " (select a.asm, a.salesman, a.area, sum(a.qty) as qty_total, sum(a.value_exc) as value_exc_total";
+					$str_sql = $str_sql . " from";
+					$str_sql = $str_sql . " (select aa.asm, aa.salesman, aa.area, aa.item_code, sum(aa.qty) as qty, if(isnull(bb.price_exc), sum(aa.value_exc)/1000, (sum(aa.qty)*bb.price_exc)/1000) as value_exc";
+					$str_sql = $str_sql . " from selling_out aa";
+					$str_sql = $str_sql . " inner join (";
+									$str_sql = $str_sql . " select a.id, a.item_code, a.price_exc, a.price_inc, a.mt_exc, a.mt_inc, a.dist_exc, a.dist_inc, a.valid_from";
+									$str_sql = $str_sql . " from pricelist a";
+									$str_sql = $str_sql . " inner join (select item_code, max(valid_from) as max_valid_from";
+									$str_sql = $str_sql . " from pricelist";
+									$str_sql = $str_sql . " group by item_code) b on a.item_code = b.item_code and a.valid_from = b.max_valid_from";
+					$str_sql = $str_sql . " ) bb on aa.item_code = bb.item_code";
+					$str_sql = $str_sql . " left join area cc on aa.area = cc.area";
+					$str_sql = $str_sql . " where year(aa.tanggal) = '" . $year . "'";
+					if (isset($principal) and $principal != '')
+					{
+						$str_sql = $str_sql . " AND aa.principal = '" . $principal . "'";
+					}
 
-		if (isset($island) and $island != '')
-		{
-			$str_sql = $str_sql . " AND cc.island = '" . $island . "'";
-		}
+					if (isset($island) and $island != '')
+					{
+						$str_sql = $str_sql . " AND cc.island = '" . $island . "'";
+					}
 
-		if (isset($region) and $region != '')
-		{
-			$str_sql = $str_sql . " AND cc.region = '" . $region . "'";
-		}
+					if (isset($region) and $region != '')
+					{
+						$str_sql = $str_sql . " AND cc.region = '" . $region . "'";
+					}
 
-		if (isset($area) and $area != '')
-		{
-			$str_sql = $str_sql . " AND aa.area = '" . $area . "'";
-		}
-		$str_sql = $str_sql . " group by aa.salesman, aa.item_code) a";
-		$str_sql = $str_sql . " group by a.salesman) c on a.salesman = c.salesman";
-
-		$str_sql = $str_sql . " LEFT JOIN";
-
-		$str_sql = $str_sql . " (select a.salesman,";
-		$str_sql = $str_sql . " sum( if( a.bulan = '1', a.qty, 0)) as target_qty_jan,";
-		$str_sql = $str_sql . " sum( if( a.bulan = '1', a.value, 0)) as target_value_jan,";
-		$str_sql = $str_sql . " sum( if( a.bulan = '2', a.qty, 0)) as target_qty_feb,";
-		$str_sql = $str_sql . " sum( if( a.bulan = '2', a.value, 0)) as target_value_feb,";
-		$str_sql = $str_sql . " sum( if( a.bulan = '3', a.qty, 0)) as target_qty_mar,";
-		$str_sql = $str_sql . " sum( if( a.bulan = '3', a.value, 0)) as target_value_mar,";
-		$str_sql = $str_sql . " sum( if( a.bulan = '4', a.qty, 0)) as target_qty_apr,";
-		$str_sql = $str_sql . " sum( if( a.bulan = '4', a.value, 0)) as target_value_apr,";
-		$str_sql = $str_sql . " sum( if( a.bulan = '5', a.qty, 0)) as target_qty_mei,";
-		$str_sql = $str_sql . " sum( if( a.bulan = '5', a.value, 0)) as target_value_mei,";
-		$str_sql = $str_sql . " sum( if( a.bulan = '6', a.qty, 0)) as target_qty_jun,";
-		$str_sql = $str_sql . " sum( if( a.bulan = '6', a.value, 0)) as target_value_jun,";
-		$str_sql = $str_sql . " sum( if( a.bulan = '7', a.qty, 0)) as target_qty_jul,";
-		$str_sql = $str_sql . " sum( if( a.bulan = '7', a.value, 0)) as target_value_jul,";
-		$str_sql = $str_sql . " sum( if( a.bulan = '8', a.qty, 0)) as target_qty_agu,";
-		$str_sql = $str_sql . " sum( if( a.bulan = '8', a.value, 0)) as target_value_agu,";
-		$str_sql = $str_sql . " sum( if( a.bulan = '9', a.qty, 0)) as target_qty_sep,";
-		$str_sql = $str_sql . " sum( if( a.bulan = '9', a.value, 0)) as target_value_sep,";
-		$str_sql = $str_sql . " sum( if( a.bulan = '10', a.qty, 0)) as target_qty_okt,";
-		$str_sql = $str_sql . " sum( if( a.bulan = '10', a.value, 0)) as target_value_okt,";
-		$str_sql = $str_sql . " sum( if( a.bulan = '11', a.qty, 0)) as target_qty_nop,";
-		$str_sql = $str_sql . " sum( if( a.bulan = '11', a.value, 0)) as target_value_nop,";
-		$str_sql = $str_sql . " sum( if( a.bulan = '12', a.qty, 0)) as target_qty_des,";
-		$str_sql = $str_sql . " sum( if( a.bulan = '12', a.value, 0)) as target_value_des";
-		$str_sql = $str_sql . " from salesman_target a";
-		$str_sql = $str_sql . " left join area b on a.area = b.area";
-		$str_sql = $str_sql . " where a.tahun = '" . $year . "'";
-		if (isset($principal) and $principal != '')
-		{
-			$str_sql = $str_sql . " AND a.principal = '" . $principal . "'";
-		}
-
-		if (isset($island) and $island != '')
-		{
-			$str_sql = $str_sql . " AND b.island = '" . $island . "'";
-		}
-
-		if (isset($region) and $region != '')
-		{
-			$str_sql = $str_sql . " AND b.region = '" . $region . "'";
-		}
-
-		if (isset($area) and $area != '')
-		{
-			$str_sql = $str_sql . " AND a.area = '" . $area . "'";
-		}
-		$str_sql = $str_sql . " group by a.salesman) d on a.salesman = d.salesman";
+					if (isset($area) and $area != '')
+					{
+						$str_sql = $str_sql . " AND aa.area = '" . $area . "'";
+					}
+					$str_sql = $str_sql . " group by aa.asm, aa.salesman, aa.area, aa.item_code) a";
+					$str_sql = $str_sql . " group by a.asm, a.salesman, a.area) c on a.salesman = c.salesman AND a.asm = c.asm AND a.area = c.area";
 
 		$str_sql = $str_sql . " LEFT JOIN";
 
-		$str_sql = $str_sql . " (select a.salesman, sum(a.qty) as target_qty_total, sum(a.value) as target_value_total";
-		$str_sql = $str_sql . " from salesman_target a";
-		$str_sql = $str_sql . " left join area b on a.area = b.area";
-		$str_sql = $str_sql . " where a.tahun = '" . $year . "'";
-		if (isset($principal) and $principal != '')
-		{
-			$str_sql = $str_sql . " AND a.principal = '" . $principal . "'";
-		}
+					$str_sql = $str_sql . " (select a.salesman, a.area,";
+					$str_sql = $str_sql . " sum( if( a.bulan = '1', a.qty, 0)) as target_qty_jan,";
+					$str_sql = $str_sql . " sum( if( a.bulan = '1', a.value, 0)) as target_value_jan,";
+					$str_sql = $str_sql . " sum( if( a.bulan = '2', a.qty, 0)) as target_qty_feb,";
+					$str_sql = $str_sql . " sum( if( a.bulan = '2', a.value, 0)) as target_value_feb,";
+					$str_sql = $str_sql . " sum( if( a.bulan = '3', a.qty, 0)) as target_qty_mar,";
+					$str_sql = $str_sql . " sum( if( a.bulan = '3', a.value, 0)) as target_value_mar,";
+					$str_sql = $str_sql . " sum( if( a.bulan = '4', a.qty, 0)) as target_qty_apr,";
+					$str_sql = $str_sql . " sum( if( a.bulan = '4', a.value, 0)) as target_value_apr,";
+					$str_sql = $str_sql . " sum( if( a.bulan = '5', a.qty, 0)) as target_qty_mei,";
+					$str_sql = $str_sql . " sum( if( a.bulan = '5', a.value, 0)) as target_value_mei,";
+					$str_sql = $str_sql . " sum( if( a.bulan = '6', a.qty, 0)) as target_qty_jun,";
+					$str_sql = $str_sql . " sum( if( a.bulan = '6', a.value, 0)) as target_value_jun,";
+					$str_sql = $str_sql . " sum( if( a.bulan = '7', a.qty, 0)) as target_qty_jul,";
+					$str_sql = $str_sql . " sum( if( a.bulan = '7', a.value, 0)) as target_value_jul,";
+					$str_sql = $str_sql . " sum( if( a.bulan = '8', a.qty, 0)) as target_qty_agu,";
+					$str_sql = $str_sql . " sum( if( a.bulan = '8', a.value, 0)) as target_value_agu,";
+					$str_sql = $str_sql . " sum( if( a.bulan = '9', a.qty, 0)) as target_qty_sep,";
+					$str_sql = $str_sql . " sum( if( a.bulan = '9', a.value, 0)) as target_value_sep,";
+					$str_sql = $str_sql . " sum( if( a.bulan = '10', a.qty, 0)) as target_qty_okt,";
+					$str_sql = $str_sql . " sum( if( a.bulan = '10', a.value, 0)) as target_value_okt,";
+					$str_sql = $str_sql . " sum( if( a.bulan = '11', a.qty, 0)) as target_qty_nop,";
+					$str_sql = $str_sql . " sum( if( a.bulan = '11', a.value, 0)) as target_value_nop,";
+					$str_sql = $str_sql . " sum( if( a.bulan = '12', a.qty, 0)) as target_qty_des,";
+					$str_sql = $str_sql . " sum( if( a.bulan = '12', a.value, 0)) as target_value_des";
+					$str_sql = $str_sql . " from salesman_target a";
+					$str_sql = $str_sql . " left join area b on a.area = b.area";
+					$str_sql = $str_sql . " where a.tahun = '" . $year . "'";
+					if (isset($principal) and $principal != '')
+					{
+						$str_sql = $str_sql . " AND a.principal = '" . $principal . "'";
+					}
 
-		if (isset($island) and $island != '')
-		{
-			$str_sql = $str_sql . " AND b.island = '" . $island . "'";
-		}
+					if (isset($island) and $island != '')
+					{
+						$str_sql = $str_sql . " AND b.island = '" . $island . "'";
+					}
 
-		if (isset($region) and $region != '')
-		{
-			$str_sql = $str_sql . " AND b.region = '" . $region . "'";
-		}
+					if (isset($region) and $region != '')
+					{
+						$str_sql = $str_sql . " AND b.region = '" . $region . "'";
+					}
 
-		if (isset($area) and $area != '')
-		{
-			$str_sql = $str_sql . " AND a.area = '" . $area . "'";
-		}
+					if (isset($area) and $area != '')
+					{
+						$str_sql = $str_sql . " AND a.area = '" . $area . "'";
+					}
+					$str_sql = $str_sql . " group by a.salesman, a.area) d on a.salesman = d.salesman AND a.area = d.area";
 
-		$str_sql = $str_sql . " group by a.salesman) e on a.salesman = e.salesman";
+		$str_sql = $str_sql . " LEFT JOIN";
+
+					$str_sql = $str_sql . " (select a.salesman, a.area, sum(a.qty) as target_qty_total, sum(a.value) as target_value_total";
+					$str_sql = $str_sql . " from salesman_target a";
+					$str_sql = $str_sql . " left join area b on a.area = b.area";
+					$str_sql = $str_sql . " where a.tahun = '" . $year . "'";
+					if (isset($principal) and $principal != '')
+					{
+						$str_sql = $str_sql . " AND a.principal = '" . $principal . "'";
+					}
+
+					if (isset($island) and $island != '')
+					{
+						$str_sql = $str_sql . " AND b.island = '" . $island . "'";
+					}
+
+					if (isset($region) and $region != '')
+					{
+						$str_sql = $str_sql . " AND b.region = '" . $region . "'";
+					}
+
+					if (isset($area) and $area != '')
+					{
+						$str_sql = $str_sql . " AND a.area = '" . $area . "'";
+					}
+
+					$str_sql = $str_sql . " group by a.salesman, a.area) e on a.salesman = e.salesman AND a.area = e.area";
 		$str_sql = $str_sql . " INNER JOIN area f on a.area = f.area and a.region = f.region";
 		$str_sql = $str_sql . " WHERE NOT ISNULL(a.salesman)  and a.salesman <> '' and a.salesman <> '-' and a.salesman <> '0'";
 		if (isset($island) and $island != '')
@@ -28540,10 +28538,10 @@ class ReportModel {
 		{
 			$str_sql = $str_sql . " AND a.area = '" . $area . "'";
 		}
-		$str_sql = $str_sql . " GROUP BY a.salesman";
-		$str_sql = $str_sql . " ORDER BY a.salesman;";
+		$str_sql = $str_sql . " GROUP BY a.asm, a.salesman, a.area";
+		$str_sql = $str_sql . " ORDER BY f.id, a.asm, a.salesman";
 
-		//Flasher::setMessage('Berhasil',$str_sql,'success');
+		// Flasher::setMessage('Berhasil',$str_sql,'success');
 
 		$this->db->opendb();
 		$this->db->query($str_sql);
