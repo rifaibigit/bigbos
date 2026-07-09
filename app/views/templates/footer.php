@@ -717,7 +717,7 @@
       "searching": false,
       "info": true,
       "fixedColumns":   {
-            "leftColumns": 2
+            "leftColumns": 4
         },
       // "dom": 'Bfrtip',
       // "buttons": [

@@ -35948,122 +35948,123 @@ class Report extends Controller {
 		// Buat header tabel nya pada baris ke 6
 		$sheet->setCellValue('A7', "#"); // Set kolom A6 dengan tulisan "#"
 		$sheet->mergeCells('A7:A9');//Set Merge Cell
-		$sheet->setCellValue('B7', "Salesman");
+		$sheet->setCellValue('B7', "ASM");
 		$sheet->mergeCells('B7:B9');
-		
+		$sheet->setCellValue('C7', "Salesman");
+		$sheet->mergeCells('C7:C9');
+		$sheet->setCellValue('D7', "ASM");
+		$sheet->mergeCells('D7:D9');
+
 		//Header Month
-		$sheet->setCellValue('C7', "January");
-		$sheet->mergeCells('C7:H7');
-		$sheet->setCellValue('I7', "February");
-		$sheet->mergeCells('I7:N7');
-		$sheet->setCellValue('O7', "March");
-		$sheet->mergeCells('O7:T7');
-		$sheet->setCellValue('U7', "April");
-		$sheet->mergeCells('U7:Z7');
-		$sheet->setCellValue('AA7', "May");
-		$sheet->mergeCells('AA7:AF7');
-		$sheet->setCellValue('AG7', "June");
-		$sheet->mergeCells('AG7:AL7');
-		$sheet->setCellValue('AM7', "July");
-		$sheet->mergeCells('AM7:AR7');
-		$sheet->setCellValue('AS7', "August");
-		$sheet->mergeCells('AS7:AX7');
-		$sheet->setCellValue('AY7', "September");
-		$sheet->mergeCells('AY7:BD7');
-		$sheet->setCellValue('BE7', "October");
-		$sheet->mergeCells('BE7:BJ7');
-		$sheet->setCellValue('BK7', "November");
-		$sheet->mergeCells('BK7:BP7');
-		$sheet->setCellValue('BQ7', "December");
-		$sheet->mergeCells('BQ7:BV7');
-		$sheet->setCellValue('BW7', "Total");
-		$sheet->mergeCells('BW7:CB7');
+		$sheet->setCellValue('E7', "January");
+		$sheet->mergeCells('E7:J7');
+		$sheet->setCellValue('K7', "February");
+		$sheet->mergeCells('K7:P7');
+		$sheet->setCellValue('Q7', "March");
+		$sheet->mergeCells('Q7:V7');
+		$sheet->setCellValue('W7', "April");
+		$sheet->mergeCells('W7:AB7');
+		$sheet->setCellValue('AC7', "May");
+		$sheet->mergeCells('AC7:AH7');
+		$sheet->setCellValue('AI7', "June");
+		$sheet->mergeCells('AI7:AN7');
+		$sheet->setCellValue('AO7', "July");
+		$sheet->mergeCells('AO7:AT7');
+		$sheet->setCellValue('AU7', "August");
+		$sheet->mergeCells('AU7:AZ7');
+		$sheet->setCellValue('BA7', "September");
+		$sheet->mergeCells('BA7:BF7');
+		$sheet->setCellValue('BG7', "October");
+		$sheet->mergeCells('BG7:BL7');
+		$sheet->setCellValue('BM7', "November");
+		$sheet->mergeCells('BM7:BR7');
+		$sheet->setCellValue('BS7', "December");
+		$sheet->mergeCells('BS7:BX7');
+		$sheet->setCellValue('BY7', "Total");
+		$sheet->mergeCells('BY7:CD7');
 
 
 		//Header Actual, Target, Index
-		$sheet->setCellValue('C8', "Actual");
-		$sheet->mergeCells('C8:D8');
-		$sheet->setCellValue('E8', "Target");
+		$sheet->setCellValue('E8', "Actual");
 		$sheet->mergeCells('E8:F8');
-		$sheet->setCellValue('G8', "Index(%)");
+		$sheet->setCellValue('G8', "Target");
 		$sheet->mergeCells('G8:H8');
-		$sheet->setCellValue('I8', "Actual");
+		$sheet->setCellValue('I8', "Index(%)");
 		$sheet->mergeCells('I8:J8');
-		$sheet->setCellValue('K8', "Target");
+		$sheet->setCellValue('K8', "Actual");
 		$sheet->mergeCells('K8:L8');
-		$sheet->setCellValue('M8', "Index(%)");
+		$sheet->setCellValue('M8', "Target");
 		$sheet->mergeCells('M8:N8');
-		$sheet->setCellValue('O8', "Actual");
+		$sheet->setCellValue('O8', "Index(%)");
 		$sheet->mergeCells('O8:P8');
-		$sheet->setCellValue('Q8', "Target");
+		$sheet->setCellValue('Q8', "Actual");
 		$sheet->mergeCells('Q8:R8');
-		$sheet->setCellValue('S8', "Index(%)");
+		$sheet->setCellValue('S8', "Target");
 		$sheet->mergeCells('S8:T8');
-		$sheet->setCellValue('U8', "Actual");
+		$sheet->setCellValue('U8', "Index(%)");
 		$sheet->mergeCells('U8:V8');
-		$sheet->setCellValue('W8', "Target");
+		$sheet->setCellValue('W8', "Actual");
 		$sheet->mergeCells('W8:X8');
-		$sheet->setCellValue('Y8', "Index(%)");
+		$sheet->setCellValue('Y8', "Target");
 		$sheet->mergeCells('Y8:Z8');
-		$sheet->setCellValue('AA8', "Actual");
+		$sheet->setCellValue('AA8', "Index(%)");
 		$sheet->mergeCells('AA8:AB8');
-		$sheet->setCellValue('AC8', "Target");
+		$sheet->setCellValue('AC8', "Actual");
 		$sheet->mergeCells('AC8:AD8');
-		$sheet->setCellValue('AE8', "Index(%)");
+		$sheet->setCellValue('AE8', "Target");
 		$sheet->mergeCells('AE8:AF8');
-		$sheet->setCellValue('AG8', "Actual");
+		$sheet->setCellValue('AG8', "Index(%)");
 		$sheet->mergeCells('AG8:AH8');
-		$sheet->setCellValue('AI8', "Target");
+		$sheet->setCellValue('AI8', "Actual");
 		$sheet->mergeCells('AI8:AJ8');
-		$sheet->setCellValue('AK8', "Index(%)");
+		$sheet->setCellValue('AK8', "Target");
 		$sheet->mergeCells('AK8:AL8');
-		$sheet->setCellValue('AM8', "Actual");
+		$sheet->setCellValue('AM8', "Index(%)");
 		$sheet->mergeCells('AM8:AN8');
-		$sheet->setCellValue('AO8', "Target");
+		$sheet->setCellValue('AO8', "Actual");
 		$sheet->mergeCells('AO8:AP8');
-		$sheet->setCellValue('AQ8', "Index(%)");
+		$sheet->setCellValue('AQ8', "Target");
 		$sheet->mergeCells('AQ8:AR8');
-		$sheet->setCellValue('AS8', "Actual");
+		$sheet->setCellValue('AS8', "Index(%)");
 		$sheet->mergeCells('AS8:AT8');
-		$sheet->setCellValue('AU8', "Target");
+		$sheet->setCellValue('AU8', "Actual");
 		$sheet->mergeCells('AU8:AV8');
-		$sheet->setCellValue('AW8', "Index(%)");
+		$sheet->setCellValue('AW8', "Target");
 		$sheet->mergeCells('AW8:AX8');
-		$sheet->setCellValue('AY8', "Actual");
+		$sheet->setCellValue('AY8', "Index(%)");
 		$sheet->mergeCells('AY8:AZ8');
-		$sheet->setCellValue('BA8', "Target");
+		$sheet->setCellValue('BA8', "Actual");
 		$sheet->mergeCells('BA8:BB8');
-		$sheet->setCellValue('BC8', "Index(%)");
+		$sheet->setCellValue('BC8', "Target");
 		$sheet->mergeCells('BC8:BD8');
-		$sheet->setCellValue('BE8', "Actual");
+		$sheet->setCellValue('BE8', "Index(%)");
 		$sheet->mergeCells('BE8:BF8');
-		$sheet->setCellValue('BG8', "Target");
+		$sheet->setCellValue('BG8', "Actual");
 		$sheet->mergeCells('BG8:BH8');
-		$sheet->setCellValue('BI8', "Index(%)");
+		$sheet->setCellValue('BI8', "Target");
 		$sheet->mergeCells('BI8:BJ8');
-		$sheet->setCellValue('BK8', "Actual");
+		$sheet->setCellValue('BK8', "Index(%)");
 		$sheet->mergeCells('BK8:BL8');
-		$sheet->setCellValue('BM8', "Target");
+		$sheet->setCellValue('BM8', "Actual");
 		$sheet->mergeCells('BM8:BN8');
-		$sheet->setCellValue('BO8', "Index(%)");
+		$sheet->setCellValue('BO8', "Target");
 		$sheet->mergeCells('BO8:BP8');
-		$sheet->setCellValue('BQ8', "Actual");
+		$sheet->setCellValue('BQ8', "Index(%)");
 		$sheet->mergeCells('BQ8:BR8');
-		$sheet->setCellValue('BS8', "Target");
+		$sheet->setCellValue('BS8', "Actual");
 		$sheet->mergeCells('BS8:BT8');
-		$sheet->setCellValue('BU8', "Index(%)");
+		$sheet->setCellValue('BU8', "Target");
 		$sheet->mergeCells('BU8:BV8');
-		$sheet->setCellValue('BW8', "Actual");//TOTAL
+		$sheet->setCellValue('BW8', "Index(%)");
 		$sheet->mergeCells('BW8:BX8');
-		$sheet->setCellValue('BY8', "Target");
+		$sheet->setCellValue('BY8', "Actual");//TOTAL
 		$sheet->mergeCells('BY8:BZ8');
-		$sheet->setCellValue('CA8', "Index(%)");//TOTAL
+		$sheet->setCellValue('CA8', "Target");
 		$sheet->mergeCells('CA8:CB8');
+		$sheet->setCellValue('CC8', "Index(%)");//TOTAL
+		$sheet->mergeCells('CC8:CD8');
 
-
-		//Header QTY, VALUE
-		$sheet->setCellValue('C9', "Qty");
-		$sheet->setCellValue('D9', "Value");
+		//Header QTY, VALUE - mulai dari E9
 		$sheet->setCellValue('E9', "Qty");
 		$sheet->setCellValue('F9', "Value");
 		$sheet->setCellValue('G9', "Qty");
@@ -36140,6 +36141,8 @@ class Report extends Controller {
 		$sheet->setCellValue('BZ9', "Value");
 		$sheet->setCellValue('CA9', "Qty");
 		$sheet->setCellValue('CB9', "Value");
+		$sheet->setCellValue('CC9', "Qty");
+		$sheet->setCellValue('CD9', "Value");
 		
 		
 		// Apply style header yang telah kita buat tadi ke masing-masing kolom header
@@ -36223,6 +36226,8 @@ class Report extends Controller {
 		$sheet->getStyle('BZ7')->applyFromArray($style_col);
 		$sheet->getStyle('CA7')->applyFromArray($style_col);
 		$sheet->getStyle('CB7')->applyFromArray($style_col);
+		$sheet->getStyle('CC7')->applyFromArray($style_col);
+		$sheet->getStyle('CD7')->applyFromArray($style_col);
 
 		$sheet->getStyle('A8')->applyFromArray($style_col);
 		$sheet->getStyle('B8')->applyFromArray($style_col);
@@ -36304,6 +36309,8 @@ class Report extends Controller {
 		$sheet->getStyle('BZ8')->applyFromArray($style_col);
 		$sheet->getStyle('CA8')->applyFromArray($style_col);
 		$sheet->getStyle('CB8')->applyFromArray($style_col);
+		$sheet->getStyle('CC8')->applyFromArray($style_col);
+		$sheet->getStyle('CD8')->applyFromArray($style_col);
 
 		$sheet->getStyle('A9')->applyFromArray($style_col);
 		$sheet->getStyle('B9')->applyFromArray($style_col);
@@ -36385,9 +36392,11 @@ class Report extends Controller {
 		$sheet->getStyle('BZ9')->applyFromArray($style_col);
 		$sheet->getStyle('CA9')->applyFromArray($style_col);
 		$sheet->getStyle('CB9')->applyFromArray($style_col);
+		$sheet->getStyle('CC9')->applyFromArray($style_col);
+		$sheet->getStyle('CD9')->applyFromArray($style_col);
 
-		$sheet->getStyle('A7:BV9')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFE4B5');
-		$sheet->getStyle('BW7:CB9')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');//TOTAL
+		$sheet->getStyle('A7:BX9')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFE4B5');
+		$sheet->getStyle('BZ7:CD9')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');//TOTAL
 
 		// Set height baris ke 1 dan 2
 		$sheet->getRowDimension('1')->setRowHeight(40);
@@ -36585,80 +36594,82 @@ class Report extends Controller {
 		foreach ($data['so_salesman_year'] as $rows) :
 
 			$sheet->setCellValue('A' . $row, $no);
-    		$sheet->setCellValue('B' . $row, $rows['salesman']);
+    		$sheet->setCellValue('B' . $row, $rows['asm']);
+			$sheet->setCellValue('C' . $row, $rows['salesman']);
+			$sheet->setCellValue('D' . $row, $rows['area']);
 
-			$sheet->setCellValue('C' . $row, $rows['qty_jan']);
-			$sheet->setCellValue('D' . $row, $rows['value_jan']);
-			$sheet->setCellValue('E' . $row, $rows['target_qty_jan']);
-			$sheet->setCellValue('F' . $row, $rows['target_value_jan']);
-			$sheet->setCellValue('G' . $row, $rows['idx_qty_jan']);
-			$sheet->setCellValue('H' . $row, $rows['idx_value_jan']);
-			$sheet->setCellValue('I' . $row, $rows['qty_feb']);
-			$sheet->setCellValue('J' . $row, $rows['value_feb']);
-			$sheet->setCellValue('K' . $row, $rows['target_qty_feb']);
-			$sheet->setCellValue('L' . $row, $rows['target_value_feb']);
-			$sheet->setCellValue('M' . $row, $rows['idx_qty_feb']);
-			$sheet->setCellValue('N' . $row, $rows['idx_value_feb']);
-			$sheet->setCellValue('O' . $row, $rows['qty_mar']);
-			$sheet->setCellValue('P' . $row, $rows['value_mar']);
-			$sheet->setCellValue('Q' . $row, $rows['target_qty_mar']);
-			$sheet->setCellValue('R' . $row, $rows['target_value_mar']);
-			$sheet->setCellValue('S' . $row, $rows['idx_qty_mar']);
-			$sheet->setCellValue('T' . $row, $rows['idx_value_mar']);
-			$sheet->setCellValue('U' . $row, $rows['qty_apr']);
-			$sheet->setCellValue('V' . $row, $rows['value_apr']);
-			$sheet->setCellValue('W' . $row, $rows['target_qty_apr']);
-			$sheet->setCellValue('X' . $row, $rows['target_value_apr']);
-			$sheet->setCellValue('Y' . $row, $rows['idx_qty_apr']);
-			$sheet->setCellValue('Z' . $row, $rows['idx_value_apr']);
-			$sheet->setCellValue('AA' . $row, $rows['qty_mei']);
-			$sheet->setCellValue('AB' . $row, $rows['value_mei']);
-			$sheet->setCellValue('AC' . $row, $rows['target_qty_mei']);
-			$sheet->setCellValue('AD' . $row, $rows['target_value_mei']);
-			$sheet->setCellValue('AE' . $row, $rows['idx_qty_mei']);
-			$sheet->setCellValue('AF' . $row, $rows['idx_value_mei']);
-			$sheet->setCellValue('AG' . $row, $rows['qty_jun']);
-			$sheet->setCellValue('AH' . $row, $rows['value_jun']);
-			$sheet->setCellValue('AI' . $row, $rows['target_qty_jun']);
-			$sheet->setCellValue('AJ' . $row, $rows['target_value_jun']);
-			$sheet->setCellValue('AK' . $row, $rows['idx_qty_jun']);
-			$sheet->setCellValue('AL' . $row, $rows['idx_value_jun']);
-			$sheet->setCellValue('AM' . $row, $rows['qty_jul']);
-			$sheet->setCellValue('AN' . $row, $rows['value_jul']);
-			$sheet->setCellValue('AO' . $row, $rows['target_qty_jul']);
-			$sheet->setCellValue('AP' . $row, $rows['target_value_jul']);
-			$sheet->setCellValue('AQ' . $row, $rows['idx_qty_jul']);
-			$sheet->setCellValue('AR' . $row, $rows['idx_value_jul']);
-			$sheet->setCellValue('AS' . $row, $rows['qty_agu']);
-			$sheet->setCellValue('AT' . $row, $rows['value_agu']);
-			$sheet->setCellValue('AU' . $row, $rows['target_qty_agu']);
-			$sheet->setCellValue('AV' . $row, $rows['target_value_agu']);
-			$sheet->setCellValue('AW' . $row, $rows['idx_qty_agu']);
-			$sheet->setCellValue('AX' . $row, $rows['idx_value_agu']);
-			$sheet->setCellValue('AY' . $row, $rows['qty_sep']);
-			$sheet->setCellValue('AZ' . $row, $rows['value_sep']);
-			$sheet->setCellValue('BA' . $row, $rows['target_qty_sep']);
-			$sheet->setCellValue('BB' . $row, $rows['target_value_sep']);
-			$sheet->setCellValue('BC' . $row, $rows['idx_qty_sep']);
-			$sheet->setCellValue('BD' . $row, $rows['idx_value_sep']);
-			$sheet->setCellValue('BE' . $row, $rows['qty_okt']);
-			$sheet->setCellValue('BF' . $row, $rows['value_okt']);
-			$sheet->setCellValue('BG' . $row, $rows['target_qty_okt']);
-			$sheet->setCellValue('BH' . $row, $rows['target_value_okt']);
-			$sheet->setCellValue('BI' . $row, $rows['idx_qty_okt']);
-			$sheet->setCellValue('BJ' . $row, $rows['idx_value_okt']);
-			$sheet->setCellValue('BK' . $row, $rows['qty_nop']);
-			$sheet->setCellValue('BL' . $row, $rows['value_nop']);
-			$sheet->setCellValue('BM' . $row, $rows['target_qty_nop']);
-			$sheet->setCellValue('BN' . $row, $rows['target_value_nop']);
-			$sheet->setCellValue('BO' . $row, $rows['idx_qty_nop']);
-			$sheet->setCellValue('BP' . $row, $rows['idx_value_nop']);
-			$sheet->setCellValue('BQ' . $row, $rows['qty_des']);
-			$sheet->setCellValue('BR' . $row, $rows['value_des']);
-			$sheet->setCellValue('BS' . $row, $rows['target_qty_des']);
-			$sheet->setCellValue('BT' . $row, $rows['target_value_des']);
-			$sheet->setCellValue('BU' . $row, $rows['idx_qty_des']);
-			$sheet->setCellValue('BV' . $row, $rows['idx_value_des']);
+			$sheet->setCellValue('E' . $row, $rows['qty_jan']);
+			$sheet->setCellValue('F' . $row, $rows['value_jan']);
+			$sheet->setCellValue('G' . $row, $rows['target_qty_jan']);
+			$sheet->setCellValue('H' . $row, $rows['target_value_jan']);
+			$sheet->setCellValue('I' . $row, $rows['idx_qty_jan']);
+			$sheet->setCellValue('J' . $row, $rows['idx_value_jan']);
+			$sheet->setCellValue('K' . $row, $rows['qty_feb']);
+			$sheet->setCellValue('L' . $row, $rows['value_feb']);
+			$sheet->setCellValue('M' . $row, $rows['target_qty_feb']);
+			$sheet->setCellValue('N' . $row, $rows['target_value_feb']);
+			$sheet->setCellValue('O' . $row, $rows['idx_qty_feb']);
+			$sheet->setCellValue('P' . $row, $rows['idx_value_feb']);
+			$sheet->setCellValue('Q' . $row, $rows['qty_mar']);
+			$sheet->setCellValue('R' . $row, $rows['value_mar']);
+			$sheet->setCellValue('S' . $row, $rows['target_qty_mar']);
+			$sheet->setCellValue('T' . $row, $rows['target_value_mar']);
+			$sheet->setCellValue('U' . $row, $rows['idx_qty_mar']);
+			$sheet->setCellValue('V' . $row, $rows['idx_value_mar']);
+			$sheet->setCellValue('W' . $row, $rows['qty_apr']);
+			$sheet->setCellValue('X' . $row, $rows['value_apr']);
+			$sheet->setCellValue('Y' . $row, $rows['target_qty_apr']);
+			$sheet->setCellValue('Z' . $row, $rows['target_value_apr']);
+			$sheet->setCellValue('AA' . $row, $rows['idx_qty_apr']);
+			$sheet->setCellValue('AB' . $row, $rows['idx_value_apr']);
+			$sheet->setCellValue('AC' . $row, $rows['qty_mei']);
+			$sheet->setCellValue('AD' . $row, $rows['value_mei']);
+			$sheet->setCellValue('AE' . $row, $rows['target_qty_mei']);
+			$sheet->setCellValue('AF' . $row, $rows['target_value_mei']);
+			$sheet->setCellValue('AG' . $row, $rows['idx_qty_mei']);
+			$sheet->setCellValue('AH' . $row, $rows['idx_value_mei']);
+			$sheet->setCellValue('AI' . $row, $rows['qty_jun']);
+			$sheet->setCellValue('AJ' . $row, $rows['value_jun']);
+			$sheet->setCellValue('AK' . $row, $rows['target_qty_jun']);
+			$sheet->setCellValue('AL' . $row, $rows['target_value_jun']);
+			$sheet->setCellValue('AM' . $row, $rows['idx_qty_jun']);
+			$sheet->setCellValue('AN' . $row, $rows['idx_value_jun']);
+			$sheet->setCellValue('AO' . $row, $rows['qty_jul']);
+			$sheet->setCellValue('AP' . $row, $rows['value_jul']);
+			$sheet->setCellValue('AQ' . $row, $rows['target_qty_jul']);
+			$sheet->setCellValue('AR' . $row, $rows['target_value_jul']);
+			$sheet->setCellValue('AS' . $row, $rows['idx_qty_jul']);
+			$sheet->setCellValue('AT' . $row, $rows['idx_value_jul']);
+			$sheet->setCellValue('AU' . $row, $rows['qty_agu']);
+			$sheet->setCellValue('AV' . $row, $rows['value_agu']);
+			$sheet->setCellValue('AW' . $row, $rows['target_qty_agu']);
+			$sheet->setCellValue('AX' . $row, $rows['target_value_agu']);
+			$sheet->setCellValue('AY' . $row, $rows['idx_qty_agu']);
+			$sheet->setCellValue('AZ' . $row, $rows['idx_value_agu']);
+			$sheet->setCellValue('BA' . $row, $rows['qty_sep']);
+			$sheet->setCellValue('BB' . $row, $rows['value_sep']);
+			$sheet->setCellValue('BC' . $row, $rows['target_qty_sep']);
+			$sheet->setCellValue('BD' . $row, $rows['target_value_sep']);
+			$sheet->setCellValue('BE' . $row, $rows['idx_qty_sep']);
+			$sheet->setCellValue('BF' . $row, $rows['idx_value_sep']);
+			$sheet->setCellValue('BG' . $row, $rows['qty_okt']);
+			$sheet->setCellValue('BH' . $row, $rows['value_okt']);
+			$sheet->setCellValue('BI' . $row, $rows['target_qty_okt']);
+			$sheet->setCellValue('BJ' . $row, $rows['target_value_okt']);
+			$sheet->setCellValue('BK' . $row, $rows['idx_qty_okt']);
+			$sheet->setCellValue('BL' . $row, $rows['idx_value_okt']);
+			$sheet->setCellValue('BM' . $row, $rows['qty_nop']);
+			$sheet->setCellValue('BN' . $row, $rows['value_nop']);
+			$sheet->setCellValue('BO' . $row, $rows['target_qty_nop']);
+			$sheet->setCellValue('BP' . $row, $rows['target_value_nop']);
+			$sheet->setCellValue('BQ' . $row, $rows['idx_qty_nop']);
+			$sheet->setCellValue('BR' . $row, $rows['idx_value_nop']);
+			$sheet->setCellValue('BS' . $row, $rows['qty_des']);
+			$sheet->setCellValue('BT' . $row, $rows['value_des']);
+			$sheet->setCellValue('BU' . $row, $rows['target_qty_des']);
+			$sheet->setCellValue('BV' . $row, $rows['target_value_des']);
+			$sheet->setCellValue('BW' . $row, $rows['idx_qty_des']);
+			$sheet->setCellValue('BX' . $row, $rows['idx_value_des']);
 
 			$qty_year = $rows['qty_jan'] + $rows['qty_feb'] + $rows['qty_mar'] + $rows['qty_apr'] + $rows['qty_mei'] + $rows['qty_jun'] + $rows['qty_jul'] + $rows['qty_agu'] + $rows['qty_sep'] + $rows['qty_okt'] + $rows['qty_nop'] + $rows['qty_des'];
 			$target_qty_year = $rows['target_qty_jan'] + $rows['target_qty_feb'] + $rows['target_qty_mar'] + $rows['target_qty_apr'] + $rows['target_qty_mei'] + $rows['target_qty_jun'] + $rows['target_qty_jul'] + $rows['target_qty_agu'] + $rows['target_qty_sep'] + $rows['target_qty_okt'] + $rows['target_qty_nop'] + $rows['target_qty_des'];
@@ -36673,12 +36684,12 @@ class Report extends Controller {
 			// $target_val_avg = $target_val_year / 12;
 			// $idx_val_avg = ($val_avg/($target_val_avg ?: 1))*100;
 
-			$sheet->setCellValue('BW' . $row, $qty_year);
-			$sheet->setCellValue('BX' . $row, $val_year);
-			$sheet->setCellValue('BY' . $row, $target_qty_year);
-			$sheet->setCellValue('BZ' . $row, $target_val_year);
-			$sheet->setCellValue('CA' . $row, $idx_qty_year);
-			$sheet->setCellValue('CB' . $row, $idx_val_year);
+			$sheet->setCellValue('BY' . $row, $qty_year);
+			$sheet->setCellValue('BZ' . $row, $val_year);
+			$sheet->setCellValue('CA' . $row, $target_qty_year);
+			$sheet->setCellValue('CB' . $row, $target_val_year);
+			$sheet->setCellValue('CC' . $row, $idx_qty_year);
+			$sheet->setCellValue('CD' . $row, $idx_val_year);
 
 			// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 			$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -36761,11 +36772,13 @@ class Report extends Controller {
 			$sheet->getStyle('BZ' . $row)->applyFromArray($style_row);
 			$sheet->getStyle('CA' . $row)->applyFromArray($style_row);
 			$sheet->getStyle('CB' . $row)->applyFromArray($style_row);
+			$sheet->getStyle('CC' . $row)->applyFromArray($style_row);
+			$sheet->getStyle('CD' . $row)->applyFromArray($style_row);
 
 			$sheet->getStyle('A' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 			$sheet->getStyle('B' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
-			$sheet->getStyle('C' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
-			$sheet->getStyle('D' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+			$sheet->getStyle('C' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+			$sheet->getStyle('D' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
 			$sheet->getStyle('E' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 			$sheet->getStyle('F' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 			$sheet->getStyle('G' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
@@ -36810,6 +36823,7 @@ class Report extends Controller {
 			$sheet->getStyle('AT' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 			$sheet->getStyle('AU' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 			$sheet->getStyle('AV' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+			$sheet->getStyle('AW' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 			$sheet->getStyle('AX' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 			$sheet->getStyle('AY' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 			$sheet->getStyle('AZ' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
@@ -36828,6 +36842,7 @@ class Report extends Controller {
 			$sheet->getStyle('BM' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 			$sheet->getStyle('BN' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 			$sheet->getStyle('BO' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+			$sheet->getStyle('BP' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 			$sheet->getStyle('BQ' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 			$sheet->getStyle('BR' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 			$sheet->getStyle('BS' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
@@ -36840,85 +36855,87 @@ class Report extends Controller {
 			$sheet->getStyle('BZ' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 			$sheet->getStyle('CA' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 			$sheet->getStyle('CB' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+			$sheet->getStyle('CC' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+			$sheet->getStyle('CD' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
-			$sheet->getStyle('C' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('D' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 			$sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0');
 			$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 			$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 			$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0');
 			$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
 			$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 			$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 			$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0');
 			$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
 			$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 			$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('T' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('T' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 			$sheet->getStyle('U' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('V' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('V' . $row)->getNumberFormat()->setFormatCode('#,##0');
 			$sheet->getStyle('W' . $row)->getNumberFormat()->setFormatCode('#,##0');
 			$sheet->getStyle('X' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 			$sheet->getStyle('Y' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('Z' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('Z' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 			$sheet->getStyle('AA' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('AB' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('AB' . $row)->getNumberFormat()->setFormatCode('#,##0');
 			$sheet->getStyle('AC' . $row)->getNumberFormat()->setFormatCode('#,##0');
 			$sheet->getStyle('AD' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 			$sheet->getStyle('AE' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('AF' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AF' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 			$sheet->getStyle('AG' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('AH' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('AH' . $row)->getNumberFormat()->setFormatCode('#,##0');
 			$sheet->getStyle('AI' . $row)->getNumberFormat()->setFormatCode('#,##0');
 			$sheet->getStyle('AJ' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 			$sheet->getStyle('AK' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('AL' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AL' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 			$sheet->getStyle('AM' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('AN' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('AN' . $row)->getNumberFormat()->setFormatCode('#,##0');
 			$sheet->getStyle('AO' . $row)->getNumberFormat()->setFormatCode('#,##0');
 			$sheet->getStyle('AP' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 			$sheet->getStyle('AQ' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('AR' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AR' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 			$sheet->getStyle('AS' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('AT' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('AT' . $row)->getNumberFormat()->setFormatCode('#,##0');
 			$sheet->getStyle('AU' . $row)->getNumberFormat()->setFormatCode('#,##0');
 			$sheet->getStyle('AV' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 			$sheet->getStyle('AW' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('AX' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('AX' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 			$sheet->getStyle('AY' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('AZ' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('AZ' . $row)->getNumberFormat()->setFormatCode('#,##0');
 			$sheet->getStyle('BA' . $row)->getNumberFormat()->setFormatCode('#,##0');
 			$sheet->getStyle('BB' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 			$sheet->getStyle('BC' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('BD' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('BD' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 			$sheet->getStyle('BE' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('BF' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('BF' . $row)->getNumberFormat()->setFormatCode('#,##0');
 			$sheet->getStyle('BG' . $row)->getNumberFormat()->setFormatCode('#,##0');
 			$sheet->getStyle('BH' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 			$sheet->getStyle('BI' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('BJ' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('BJ' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 			$sheet->getStyle('BK' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('BL' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('BL' . $row)->getNumberFormat()->setFormatCode('#,##0');
 			$sheet->getStyle('BM' . $row)->getNumberFormat()->setFormatCode('#,##0');
 			$sheet->getStyle('BN' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 			$sheet->getStyle('BO' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('BP' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('BP' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 			$sheet->getStyle('BQ' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('BR' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('BR' . $row)->getNumberFormat()->setFormatCode('#,##0');
 			$sheet->getStyle('BS' . $row)->getNumberFormat()->setFormatCode('#,##0');
 			$sheet->getStyle('BT' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 			$sheet->getStyle('BU' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('BV' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('BV' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 			$sheet->getStyle('BW' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('BX' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('BX' . $row)->getNumberFormat()->setFormatCode('#,##0');
 			$sheet->getStyle('BY' . $row)->getNumberFormat()->setFormatCode('#,##0');
 			$sheet->getStyle('BZ' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 			$sheet->getStyle('CA' . $row)->getNumberFormat()->setFormatCode('#,##0');
-			$sheet->getStyle('CB' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('CB' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+			$sheet->getStyle('CC' . $row)->getNumberFormat()->setFormatCode('#,##0');
+			$sheet->getStyle('CD' . $row)->getNumberFormat()->setFormatCode('#,##0');
 
 			$qty_jan += $rows['qty_jan'];
 			$qty_feb += $rows['qty_feb'];
@@ -37083,79 +37100,81 @@ class Report extends Controller {
 		//grand total
 		//$row = $row + 1;
 		$sheet->setCellValue('A' . $row, '');
-		$sheet->setCellValue('B' . $row, 'TOTAL');
-		$sheet->setCellValue('C' . $row, $total_qty_jan);
-		$sheet->setCellValue('D' . $row, $total_val_jan);
-		$sheet->setCellValue('E' . $row, $total_target_qty_jan);
-		$sheet->setCellValue('F' . $row, $total_target_val_jan);
-		$sheet->setCellValue('G' . $row, $total_idx_qty_jan);
-		$sheet->setCellValue('H' . $row, $total_idx_val_jan);
-		$sheet->setCellValue('I' . $row, $total_qty_feb);
-		$sheet->setCellValue('J' . $row, $total_val_feb);
-		$sheet->setCellValue('K' . $row, $total_target_qty_feb);
-		$sheet->setCellValue('L' . $row, $total_target_val_feb);
-		$sheet->setCellValue('M' . $row, $total_idx_qty_feb);
-		$sheet->setCellValue('N' . $row, $total_idx_val_feb);
-		$sheet->setCellValue('O' . $row, $total_qty_mar);
-		$sheet->setCellValue('P' . $row, $total_val_mar);
-		$sheet->setCellValue('Q' . $row, $total_target_qty_mar);
-		$sheet->setCellValue('R' . $row, $total_target_val_mar);
-		$sheet->setCellValue('S' . $row, $total_idx_qty_mar);
-		$sheet->setCellValue('T' . $row, $total_idx_val_mar);
-		$sheet->setCellValue('U' . $row, $total_qty_apr);
-		$sheet->setCellValue('V' . $row, $total_val_apr);
-		$sheet->setCellValue('W' . $row, $total_target_qty_apr);
-		$sheet->setCellValue('X' . $row, $total_target_val_apr);
-		$sheet->setCellValue('Y' . $row, $total_idx_qty_apr);
-		$sheet->setCellValue('Z' . $row, $total_idx_val_apr);
-		$sheet->setCellValue('AA' . $row, $total_qty_mei);
-		$sheet->setCellValue('AB' . $row, $total_val_mei);
-		$sheet->setCellValue('AC' . $row, $total_target_qty_mei);
-		$sheet->setCellValue('AD' . $row, $total_target_val_mei);
-		$sheet->setCellValue('AE' . $row, $total_idx_qty_mei);
-		$sheet->setCellValue('AF' . $row, $total_idx_val_mei);
-		$sheet->setCellValue('AG' . $row, $total_qty_jun);
-		$sheet->setCellValue('AH' . $row, $total_val_jun);
-		$sheet->setCellValue('AI' . $row, $total_target_qty_jun);
-		$sheet->setCellValue('AJ' . $row, $total_target_val_jun);
-		$sheet->setCellValue('AK' . $row, $total_idx_qty_jun);
-		$sheet->setCellValue('AL' . $row, $total_idx_val_jun);
-		$sheet->setCellValue('AM' . $row, $total_qty_jul);
-		$sheet->setCellValue('AN' . $row, $total_val_jul);
-		$sheet->setCellValue('AO' . $row, $total_target_qty_jul);
-		$sheet->setCellValue('AP' . $row, $total_target_val_jul);
-		$sheet->setCellValue('AQ' . $row, $total_idx_qty_jul);
-		$sheet->setCellValue('AR' . $row, $total_idx_val_jul);
-		$sheet->setCellValue('AS' . $row, $total_qty_agu);
-		$sheet->setCellValue('AT' . $row, $total_val_agu);
-		$sheet->setCellValue('AU' . $row, $total_target_qty_agu);
-		$sheet->setCellValue('AV' . $row, $total_target_val_agu);
-		$sheet->setCellValue('AW' . $row, $total_idx_qty_agu);
-		$sheet->setCellValue('AX' . $row, $total_idx_val_agu);
-		$sheet->setCellValue('AY' . $row, $total_qty_sep);
-		$sheet->setCellValue('AZ' . $row, $total_val_sep);
-		$sheet->setCellValue('BA' . $row, $total_target_qty_sep);
-		$sheet->setCellValue('BB' . $row, $total_target_val_sep);
-		$sheet->setCellValue('BC' . $row, $total_idx_qty_sep);
-		$sheet->setCellValue('BD' . $row, $total_idx_val_sep);
-		$sheet->setCellValue('BE' . $row, $total_qty_okt);
-		$sheet->setCellValue('BF' . $row, $total_val_okt);
-		$sheet->setCellValue('BG' . $row, $total_target_qty_okt);
-		$sheet->setCellValue('BH' . $row, $total_target_val_okt);
-		$sheet->setCellValue('BI' . $row, $total_idx_qty_okt);
-		$sheet->setCellValue('BJ' . $row, $total_idx_val_okt);
-		$sheet->setCellValue('BK' . $row, $total_qty_nop);
-		$sheet->setCellValue('BL' . $row, $total_val_nop);
-		$sheet->setCellValue('BM' . $row, $total_target_qty_nop);
-		$sheet->setCellValue('BN' . $row, $total_target_val_nop);
-		$sheet->setCellValue('BO' . $row, $total_idx_qty_nop);
-		$sheet->setCellValue('BP' . $row, $total_idx_val_nop);
-		$sheet->setCellValue('BQ' . $row, $total_qty_des);
-		$sheet->setCellValue('BR' . $row, $total_val_des);
-		$sheet->setCellValue('BS' . $row, $total_target_qty_des);
-		$sheet->setCellValue('BT' . $row, $total_target_val_des);
-		$sheet->setCellValue('BU' . $row, $total_idx_qty_des);
-		$sheet->setCellValue('BV' . $row, $total_idx_val_des);
+		$sheet->setCellValue('B' . $row, '');
+		$sheet->setCellValue('C' . $row, '');
+		$sheet->setCellValue('D' . $row, 'TOTAL');
+		$sheet->setCellValue('E' . $row, $total_qty_jan);
+		$sheet->setCellValue('F' . $row, $total_val_jan);
+		$sheet->setCellValue('G' . $row, $total_target_qty_jan);
+		$sheet->setCellValue('H' . $row, $total_target_val_jan);
+		$sheet->setCellValue('I' . $row, $total_idx_qty_jan);
+		$sheet->setCellValue('J' . $row, $total_idx_val_jan);
+		$sheet->setCellValue('K' . $row, $total_qty_feb);
+		$sheet->setCellValue('L' . $row, $total_val_feb);
+		$sheet->setCellValue('M' . $row, $total_target_qty_feb);
+		$sheet->setCellValue('N' . $row, $total_target_val_feb);
+		$sheet->setCellValue('O' . $row, $total_idx_qty_feb);
+		$sheet->setCellValue('P' . $row, $total_idx_val_feb);
+		$sheet->setCellValue('Q' . $row, $total_qty_mar);
+		$sheet->setCellValue('R' . $row, $total_val_mar);
+		$sheet->setCellValue('S' . $row, $total_target_qty_mar);
+		$sheet->setCellValue('T' . $row, $total_target_val_mar);
+		$sheet->setCellValue('U' . $row, $total_idx_qty_mar);
+		$sheet->setCellValue('V' . $row, $total_idx_val_mar);
+		$sheet->setCellValue('W' . $row, $total_qty_apr);
+		$sheet->setCellValue('X' . $row, $total_val_apr);
+		$sheet->setCellValue('Y' . $row, $total_target_qty_apr);
+		$sheet->setCellValue('Z' . $row, $total_target_val_apr);
+		$sheet->setCellValue('AA' . $row, $total_idx_qty_apr);
+		$sheet->setCellValue('AB' . $row, $total_idx_val_apr);
+		$sheet->setCellValue('AC' . $row, $total_qty_mei);
+		$sheet->setCellValue('AD' . $row, $total_val_mei);
+		$sheet->setCellValue('AE' . $row, $total_target_qty_mei);
+		$sheet->setCellValue('AF' . $row, $total_target_val_mei);
+		$sheet->setCellValue('AG' . $row, $total_idx_qty_mei);
+		$sheet->setCellValue('AH' . $row, $total_idx_val_mei);
+		$sheet->setCellValue('AI' . $row, $total_qty_jun);
+		$sheet->setCellValue('AJ' . $row, $total_val_jun);
+		$sheet->setCellValue('AK' . $row, $total_target_qty_jun);
+		$sheet->setCellValue('AL' . $row, $total_target_val_jun);
+		$sheet->setCellValue('AM' . $row, $total_idx_qty_jun);
+		$sheet->setCellValue('AN' . $row, $total_idx_val_jun);
+		$sheet->setCellValue('AO' . $row, $total_qty_jul);
+		$sheet->setCellValue('AP' . $row, $total_val_jul);
+		$sheet->setCellValue('AQ' . $row, $total_target_qty_jul);
+		$sheet->setCellValue('AR' . $row, $total_target_val_jul);
+		$sheet->setCellValue('AS' . $row, $total_idx_qty_jul);
+		$sheet->setCellValue('AT' . $row, $total_idx_val_jul);
+		$sheet->setCellValue('AU' . $row, $total_qty_agu);
+		$sheet->setCellValue('AV' . $row, $total_val_agu);
+		$sheet->setCellValue('AW' . $row, $total_target_qty_agu);
+		$sheet->setCellValue('AX' . $row, $total_target_val_agu);
+		$sheet->setCellValue('AY' . $row, $total_idx_qty_agu);
+		$sheet->setCellValue('AZ' . $row, $total_idx_val_agu);
+		$sheet->setCellValue('BA' . $row, $total_qty_sep);
+		$sheet->setCellValue('BB' . $row, $total_val_sep);
+		$sheet->setCellValue('BC' . $row, $total_target_qty_sep);
+		$sheet->setCellValue('BD' . $row, $total_target_val_sep);
+		$sheet->setCellValue('BE' . $row, $total_idx_qty_sep);
+		$sheet->setCellValue('BF' . $row, $total_idx_val_sep);
+		$sheet->setCellValue('BG' . $row, $total_qty_okt);
+		$sheet->setCellValue('BH' . $row, $total_val_okt);
+		$sheet->setCellValue('BI' . $row, $total_target_qty_okt);
+		$sheet->setCellValue('BJ' . $row, $total_target_val_okt);
+		$sheet->setCellValue('BK' . $row, $total_idx_qty_okt);
+		$sheet->setCellValue('BL' . $row, $total_idx_val_okt);
+		$sheet->setCellValue('BM' . $row, $total_qty_nop);
+		$sheet->setCellValue('BN' . $row, $total_val_nop);
+		$sheet->setCellValue('BO' . $row, $total_target_qty_nop);
+		$sheet->setCellValue('BP' . $row, $total_target_val_nop);
+		$sheet->setCellValue('BQ' . $row, $total_idx_qty_nop);
+		$sheet->setCellValue('BR' . $row, $total_idx_val_nop);
+		$sheet->setCellValue('BS' . $row, $total_qty_des);
+		$sheet->setCellValue('BT' . $row, $total_val_des);
+		$sheet->setCellValue('BU' . $row, $total_target_qty_des);
+		$sheet->setCellValue('BV' . $row, $total_target_val_des);
+		$sheet->setCellValue('BW' . $row, $total_idx_qty_des);
+		$sheet->setCellValue('BX' . $row, $total_idx_val_des);
 
 		$total_qty_year = $total_qty_jan + $total_qty_feb + $total_qty_mar + $total_qty_apr + $total_qty_mei + $total_qty_jun + $total_qty_jul + $total_qty_agu + $total_qty_sep + $total_qty_okt + $total_qty_nop + $total_qty_des;
 		$total_target_qty_year = $total_target_qty_jan + $total_target_qty_feb + $total_target_qty_mar + $total_target_qty_apr + $total_target_qty_mei + $total_target_qty_jun + $total_target_qty_jul + $total_target_qty_agu + $total_target_qty_sep + $total_target_qty_okt + $total_target_qty_nop + $total_target_qty_des;
@@ -37164,12 +37183,12 @@ class Report extends Controller {
 		$total_target_val_year = $total_target_val_jan + $total_target_val_feb + $total_target_val_mar + $total_target_val_apr + $total_target_val_mei + $total_target_val_jun + $total_target_val_jul + $total_target_val_agu + $total_target_val_sep + $total_target_val_okt + $total_target_val_nop + $total_target_val_des;
 		$total_idx_val_year = ($total_val_year/($total_target_val_year ?: 1))*100;
 
-		$sheet->setCellValue('BW' . $row, $total_qty_year);
-		$sheet->setCellValue('BX' . $row, $total_val_year);
-		$sheet->setCellValue('BY' . $row, $total_target_qty_year);
-		$sheet->setCellValue('BZ' . $row, $total_target_val_year);
-		$sheet->setCellValue('CA' . $row, $total_idx_qty_year);
-		$sheet->setCellValue('CB' . $row, $total_idx_val_year);
+		$sheet->setCellValue('BY' . $row, $total_qty_year);
+		$sheet->setCellValue('BZ' . $row, $total_val_year);
+		$sheet->setCellValue('CA' . $row, $total_target_qty_year);
+		$sheet->setCellValue('CB' . $row, $total_target_val_year);
+		$sheet->setCellValue('CC' . $row, $total_idx_qty_year);
+		$sheet->setCellValue('CD' . $row, $total_idx_val_year);
 
 		// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 		$sheet->getStyle('A' . $row)->applyFromArray($style_row);
@@ -37252,12 +37271,14 @@ class Report extends Controller {
 		$sheet->getStyle('BZ' . $row)->applyFromArray($style_row);
 		$sheet->getStyle('CA' . $row)->applyFromArray($style_row);
 		$sheet->getStyle('CB' . $row)->applyFromArray($style_row);
+		$sheet->getStyle('CC' . $row)->applyFromArray($style_row);
+		$sheet->getStyle('CD' . $row)->applyFromArray($style_row);
 
 
 		$sheet->getStyle('A' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 		$sheet->getStyle('B' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-		$sheet->getStyle('C' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
-		$sheet->getStyle('D' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+		$sheet->getStyle('C' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+		$sheet->getStyle('D' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 		$sheet->getStyle('E' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('F' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('G' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
@@ -37302,6 +37323,7 @@ class Report extends Controller {
 		$sheet->getStyle('AT' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('AU' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('AV' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+		$sheet->getStyle('AW' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('AX' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('AY' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('AZ' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
@@ -37320,6 +37342,7 @@ class Report extends Controller {
 		$sheet->getStyle('BM' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('BN' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('BO' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+		$sheet->getStyle('BP' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('BQ' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('BR' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('BS' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
@@ -37332,171 +37355,176 @@ class Report extends Controller {
 		$sheet->getStyle('BZ' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('CA' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 		$sheet->getStyle('CB' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+		$sheet->getStyle('CC' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+		$sheet->getStyle('CD' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
-		$sheet->getStyle('C' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('D' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		// Number Format
 		$sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode('#,##0');
 		$sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 		$sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('H' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 		$sheet->getStyle('I' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('J' . $row)->getNumberFormat()->setFormatCode('#,##0');
 		$sheet->getStyle('K' . $row)->getNumberFormat()->setFormatCode('#,##0');
 		$sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 		$sheet->getStyle('M' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 		$sheet->getStyle('O' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('P' . $row)->getNumberFormat()->setFormatCode('#,##0');
 		$sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode('#,##0');
 		$sheet->getStyle('R' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 		$sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('T' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('T' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 		$sheet->getStyle('U' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('V' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('V' . $row)->getNumberFormat()->setFormatCode('#,##0');
 		$sheet->getStyle('W' . $row)->getNumberFormat()->setFormatCode('#,##0');
 		$sheet->getStyle('X' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 		$sheet->getStyle('Y' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('Z' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('Z' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 		$sheet->getStyle('AA' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AB' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AB' . $row)->getNumberFormat()->setFormatCode('#,##0');
 		$sheet->getStyle('AC' . $row)->getNumberFormat()->setFormatCode('#,##0');
 		$sheet->getStyle('AD' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 		$sheet->getStyle('AE' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AF' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AF' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 		$sheet->getStyle('AG' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AH' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AH' . $row)->getNumberFormat()->setFormatCode('#,##0');
 		$sheet->getStyle('AI' . $row)->getNumberFormat()->setFormatCode('#,##0');
 		$sheet->getStyle('AJ' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 		$sheet->getStyle('AK' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AL' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AL' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 		$sheet->getStyle('AM' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AN' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AN' . $row)->getNumberFormat()->setFormatCode('#,##0');
 		$sheet->getStyle('AO' . $row)->getNumberFormat()->setFormatCode('#,##0');
 		$sheet->getStyle('AP' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 		$sheet->getStyle('AQ' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AR' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AR' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 		$sheet->getStyle('AS' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AT' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AT' . $row)->getNumberFormat()->setFormatCode('#,##0');
 		$sheet->getStyle('AU' . $row)->getNumberFormat()->setFormatCode('#,##0');
 		$sheet->getStyle('AV' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 		$sheet->getStyle('AW' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AX' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('AX' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 		$sheet->getStyle('AY' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('AZ' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('AZ' . $row)->getNumberFormat()->setFormatCode('#,##0');
 		$sheet->getStyle('BA' . $row)->getNumberFormat()->setFormatCode('#,##0');
 		$sheet->getStyle('BB' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 		$sheet->getStyle('BC' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BD' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('BD' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 		$sheet->getStyle('BE' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BF' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('BF' . $row)->getNumberFormat()->setFormatCode('#,##0');
 		$sheet->getStyle('BG' . $row)->getNumberFormat()->setFormatCode('#,##0');
 		$sheet->getStyle('BH' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 		$sheet->getStyle('BI' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BJ' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('BJ' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 		$sheet->getStyle('BK' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BL' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('BL' . $row)->getNumberFormat()->setFormatCode('#,##0');
 		$sheet->getStyle('BM' . $row)->getNumberFormat()->setFormatCode('#,##0');
 		$sheet->getStyle('BN' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 		$sheet->getStyle('BO' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BP' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('BP' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 		$sheet->getStyle('BQ' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BR' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('BR' . $row)->getNumberFormat()->setFormatCode('#,##0');
 		$sheet->getStyle('BS' . $row)->getNumberFormat()->setFormatCode('#,##0');
 		$sheet->getStyle('BT' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 		$sheet->getStyle('BU' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BV' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('BV' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 		$sheet->getStyle('BW' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('BX' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('BX' . $row)->getNumberFormat()->setFormatCode('#,##0');
 		$sheet->getStyle('BY' . $row)->getNumberFormat()->setFormatCode('#,##0');
 		$sheet->getStyle('BZ' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
 		$sheet->getStyle('CA' . $row)->getNumberFormat()->setFormatCode('#,##0');
-		$sheet->getStyle('CB' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('CB' . $row)->getNumberFormat()->setFormatCode('#,##0.00');
+		$sheet->getStyle('CC' . $row)->getNumberFormat()->setFormatCode('#,##0');
+		$sheet->getStyle('CD' . $row)->getNumberFormat()->setFormatCode('#,##0');
 
-		$sheet->getStyle('A' . $row . ':CB' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');
-		$sheet->getStyle('A' . $row . ':CB' . $row)->getFont()->setBold(true);
+		$sheet->getStyle('A' . $row . ':CD' . $row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A');
+		$sheet->getStyle('A' . $row . ':CD' . $row)->getFont()->setBold(true);
 
 
 		//set columns width
 		$sheet->getColumnDimension('A')->setWidth(5); 
-		$sheet->getColumnDimension('B')->setWidth(40); 
-		$sheet->getColumnDimension('C')->setWidth(10);
-		$sheet->getColumnDimension('D')->setWidth(16);
+		$sheet->getColumnDimension('B')->setWidth(30); 
+		$sheet->getColumnDimension('C')->setWidth(40); 
+		$sheet->getColumnDimension('D')->setWidth(20); 
 		$sheet->getColumnDimension('E')->setWidth(10);
 		$sheet->getColumnDimension('F')->setWidth(16);
-		$sheet->getColumnDimension('G')->setWidth(8);//Index(%)
-		$sheet->getColumnDimension('H')->setWidth(8);//Index(%)
-		$sheet->getColumnDimension('I')->setWidth(10);
-		$sheet->getColumnDimension('J')->setWidth(16);
+		$sheet->getColumnDimension('G')->setWidth(10);
+		$sheet->getColumnDimension('H')->setWidth(16);
+		$sheet->getColumnDimension('I')->setWidth(8);//Index(%)
+		$sheet->getColumnDimension('J')->setWidth(8);//Index(%)
 		$sheet->getColumnDimension('K')->setWidth(10);
 		$sheet->getColumnDimension('L')->setWidth(16);
-		$sheet->getColumnDimension('M')->setWidth(8);//Index(%)
-		$sheet->getColumnDimension('N')->setWidth(8);//Index(%)
-		$sheet->getColumnDimension('O')->setWidth(10);
-		$sheet->getColumnDimension('P')->setWidth(16);
+		$sheet->getColumnDimension('M')->setWidth(10);
+		$sheet->getColumnDimension('N')->setWidth(16);
+		$sheet->getColumnDimension('O')->setWidth(8);//Index(%)
+		$sheet->getColumnDimension('P')->setWidth(8);//Index(%)
 		$sheet->getColumnDimension('Q')->setWidth(10);
 		$sheet->getColumnDimension('R')->setWidth(16);
-		$sheet->getColumnDimension('S')->setWidth(8);//Index(%)
-		$sheet->getColumnDimension('T')->setWidth(8);//Index(%)
-		$sheet->getColumnDimension('U')->setWidth(10);
-		$sheet->getColumnDimension('V')->setWidth(16);
+		$sheet->getColumnDimension('S')->setWidth(10);
+		$sheet->getColumnDimension('T')->setWidth(16);
+		$sheet->getColumnDimension('U')->setWidth(8);//Index(%)
+		$sheet->getColumnDimension('V')->setWidth(8);//Index(%)
 		$sheet->getColumnDimension('W')->setWidth(10);
 		$sheet->getColumnDimension('X')->setWidth(16);
-		$sheet->getColumnDimension('Y')->setWidth(8);//Index(%)
-		$sheet->getColumnDimension('Z')->setWidth(8);//Index(%)
-		$sheet->getColumnDimension('AA')->setWidth(10);
-		$sheet->getColumnDimension('AB')->setWidth(16);
+		$sheet->getColumnDimension('Y')->setWidth(10);
+		$sheet->getColumnDimension('Z')->setWidth(16);
+		$sheet->getColumnDimension('AA')->setWidth(8);//Index(%)
+		$sheet->getColumnDimension('AB')->setWidth(8);//Index(%)
 		$sheet->getColumnDimension('AC')->setWidth(10);
 		$sheet->getColumnDimension('AD')->setWidth(16);
-		$sheet->getColumnDimension('AE')->setWidth(8);//Index(%)
-		$sheet->getColumnDimension('AF')->setWidth(8);//Index(%)
-		$sheet->getColumnDimension('AG')->setWidth(10);
-		$sheet->getColumnDimension('AH')->setWidth(16);
+		$sheet->getColumnDimension('AE')->setWidth(10);
+		$sheet->getColumnDimension('AF')->setWidth(16);
+		$sheet->getColumnDimension('AG')->setWidth(8);//Index(%)
+		$sheet->getColumnDimension('AH')->setWidth(8);//Index(%)
 		$sheet->getColumnDimension('AI')->setWidth(10);
 		$sheet->getColumnDimension('AJ')->setWidth(16);
-		$sheet->getColumnDimension('AK')->setWidth(8);//Index(%)
-		$sheet->getColumnDimension('AL')->setWidth(8);//Index(%)
-		$sheet->getColumnDimension('AM')->setWidth(10);
-		$sheet->getColumnDimension('AN')->setWidth(16);
+		$sheet->getColumnDimension('AK')->setWidth(10);
+		$sheet->getColumnDimension('AL')->setWidth(16);
+		$sheet->getColumnDimension('AM')->setWidth(8);//Index(%)
+		$sheet->getColumnDimension('AN')->setWidth(8);//Index(%)
 		$sheet->getColumnDimension('AO')->setWidth(10);
 		$sheet->getColumnDimension('AP')->setWidth(16);
-		$sheet->getColumnDimension('AQ')->setWidth(8);//Index(%)
-		$sheet->getColumnDimension('AR')->setWidth(8);//Index(%)
-		$sheet->getColumnDimension('AS')->setWidth(10);
-		$sheet->getColumnDimension('AT')->setWidth(16);
+		$sheet->getColumnDimension('AQ')->setWidth(10);
+		$sheet->getColumnDimension('AR')->setWidth(16);
+		$sheet->getColumnDimension('AS')->setWidth(8);//Index(%)
+		$sheet->getColumnDimension('AT')->setWidth(8);//Index(%)
 		$sheet->getColumnDimension('AU')->setWidth(10);
 		$sheet->getColumnDimension('AV')->setWidth(16);
-		$sheet->getColumnDimension('AW')->setWidth(8);//Index(%)
-		$sheet->getColumnDimension('AX')->setWidth(8);//Index(%)
-		$sheet->getColumnDimension('AY')->setWidth(10);
-		$sheet->getColumnDimension('AZ')->setWidth(16);
+		$sheet->getColumnDimension('AW')->setWidth(10);
+		$sheet->getColumnDimension('AX')->setWidth(16);
+		$sheet->getColumnDimension('AY')->setWidth(8);//Index(%)
+		$sheet->getColumnDimension('AZ')->setWidth(8);//Index(%)
 		$sheet->getColumnDimension('BA')->setWidth(10);
 		$sheet->getColumnDimension('BB')->setWidth(16);
-		$sheet->getColumnDimension('BC')->setWidth(8);//Index(%)
-		$sheet->getColumnDimension('BD')->setWidth(8);//Index(%)
-		$sheet->getColumnDimension('BE')->setWidth(10);
-		$sheet->getColumnDimension('BF')->setWidth(16);
+		$sheet->getColumnDimension('BC')->setWidth(10);
+		$sheet->getColumnDimension('BD')->setWidth(16);
+		$sheet->getColumnDimension('BE')->setWidth(8);//Index(%)
+		$sheet->getColumnDimension('BF')->setWidth(8);//Index(%)
 		$sheet->getColumnDimension('BG')->setWidth(10);
 		$sheet->getColumnDimension('BH')->setWidth(16);
-		$sheet->getColumnDimension('BI')->setWidth(8);//Index(%)
-		$sheet->getColumnDimension('BJ')->setWidth(8);//Index(%)
-		$sheet->getColumnDimension('BK')->setWidth(10);
-		$sheet->getColumnDimension('BL')->setWidth(16);
+		$sheet->getColumnDimension('BI')->setWidth(10);
+		$sheet->getColumnDimension('BJ')->setWidth(16);
+		$sheet->getColumnDimension('BK')->setWidth(8);//Index(%)
+		$sheet->getColumnDimension('BL')->setWidth(8);//Index(%)
 		$sheet->getColumnDimension('BM')->setWidth(10);
 		$sheet->getColumnDimension('BN')->setWidth(16);
-		$sheet->getColumnDimension('BO')->setWidth(8);//Index(%)
-		$sheet->getColumnDimension('BP')->setWidth(8);//Index(%)
-		$sheet->getColumnDimension('BQ')->setWidth(10);
-		$sheet->getColumnDimension('BR')->setWidth(16);
+		$sheet->getColumnDimension('BO')->setWidth(10);
+		$sheet->getColumnDimension('BP')->setWidth(16);
+		$sheet->getColumnDimension('BQ')->setWidth(8);//Index(%)
+		$sheet->getColumnDimension('BR')->setWidth(8);//Index(%)
 		$sheet->getColumnDimension('BS')->setWidth(10);
 		$sheet->getColumnDimension('BT')->setWidth(16);
-		$sheet->getColumnDimension('BU')->setWidth(8);//Index(%)
-		$sheet->getColumnDimension('BV')->setWidth(8);//Index(%)
-		$sheet->getColumnDimension('BW')->setWidth(10);
-		$sheet->getColumnDimension('BX')->setWidth(16);
+		$sheet->getColumnDimension('BU')->setWidth(10);
+		$sheet->getColumnDimension('BV')->setWidth(16);
+		$sheet->getColumnDimension('BW')->setWidth(8);//Index(%)
+		$sheet->getColumnDimension('BX')->setWidth(8);//Index(%)
 		$sheet->getColumnDimension('BY')->setWidth(10);
 		$sheet->getColumnDimension('BZ')->setWidth(16);
-		$sheet->getColumnDimension('CA')->setWidth(8);//Index(%)
-		$sheet->getColumnDimension('CB')->setWidth(8);//Index(%)
+		$sheet->getColumnDimension('CA')->setWidth(10);
+		$sheet->getColumnDimension('CB')->setWidth(16);
+		$sheet->getColumnDimension('CC')->setWidth(8);//Index(%)
+		$sheet->getColumnDimension('CD')->setWidth(8);//Index(%)
 
 		// Set orientasi kertas jadi LANDSCAPE
 		$sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
