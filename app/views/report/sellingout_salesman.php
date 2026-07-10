@@ -57,7 +57,7 @@
                                 if ($_SESSION['area'] == 'ALL')
                                 {
                                   echo '<option value="">By Island</option>';
-                                }else 
+                                }
                               ?> -->
                               <option value="">By Island</option>
                                   <?php $no=1; ?>
@@ -72,7 +72,7 @@
                                 if ($_SESSION['area'] == 'ALL')
                                 {
                                   echo '<option value="">By Region</option>';
-                                }else 
+                                }
                               ?> -->
                               <option value="">By Region</option>
                                   <?php $no=1; ?>
@@ -81,18 +81,18 @@
                                   <?php $no++; endforeach; ?>
                             </select>
                           </div>
-                          <div style="margin-left : 5px;">
-                            <select class="mdb-select md-form form-control" title="By Area" name="by_area" id="dt_area" style="margin-left : 10px;">
+                          <div style="margin-left : 5px;width : 155px;">
+                            <select class="select2-multiple2 md-form form-control" title="By Area" name="by_area[]" id="dt_area" style="margin-left : 10px;width : 155px;" multiple="multiple">
                               <!-- <?php
                                 if ($_SESSION['area'] == 'ALL')
                                 {
                                   echo '<option value="">By Area</option>';
-                                }else 
+                                }
                               ?> -->
                                 <option value="">By Area</option>
                                     <?php $no=1; ?>
                                     <?php foreach ($data['area'] as $row) :?>
-                                            <option <?php if( $area==$row['area']){echo "selected"; } ?> value="<?= $row['area'];?>"><b><?= $row['area'];?></b></option>
+                                          <option <?php if(in_array($row['area'], $area)){echo "selected"; } ?> value="<?= $row['area'];?>"><b><?= $row['area'];?></b></option>
                                     <?php $no++; endforeach; ?>
                             </select>
                           </div>
@@ -102,7 +102,7 @@
                                 if ($_SESSION['principal'] == 'ALL')
                                 {
                                   echo '<option value="">By Principal</option>';
-                                }else 
+                                }
                               ?> -->
                                 <option value="">By Principal</option>
                                     <?php $no=1; ?>

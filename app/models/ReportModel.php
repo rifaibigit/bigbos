@@ -1262,8 +1262,9 @@ class ReportModel {
 
 	public function getSellingOut_ASM2($data)
 	{
-		$area = str_replace(",", "','", $_SESSION['area']);
-		$area = str_replace(" ", "", $area);
+		$areaArray = explode(",", $_SESSION['area']);
+		$trimmedArray = array_map('trim', $areaArray);
+		$area = implode("','", $trimmedArray);
 
 		if (isset($data['by_principal']))
 		{
@@ -6853,8 +6854,9 @@ class ReportModel {
 
 	public function getAreaOut()
 	{
-		$area = str_replace(",", "','", $_SESSION['area']);
-		$area = str_replace(" ", "", $area);
+		$areaArray = explode(",", $_SESSION['area']);
+		$trimmedArray = array_map('trim', $areaArray);
+		$area = implode("','", $trimmedArray);
 
 		if($area != '' and $area != 'ALL')
 		{
@@ -6979,8 +6981,9 @@ class ReportModel {
 
 	public function getRegionOut()
 	{
-		$area = str_replace(",", "','", $_SESSION['area']);
-		$area = str_replace(" ", "", $area);
+		$areaArray = explode(",", $_SESSION['area']);
+		$trimmedArray = array_map('trim', $areaArray);
+		$area = implode("','", $trimmedArray);
 
 		if($area != '' and $area != 'ALL')
 		{
@@ -6997,8 +7000,9 @@ class ReportModel {
 
     public function getIslandOut()
 	{
-		$area = str_replace(",", "','", $_SESSION['area']);
-		$area = str_replace(" ", "", $area);
+		$areaArray = explode(",", $_SESSION['area']);
+		$trimmedArray = array_map('trim', $areaArray);
+		$area = implode("','", $trimmedArray);
 
 		if($area != '' and $area != 'ALL')
 		{
@@ -28293,13 +28297,23 @@ class ReportModel {
 
 	public function getSellingOut_Salesman_Year2()
 	{
+
+		$areaArray = explode(",", $_SESSION['area']);
+		$trimmedArray = array_map('trim', $areaArray);
+		$login_area = implode("','", $trimmedArray);
+
 		if (isset($_POST['by_region']))
 		{
 			$region = $_POST['by_region'];
 		}
 		if (isset($_POST['by_area']))
 		{
-			$area = $_POST['by_area'];
+			$area = implode(',', $_POST['by_area']);
+			$area = str_replace(",", "','", $area);
+		}
+		else
+		{
+			$area = $login_area;
 		}
 		if (isset($_POST['by_island']))
 		{
@@ -28400,9 +28414,9 @@ class ReportModel {
 						$str_sql = $str_sql . " AND cc.region = '" . $region . "'";
 					}
 
-					if (isset($area) and $area != '')
+					if (isset($area) and $area != '' and $area != 'ALL')
 					{
-						$str_sql = $str_sql . " AND aa.area = '" . $area . "'";
+						$str_sql = $str_sql . " AND aa.area in ('" . $area . "')";
 					}
 					$str_sql = $str_sql . " group by month(aa.tanggal), aa.asm, aa.salesman, aa.area, aa.item_code) a";
 					$str_sql = $str_sql . " group by a.salesman) b on a.salesman = b.salesman AND a.asm = b.asm AND a.area = b.area";
@@ -28437,9 +28451,9 @@ class ReportModel {
 						$str_sql = $str_sql . " AND cc.region = '" . $region . "'";
 					}
 
-					if (isset($area) and $area != '')
+					if (isset($area) and $area != '' and $area != 'ALL')
 					{
-						$str_sql = $str_sql . " AND aa.area = '" . $area . "'";
+						$str_sql = $str_sql . " AND aa.area in ('" . $area . "')";
 					}
 					$str_sql = $str_sql . " group by aa.asm, aa.salesman, aa.area, aa.item_code) a";
 					$str_sql = $str_sql . " group by a.asm, a.salesman, a.area) c on a.salesman = c.salesman AND a.asm = c.asm AND a.area = c.area";
@@ -28489,9 +28503,9 @@ class ReportModel {
 						$str_sql = $str_sql . " AND b.region = '" . $region . "'";
 					}
 
-					if (isset($area) and $area != '')
+					if (isset($area) and $area != '' and $area != 'ALL')
 					{
-						$str_sql = $str_sql . " AND a.area = '" . $area . "'";
+						$str_sql = $str_sql . " AND a.area in ('" . $area . "')";
 					}
 					$str_sql = $str_sql . " group by a.salesman, a.area) d on a.salesman = d.salesman AND a.area = d.area";
 
@@ -28516,9 +28530,9 @@ class ReportModel {
 						$str_sql = $str_sql . " AND b.region = '" . $region . "'";
 					}
 
-					if (isset($area) and $area != '')
+					if (isset($area) and $area != '' and $area != 'ALL')
 					{
-						$str_sql = $str_sql . " AND a.area = '" . $area . "'";
+						$str_sql = $str_sql . " AND a.area in ('" . $area . "')";
 					}
 
 					$str_sql = $str_sql . " group by a.salesman, a.area) e on a.salesman = e.salesman AND a.area = e.area";
@@ -28534,9 +28548,9 @@ class ReportModel {
 			$str_sql = $str_sql . " AND a.region = '" . $region . "'";
 		}
 
-		if (isset($area) and $area != '')
+		if (isset($area) and $area != '' and $area != 'ALL')
 		{
-			$str_sql = $str_sql . " AND a.area = '" . $area . "'";
+			$str_sql = $str_sql . " AND a.area in ('" . $area . "')";
 		}
 		$str_sql = $str_sql . " GROUP BY a.asm, a.salesman, a.area";
 		$str_sql = $str_sql . " ORDER BY f.id, a.asm, a.salesman";

@@ -3151,7 +3151,6 @@ class Report extends Controller {
         $data['island'] = $this->model('ReportModel')->getIslandOut();
 		$data['principal'] = $this->model('ReportModel')->getPrincipalOut();
 
-
 		$data['so_salesman_year'] = $this->model('ReportModel')->getSellingOut_Salesman_Year2();
 
 		if(isset($_POST['by_region']))
@@ -3165,7 +3164,12 @@ class Report extends Controller {
 		if(isset($_POST['by_area']))
 		{
 			$data['by_area'] = $_POST['by_area'];
-		}else
+		}
+		elseif ($_SESSION['area'] != 'ALL')
+		{
+			$data['by_area'] = explode(', ', $_SESSION['area']);
+		}
+		else
 		{
 			$data['by_area'] = "";
 		}
@@ -35907,7 +35911,8 @@ class Report extends Controller {
 
 		if (isset($_POST['by_area']))
 		{
-			$area = $_POST['by_area'];
+			$area = implode(',', $_POST['by_area']);
+			$area = str_replace(",", "','", $area);
 		}
 		else
 		{
@@ -35936,7 +35941,7 @@ class Report extends Controller {
 		$sheet->setCellValue('A1', "Report Selling Out - Salesman (" . $year . ")"); // Set kolom A1 dengan tulisan 
 		$sheet->setCellValue('A2', "Island : " . $island);
 		$sheet->setCellValue('A3', "Region : " . $region); 
-		$sheet->setCellValue('A4', "Area : " . $area);
+		$sheet->setCellValue('A4', "Area : '" . $area . "'");
 		$sheet->setCellValue('A5', "Principal : " . $principal);  
 		//$sheet->mergeCells('A1:F1'); // Set Merge Cell pada kolom A1 sampai F1
 		$sheet->getStyle('A1')->getFont()->setBold(true); // Set bold kolom A1
