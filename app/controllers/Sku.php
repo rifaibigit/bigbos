@@ -92,8 +92,9 @@ class Sku extends Controller {
 	{
 		$data['title'] = 'Tambah SKU';
 		$data['item_group'] = $this->model('SkuModel')->getGroupSKU2();	
+		$data['item_category'] = $this->model('SkuModel')->getCategorySKU();
 		$data['principal'] = $this->model('ReportModel')->getPrincipalIn();	
-		$data['sku'] = $this->model('SkuModel')->getAllSku();		
+		$data['sku'] = $this->model('SkuModel')->getAllSku();	
 		$this->template('header', $data);
 		$this->template('sidebar', $data);
 		$this->view('sku/create', $data);

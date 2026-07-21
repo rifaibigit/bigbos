@@ -14,6 +14,7 @@
     <section class="content">
           <div class="card card-primary">
               <div class="card-header">
+                <?php extract($data); ?>
                 <h3 class="card-title"><?= $data['title']; ?></h3>
               </div>
               <!-- /.card-header -->
@@ -40,6 +41,16 @@
                         <?php $no=1; ?>
                         <?php foreach ($data['item_group'] as $row) :?>
                           <option value="<?= $row['item_group'];?>"><b><?= $row['item_group'];?></b></option>
+                        <?php $no++; endforeach; ?>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Category SKU</label>
+                    <select class="mdb-select md-form form-control" title="By Category SKU" id="dt_categorysku" name="item_category" style="margin-left : 10px;">
+                      <option value="">--</option>
+                        <?php $no=1; ?>
+                        <?php foreach ($data['item_category'] as $row) :?>
+                          <option value="<?= $row['item_category'];?>"><b><?= $row['item_category'];?></b></option>
                         <?php $no++; endforeach; ?>
                     </select>
                   </div>

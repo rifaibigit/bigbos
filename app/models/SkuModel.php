@@ -267,6 +267,15 @@ class SkuModel {
 		return $this->db->resultSet();
 	}
 
+	public function getCategorySKU()
+	{
+		$this->db->opendb();
+		$str_sql = "SELECT * FROM sku_category";
+
+		$this->db->query($str_sql);
+		return $this->db->resultSet();
+	}
+
 	public function getCountSKU($principal)
 	{
 		$this->db->opendb();
@@ -449,13 +458,14 @@ class SkuModel {
 	public function tambahSku($data)
 	{
 		$this->db->opendb();
-		$query = "INSERT INTO sku (item_code, item_name, unit, item_group, principal, create_by, create_date) VALUES(:item_code, :item_name, :unit, :item_group, :principal, :create_by, now())";
+		$query = "INSERT INTO sku (item_code, item_name, unit, item_group, item_category, principal, create_by, create_date) VALUES(:item_code, :item_name, :unit, :item_group, :item_category, :principal, :create_by, now())";
 		$this->db->query($query);
         //$this->db->bind('id',$data['id']);
 		$this->db->bind('item_code', $data['item_code']);
 		$this->db->bind('item_name', $data['item_name']);
 		$this->db->bind('unit', $data['unit']);
         $this->db->bind('item_group', $data['item_group']);
+		$this->db->bind('item_category', $data['item_category']);
 		$this->db->bind('principal', $data['principal']);
 		$this->db->bind('create_by', $data['create_by']);
 		$this->db->execute();

@@ -1362,7 +1362,7 @@ class ReportModel {
 		}
 		$str_sql = $str_sql . " GROUP BY c.id, c.island, c.region, c.area ASC";
 
-		// Flasher::setMessage('Berhasil',$str_sql,'success');
+		Flasher::setMessage('Berhasil',$str_sql,'success');
 
 		$this->db->opendb();
 		$this->db->query($str_sql);
@@ -28553,7 +28553,7 @@ class ReportModel {
 			$str_sql = $str_sql . " AND a.area in ('" . $area . "')";
 		}
 		$str_sql = $str_sql . " GROUP BY a.asm, a.salesman, a.area";
-		$str_sql = $str_sql . " ORDER BY f.id, a.asm, a.salesman";
+		$str_sql = $str_sql . " ORDER BY a.asm, f.id, a.salesman";
 
 		// Flasher::setMessage('Berhasil',$str_sql,'success');
 
