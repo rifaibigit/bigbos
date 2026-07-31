@@ -824,6 +824,7 @@ class Report extends Controller {
 		$data['principal'] = $this->model('ReportModel')->getPrincipalOut();
 		$data['channel'] = $this->model('ReportModel')->getChannel();
 		$data['outlet_type'] = $this->model('ReportModel')->getOutletType();
+		$data['area'] = $this->model('ReportModel')->getAreaOut();
 
 		$data['sellingin_OT'] = $this->model('ReportModel')->getActiveOutlet_OT();
 
@@ -841,6 +842,19 @@ class Report extends Controller {
 		}else
 		{
 			$data['by_channel'] = "";
+		}
+
+		if(isset($_POST['by_area']))
+		{
+			$data['by_area'] = $_POST['by_area'];
+		}
+		elseif ($_SESSION['area'] != 'ALL')
+		{
+			$data['by_area'] = explode(', ', $_SESSION['area']);
+		}
+		else
+		{
+			$data['by_area'] = "";
 		}
 
 		if(isset($_POST['by_outlet_type']))
@@ -6126,6 +6140,19 @@ class Report extends Controller {
 		else
 		{
 			$outlet_type = "";
+		}
+
+		if(isset($_POST['by_area']))
+		{
+			$data['by_area'] = $_POST['by_area'];
+		}
+		elseif ($_SESSION['area'] != 'ALL')
+		{
+			$data['by_area'] = explode(', ', $_SESSION['area']);
+		}
+		else
+		{
+			$data['by_area'] = "";
 		}
 
 		if (isset($_POST['by_year']))

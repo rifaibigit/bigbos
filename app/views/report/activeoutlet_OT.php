@@ -38,12 +38,14 @@
                                     $principal = $data['by_principal'];
                                     $channel = $data['by_channel'];
                                     $outlet_type = $data['by_outlet_type'];
+                                    $area = $data['by_area'];
                                     $year = $data['by_year'];
                                 }else
                                 {
                                     $principal = "By Principal";
                                     $channel = "By Channel";
                                     $outlet_type = "By Outlet Type";
+                                    $area = "By Area";
                                 }
 
                                 ?>
@@ -71,6 +73,15 @@
                                                 <?php $no=1; ?>
                                                 <?php foreach ($data['outlet_type'] as $row) :?>
                                                         <option <?php if( $outlet_type==$row['outlet_type']){echo "selected"; echo ' style="font-weight: bold;"'; } ?> value="<?= $row['outlet_type'];?>"><b><?= $row['outlet_type'];?></b></option>
+                                                <?php $no++; endforeach; ?>
+                                        </select>
+                                    </div>
+                                    <div style="margin-left : 5px;width : 155px;">
+                                        <select class="select2-multiple2 md-form form-control" title="By Area" name="by_area[]" id="dt_area" style="margin-left : 10px;width : 155px;" multiple="multiple">
+                                            <!-- <option value="">By Area</option> -->
+                                                <?php $no=1; ?>
+                                                <?php foreach ($data['area'] as $row) :?>
+                                                        <option <?php if(in_array($row['area'], $area)){echo "selected"; } ?> value="<?= $row['area'];?>"><b><?= $row['area'];?></b></option>
                                                 <?php $no++; endforeach; ?>
                                         </select>
                                     </div>

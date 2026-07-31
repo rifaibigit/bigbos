@@ -3461,6 +3461,16 @@ class ReportModel {
 		{
 			$outlet_type = $_POST['by_outlet_type'];
 		}
+		if (isset($_POST['by_area']))
+		{
+			$area = implode(',', $_POST['by_area']);
+			$area = str_replace(",", "','", $area);
+		}
+		elseif ($_SESSION['area'] != 'ALL')
+		{
+			$session_area = str_replace(", ", "','", $_SESSION['area']); 
+			$area = $session_area;
+		}
 		if (isset($_POST['by_year']))
 		{
 			$year = $_POST['by_year'];
